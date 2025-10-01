@@ -16,14 +16,14 @@ const progressSteps = [
 
 export default function Page() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-brand-50 via-white w-full to-brand-100 text-foreground">
+    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-brand-50 via-white w-full to-brand-100 text-foreground justify-center items-center">
       <div className="pointer-events-none absolute inset-0 opacity-70">
         <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-brand-200/30 blur-3xl" />
         <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-24 pt-20 lg:px-10">
+      <div className="relative z-10  flex justify-center items-center w-full max-w-6xl flex-col gap-12 px-6 pb-24 pt-20 lg:px-10">
         <header className="flex flex-col gap-4 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-sm backdrop-blur">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand">
             EV Insights
@@ -31,7 +31,7 @@ export default function Page() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-xl space-y-3">
               <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                Your charging cockpit, designed for clarity
+                Your premium EV charging dashboard
               </h1>
               <p className="text-sm text-muted-foreground sm:text-base">
                 Monitor the full charging journey and stay in control of every action. These widgets update in real time once connected to the vehicle backend.

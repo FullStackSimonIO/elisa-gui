@@ -173,7 +173,7 @@ export function ProgressBar({
       <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-            Progress
+            Charging
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-foreground">
             Progress:

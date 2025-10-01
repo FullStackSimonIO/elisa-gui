@@ -156,7 +156,7 @@ export function EVCC({
                   aria-label={`${label} info`}
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-primary"
+                  className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-background"
                   onClick={() => onInfoClick?.(key)}
                 >
                   <Info className="size-4" />
@@ -169,7 +169,7 @@ export function EVCC({
                     variant === "secondary"
                       ? "bg-secondary/70 text-secondary-foreground hover:bg-secondary"
                       : variant === "outline"
-                        ? "border-border/70 bg-card text-muted-foreground hover:border-primary/70 hover:text-primary"
+                        ? "border-border/70 bg-card text-muted-foreground hover:border-primary/70 hover:text-background"
                         : "bg-gradient-to-r from-primary/90 via-primary to-primary/80 text-primary-foreground hover:from-primary/80 hover:via-primary/90 hover:to-primary"
                   )}
                 >
