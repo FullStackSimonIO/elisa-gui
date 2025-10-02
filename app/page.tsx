@@ -1,8 +1,9 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { toast } from "sonner"
 import ChargingAnimation from "@/components/ChargingAnimation"
-import EVCC from "@/components/EVCC"
+import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar from "@/components/ProgressBar"
 import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
 
@@ -19,11 +20,24 @@ const progressSteps = [
   { id: "complete", title: "Complete", description: "Ready to disconnect" },
 ]
 
+type EVCCInfoClickPayload = Parameters<NonNullable<EVCCProps["onInfoClick"]>>[0]
+
 export default function Page() {
   const [progress, setProgress] = useState(0)
   const [isSimulating, setIsSimulating] = useState(false)
   const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
   const processedStepRef = useRef(-1)
+
+  const handleActionInfoClick = useCallback(
+    ({ action, label, description }: EVCCInfoClickPayload) => {
+      toast(label, {
+        id: `evcc-action-${action}`,
+        description,
+        duration: 4600,
+      })
+    },
+    []
+  )
 
   const startSimulation = useCallback(() => {
     processedStepRef.current = -1
@@ -203,6 +217,7 @@ export default function Page() {
               onStart={startSimulation}
               onEnd={stopSimulation}
               onReset={resetSimulation}
+              onInfoClick={handleActionInfoClick}
               className="h-full"
             />
             <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" />

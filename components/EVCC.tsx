@@ -20,7 +20,11 @@ export interface EVCCProps {
   onStart?: () => void
   onEnd?: () => void
   onReset?: () => void
-  onInfoClick?: (action: ActionKey) => void
+  onInfoClick?: (payload: {
+    action: ActionKey
+    label: string
+    description: string
+  }) => void
   actionInfoLabels?: Partial<Record<ActionKey, string>>
 }
 
@@ -157,7 +161,13 @@ export function EVCC({
                   variant="ghost"
                   size="icon"
                   className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-background"
-                  onClick={() => onInfoClick?.(key)}
+                  onClick={() =>
+                    onInfoClick?.({
+                      action: key,
+                      label,
+                      description,
+                    })
+                  }
                 >
                   <Info className="size-4" />
                 </Button>

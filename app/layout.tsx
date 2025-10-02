@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,6 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen bg-background font-sans text-foreground justify-center items-center`}
       >
         {children}
+        <Toaster richColors closeButton position="top-right" duration={4000} />
       </body>
     </html>
   );
