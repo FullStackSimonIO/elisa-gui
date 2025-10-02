@@ -106,18 +106,23 @@ export function EVCC({
     [safeStatusIndex, totalSegments]
   )
 
+  const currentStepKey = React.useMemo(
+    () => STEPS[safeStatusIndex]?.key,
+    [safeStatusIndex]
+  )
+
   const lineProgress = React.useMemo(() => {
     if (totalSegments <= 0) return 1
-    if (STEPS[safeStatusIndex]?.key === "completed") {
+    if (currentStepKey === "completed") {
       return 1
     }
 
-    if (STEPS[safeStatusIndex]?.key === "charging") {
+    if (currentStepKey === "charging") {
       return Math.min(1, (filledSegments + clampedCharge) / totalSegments)
     }
 
     return Math.min(1, filledSegments / totalSegments)
-  }, [safeStatusIndex, totalSegments, filledSegments, clampedCharge])
+  }, [currentStepKey, totalSegments, filledSegments, clampedCharge])
 
   const chargingPercentLabel = React.useMemo(() =>
     `${Math.round(clampedCharge * 100)}%`,
@@ -206,7 +211,9 @@ export function EVCC({
               {STEPS.map((step, index) => {
                 const isActive = index === safeStatusIndex
                 const isComplete =
-                  index < safeStatusIndex || step.key === "completed" && safeStatusIndex === STEPS.length - 1
+                  index < safeStatusIndex ||
+                  (step.key === "charging" && currentStepKey === "charging") ||
+                  (step.key === "completed" && currentStepKey === "completed")
                 const isChargingStep = step.key === "charging"
 
                 return (
@@ -249,7 +256,7 @@ export function EVCC({
           <footer className="flex items-center justify-between rounded-2xl bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
             <span>Charging progress</span>
             <span className="font-semibold text-foreground">
-              {STEPS[safeStatusIndex]?.key === "completed" ? "Done" : chargingPercentLabel}
+              {currentStepKey === "completed" ? "Done" : chargingPercentLabel}
             </span>
           </footer>
         </div>
