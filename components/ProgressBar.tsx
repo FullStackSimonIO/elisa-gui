@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { animate } from "animejs"
 
 import { cn } from "@/lib/utils"
 
@@ -51,6 +52,12 @@ export function ProgressBar({
   showDescriptions = false,
   ariaLabel = "Process timeline",
 }: ProgressBarProps) {
+  const stepBubbleRefs = React.useRef<Array<HTMLSpanElement | null>>([])
+  const stepLabelRefs = React.useRef<Array<HTMLParagraphElement | null>>([])
+  const connectorRefs = React.useRef<Array<HTMLDivElement | null>>([])
+  const prevStatusesRef = React.useRef<Array<StepStatus>>([])
+  const prevConnectorValuesRef = React.useRef<Array<number>>([])
+
   const safeSteps = React.useMemo(
     () => (steps.length > 0 ? steps : DEFAULT_STEPS),
     [steps]
@@ -145,17 +152,109 @@ export function ProgressBar({
         return 1
       }
 
-      if (leftStatus === "active") {
-        return clampedProgress
+      if (leftStatus === "completed" && rightStatus === "active") {
+        return 1
       }
 
-      if (leftStatus === "completed" && rightStatus === "active") {
+      if (leftStatus === "active") {
         return clampedProgress
       }
 
       return 0
     })
   }, [safeSteps.length, statuses, clampedProgress])
+
+  React.useEffect(() => {
+    prevStatusesRef.current = []
+    prevConnectorValuesRef.current = []
+  }, [safeSteps.length])
+
+  React.useEffect(() => {
+    statuses.forEach((status, index) => {
+      const bubble = stepBubbleRefs.current[index]
+      const label = stepLabelRefs.current[index]
+      const previousStatus = prevStatusesRef.current[index]
+
+      if (bubble && status !== previousStatus) {
+        if (status === "active") {
+          bubble.style.transformOrigin = "center"
+          animate(bubble, {
+            scale: [0.85, 1.05],
+            duration: 520,
+            easing: "easeOutElastic(1, .7)",
+          })
+        }
+
+        if (status === "completed") {
+          bubble.style.transformOrigin = "center"
+          animate(bubble, {
+            scale: [1, 1.08],
+            opacity: [0.95, 1],
+            duration: 440,
+            easing: "easeOutBack",
+          })
+        }
+
+        if (status === "upcoming" && previousStatus) {
+          animate(bubble, {
+            scale: [1.02, 1],
+            opacity: [0.9, 1],
+            duration: 240,
+            easing: "easeOutQuad",
+          })
+        }
+      }
+
+      if (label && status !== previousStatus) {
+        if (status === "active" || status === "completed") {
+          animate(label, {
+            translateY: [-6, 0],
+            opacity: [0.65, 1],
+            duration: 320,
+            easing: "easeOutQuad",
+          })
+        } else {
+          animate(label, {
+            opacity: 0.7,
+            duration: 200,
+            easing: "linear",
+          })
+        }
+      }
+    })
+
+    prevStatusesRef.current = [...statuses]
+  }, [statuses])
+
+  React.useEffect(() => {
+    connectors.forEach((value, index) => {
+      const connector = connectorRefs.current[index]
+      if (!connector) return
+
+      const nextValue = Math.max(0, Math.min(1, value))
+      const previousValueRaw = prevConnectorValuesRef.current[index]
+      const previousValue =
+        previousValueRaw !== undefined
+          ? Math.max(0, Math.min(1, previousValueRaw))
+          : 0
+      if (previousValue === nextValue) return
+
+      connector.style.transformOrigin = "left"
+      connector.style.transform = `scaleX(${previousValue})`
+
+      animate(connector, {
+        scaleX: nextValue,
+        duration: 500,
+        delay: nextValue > previousValue ? 40 : 0,
+        easing:
+          nextValue > previousValue ? "easeOutCubic" : "easeInOutCubic",
+      })
+    })
+
+    prevConnectorValuesRef.current = connectors.map((value) =>
+      Math.max(0, Math.min(1, value))
+    )
+  }, [connectors])
 
   if (safeSteps.length === 0) {
     return null
@@ -185,9 +284,9 @@ export function ProgressBar({
         </span>
       </header>
 
-      <div className="overflow-x-auto pb-4">
+      <div className="overflow-x-auto py-4 ">
         <div
-          className="relative mx-auto grid max-w-5xl items-start gap-x-3"
+          className="relative mx-2 grid  items-start gap-x-3"
           style={{
             gridTemplateColumns: `repeat(${safeSteps.length * 2 - 1}, minmax(64px, 1fr))`,
           }}
@@ -208,6 +307,9 @@ export function ProgressBar({
               <React.Fragment key={step.id}>
                 <div className="col-span-1 flex flex-col items-center text-center">
                   <span
+                    ref={(node) => {
+                      stepBubbleRefs.current[index] = node
+                    }}
                     className={cn(
                       "flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all",
                       isCompleted
@@ -221,6 +323,9 @@ export function ProgressBar({
                   </span>
                   <div className="mt-3 space-y-1">
                     <p
+                      ref={(node) => {
+                        stepLabelRefs.current[index] = node
+                      }}
                       className={cn(
                         "text-xs font-semibold uppercase tracking-wide",
                         isCompleted || isActive
@@ -242,8 +347,16 @@ export function ProgressBar({
                   <div className="col-span-1 flex h-12 items-center">
                     <div className="relative h-1 w-full overflow-hidden rounded-full bg-muted">
                       <div
-                        className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-brand via-brand to-brand/80 transition-[width] duration-500 ease-out"
-                        style={{ width: `${connectors[index] * 100}%` }}
+                        ref={(node) => {
+                          connectorRefs.current[index] = node
+                        }}
+                        className="absolute left-0 top-0 h-full w-full origin-left rounded-full bg-gradient-to-r from-brand via-brand to-brand/80"
+                        style={{
+                          transform: `scaleX(${Math.max(
+                            0,
+                            Math.min(1, connectors[index])
+                          )})`,
+                        }}
                       />
                     </div>
                   </div>
@@ -253,16 +366,6 @@ export function ProgressBar({
           })}
         </div>
       </div>
-
-      <footer className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-        <span>
-          Step {Math.max(activeIndex + 1, Math.min(completedCount, safeSteps.length))}
-          /{safeSteps.length}
-        </span>
-        <span className="font-semibold text-foreground">
-          {activeIndex >= 0 ? safeSteps[activeIndex]?.title : "Not started"}
-        </span>
-      </footer>
     </section>
   )
 }

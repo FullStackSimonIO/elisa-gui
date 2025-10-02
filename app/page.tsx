@@ -1,5 +1,10 @@
+"use client"
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import ChargingAnimation from "@/components/ChargingAnimation"
 import EVCC from "@/components/EVCC"
 import ProgressBar from "@/components/ProgressBar"
+import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
 
 const progressSteps = [
   { id: "handshake", title: "Handshake", description: "Vehicle requests session" },
@@ -15,51 +20,202 @@ const progressSteps = [
 ]
 
 export default function Page() {
+  const [progress, setProgress] = useState(0)
+  const [isSimulating, setIsSimulating] = useState(false)
+  const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
+  const processedStepRef = useRef(-1)
+
+  const startSimulation = useCallback(() => {
+    processedStepRef.current = -1
+    setTerminalLogs(() => [])
+    setProgress(0)
+    setIsSimulating(true)
+  }, [])
+
+  const stopSimulation = useCallback(() => {
+    setIsSimulating(false)
+  }, [])
+
+  const resetSimulation = useCallback(() => {
+    setIsSimulating(false)
+    setProgress(0)
+    processedStepRef.current = -1
+    setTerminalLogs(() => [])
+  }, [])
+
+  useEffect(() => {
+    if (!isSimulating) return
+    const interval = window.setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 1) return 1
+        const next = Math.min(prev + 0.01, 1)
+        return next
+      })
+    }, 60)
+
+    return () => window.clearInterval(interval)
+  }, [isSimulating])
+
+  useEffect(() => {
+    if (progress >= 1 && isSimulating) {
+      setIsSimulating(false)
+    }
+  }, [progress, isSimulating])
+  const evccStatus = useMemo(() => {
+    if (progress >= 1) return "completed" as const
+    if (isSimulating) return progress > 0 ? "charging" : "ready-to-charge"
+    if (progress > 0) return "ready-to-charge"
+    return "plugged-in"
+  }, [isSimulating, progress])
+
+  const { currentStepIndex, stepProgress } = useMemo(() => {
+    if (progress >= 1) {
+      return {
+        currentStepIndex: progressSteps.length - 1,
+        stepProgress: 1,
+      }
+    }
+
+    const totalSegments = Math.max(progressSteps.length - 1, 1)
+    const scaled = progress * totalSegments
+    const baseIndex = Math.floor(scaled)
+    return {
+      currentStepIndex: Math.min(progressSteps.length - 1, Math.max(0, baseIndex)),
+      stepProgress: scaled - baseIndex,
+    }
+  }, [progress])
+
+  const isAnimationActive = isSimulating
+
+  useEffect(() => {
+    setTerminalLogs((prev) => {
+      if (!isSimulating && progress === 0) {
+        processedStepRef.current = -1
+        return []
+      }
+
+      const nextLogs = [...prev]
+
+      if (
+        (isSimulating || progress > 0) &&
+        currentStepIndex > processedStepRef.current
+      ) {
+        for (let i = 0; i <= processedStepRef.current; i += 1) {
+          if (nextLogs[i] && nextLogs[i].status !== "success") {
+            nextLogs[i] = { ...nextLogs[i], status: "success" }
+          }
+        }
+
+        const step = progressSteps[currentStepIndex]
+        processedStepRef.current = currentStepIndex
+
+        nextLogs.push({
+          id: `${step.id}-${Date.now()}`,
+          label: `${currentStepIndex + 1}. ${step.title}`,
+          detail: step.description,
+          status:
+            progress >= 1 && currentStepIndex === progressSteps.length - 1
+              ? "success" as TerminalLogStatus
+              : "running" as TerminalLogStatus,
+          timestamp: new Date().toISOString(),
+        })
+
+        return nextLogs
+      }
+
+      let changed = false
+      const updated = nextLogs.map((log, index) => {
+        let desiredStatus: TerminalLogEntry["status"] = log.status
+
+        if (index < currentStepIndex) {
+          desiredStatus = "success" as TerminalLogStatus
+        } else if (index === currentStepIndex) {
+          desiredStatus =
+            progress >= 1 && currentStepIndex === progressSteps.length - 1
+              ? "success" as TerminalLogStatus
+              : isAnimationActive
+                ? "running" as TerminalLogStatus
+                : "pending" as TerminalLogStatus
+        }
+
+        if (desiredStatus !== log.status) {
+          changed = true
+          return { ...log, status: desiredStatus }
+        }
+
+        return log
+      })
+
+      return changed ? updated : prev
+    })
+  }, [currentStepIndex, isAnimationActive, isSimulating, progress])
+
+  useEffect(() => {
+    if (progress < 1) return
+
+    setTerminalLogs((prev) => {
+      const normalized = prev.map((log) =>
+        log.status !== "success" ? { ...log, status: "success" as TerminalLogStatus } : log
+      )
+
+      if (normalized.some((log) => log.id === "session-complete")) {
+        return normalized
+      }
+
+      return [
+        ...normalized,
+        {
+          id: "session-complete",
+          label: "Session complete",
+          detail: "Vehicle confirmed full charge. Connector ready to release.",
+          status: "success" as TerminalLogStatus,
+          timestamp: new Date().toISOString(),
+          meta: "OK",
+        },
+      ]
+    })
+  }, [progress])
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-b from-brand-50 via-white w-full to-brand-100 text-foreground justify-center items-center">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 text-foreground sm:px-6">
       <div className="pointer-events-none absolute inset-0 opacity-70">
         <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-brand-200/30 blur-3xl" />
         <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
       </div>
 
-      <div className="relative z-10  flex justify-center items-center w-full max-w-6xl flex-col gap-12 px-6 pb-24 pt-20 lg:px-10">
-        <header className="flex flex-col gap-4 rounded-3xl border border-white/40 bg-white/60 p-8 shadow-sm backdrop-blur">
-          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-brand">
-            EV Insights
-          </span>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-xl space-y-3">
-              <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
-                Your premium EV charging dashboard
-              </h1>
-              <p className="text-sm text-muted-foreground sm:text-base">
-                Monitor the full charging journey and stay in control of every action. These widgets update in real time once connected to the vehicle backend.
-              </p>
-            </div>
-            <dl className="grid grid-cols-2 gap-6 rounded-2xl bg-brand-50/80 px-5 py-4 text-sm text-brand-900 shadow-inner sm:text-base">
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-brand-600">Active Modules</dt>
-                <dd className="text-2xl font-semibold text-brand">02</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-wide text-brand-600">Next Service</dt>
-                <dd className="text-2xl font-semibold text-brand">04 Nov</dd>
-              </div>
-            </dl>
-          </div>
-        </header>
+      <div className="relative z-10 mx-auto flex w-full  flex-col items-center gap-12 pb-24 pt-20">
+        
+        <ProgressBar
+              steps={progressSteps}
+              currentStepIndex={currentStepIndex}
+              progress={stepProgress}
+              showDescriptions
+              className="h-full w-full"
+              ariaLabel="Charging session progress"
+            />
 
-        <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:gap-10">
-          <EVCC status="charging" chargingProgress={0.68} className="h-full" />
-          <ProgressBar
-            steps={progressSteps}
-            currentStepId="steady"
-            progress={0.42}
-            showDescriptions
-            className="h-full"
-            ariaLabel="Charging session progress"
-          />
+        <div className="grid w-full grid-cols-1 gap-8 2xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:gap-12">
+          <div className="grid grid-cols-1 gap-8">
+            <EVCC
+              status={evccStatus}
+              chargingProgress={progress}
+              onStart={startSimulation}
+              onEnd={stopSimulation}
+              onReset={resetSimulation}
+              className="h-full"
+            />
+            <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" />
+          </div>
+
+          <div className="grid grid-cols-1 gap-8">
+            
+            <Terminal
+              logs={terminalLogs}
+              className="min-h-[320px]"
+              footerNote="Terminal Output"
+            />
+          </div>
         </div>
       </div>
     </main>

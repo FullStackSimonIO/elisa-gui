@@ -188,7 +188,7 @@ export function EVCC({
               <div
                 aria-hidden
                 className="absolute bottom-0 left-0 w-full rounded-full bg-gradient-to-b from-primary/70 via-primary to-primary/60 transition-[height] duration-700 ease-out"
-                style={{ height: `${lineProgress * 100}%` }}
+                style={{ height: `${lineProgress * 100}%` }} // Fill based on progress
               />
             </div>
 
