@@ -145,14 +145,6 @@ export function Terminal({
       </header>
 
       <div className="flex flex-1 flex-col gap-4 px-5 py-4">
-        <div className="flex items-center gap-2 rounded-xl border border-border/60 bg-black/30 px-3 py-2 font-mono text-xs text-muted-foreground">
-          <span className="text-brand">{prompt}</span>
-          <span className="opacity-60">$</span>
-          <span className="truncate text-muted-foreground/80">
-            tail -f /var/log/evcc/session.log
-          </span>
-        </div>
-
         <div
           ref={listRef}
           className="scrollbar-thin flex-1 space-y-3 overflow-y-auto rounded-2xl bg-[#05030a]/92 px-4 py-5 font-mono text-[13px] text-brand-50"
