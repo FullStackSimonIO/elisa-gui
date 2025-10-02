@@ -2,10 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
+
 import ChargingAnimation from "@/components/ChargingAnimation"
 import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar from "@/components/ProgressBar"
 import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
+import { ThemeToggle } from "@/components/theme-toggle"
+import Navbar from "@/components/Navbar"
 
 const progressSteps = [
   { id: "handshake", title: "Handshake", description: "Vehicle requests session" },
@@ -191,15 +194,18 @@ export default function Page() {
   }, [progress])
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 text-foreground sm:px-6">
+    <main className="relative flex flex-row min-h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6">
       <div className="pointer-events-none absolute inset-0 opacity-70">
         <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-brand-200/30 blur-3xl" />
         <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
       </div>
 
+      
+
       <div className="relative z-10 mx-auto flex w-full  flex-col items-center gap-12 pb-24 pt-20">
         
+
         <ProgressBar
               steps={progressSteps}
               currentStepIndex={currentStepIndex}
@@ -220,7 +226,7 @@ export default function Page() {
               onInfoClick={handleActionInfoClick}
               className="h-full"
             />
-            <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" />
+            {/* <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" /> */}
           </div>
 
           <div className="grid grid-cols-1 gap-8">

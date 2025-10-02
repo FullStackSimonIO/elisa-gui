@@ -137,7 +137,8 @@ export function Terminal({
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
             {title}
           </p>
-          <p className="text-sm text-muted-foreground/80">Streaming command log</p>
+          <div className="flex flex-col gap-0.5 text-sm text-muted-foreground/80">
+          </div>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">
           Live

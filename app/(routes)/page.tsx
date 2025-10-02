@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import ChargingAnimation from "@/components/ChargingAnimation"
 import EVCC from "@/components/EVCC"
 import ProgressBar from "@/components/ProgressBar"
 import { Button } from "@/components/ui/button"
@@ -82,7 +81,6 @@ export default function Page() {
   }, [isSimulating, progress])
 
   const displayProgress = Math.round(progress * 100)
-  const isAnimationActive = isSimulating || (progress > 0 && progress < 1)
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 text-foreground sm:px-6">
@@ -136,7 +134,7 @@ export default function Page() {
         <div className="grid w-full grid-cols-1 gap-8 2xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:gap-12">
           <div className="grid grid-cols-1 gap-8">
             <EVCC status={evccStatus} chargingProgress={progress} className="h-full" />
-            <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" />
+            {/* <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" /> */}
           </div>
 
           <ProgressBar
