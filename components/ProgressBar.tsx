@@ -12,6 +12,8 @@ export interface ProgressStep {
   title: string
   description?: string
   status?: StepStatus
+  /** Optional label to display in the terminal once the step completes. */
+  terminalLabel?: string
 }
 
 export interface ProgressBarProps {
@@ -33,15 +35,70 @@ export interface ProgressBarProps {
   ariaLabel?: string
 }
 
-const DEFAULT_STEPS: ProgressStep[] = [
-  { id: "step-1", title: "Step 1" },
-  { id: "step-2", title: "Step 2" },
-  { id: "step-3", title: "Step 3" },
-  { id: "step-4", title: "Step 4" },
-  { id: "step-5", title: "Step 5" },
-  { id: "step-6", title: "Step 6" },
-  { id: "step-7", title: "Step 7" },
-]
+export const CHARGING_PROGRESS_STEPS = [
+  {
+    id: "handshake",
+    title: "Handshake",
+    description: "Vehicle requests session",
+    terminalLabel: "Handshake - Requesting Session",
+  },
+  {
+    id: "authorization",
+    title: "Authorization",
+    description: "Driver profile verified",
+    terminalLabel: "Authorization - Profile Verified",
+  },
+  {
+    id: "connector-lock",
+    title: "Connector Lock",
+    description: "Plug secured",
+    terminalLabel: "Connector Lock - Plug Secured",
+  },
+  {
+    id: "precharge",
+    title: "Pre-Charge",
+    description: "Voltage aligned",
+    terminalLabel: "Pre-Charge - Voltage Aligned",
+  },
+  {
+    id: "ramp-up",
+    title: "Ramp Up",
+    description: "Current increases",
+    terminalLabel: "Ramp Up - Current Increasing",
+  },
+  {
+    id: "steady",
+    title: "Steady State",
+    description: "Charging at target rate",
+    terminalLabel: "Steady State - Charging at Target Rate",
+  },
+  {
+    id: "thermal-check",
+    title: "Thermal Check",
+    description: "Cooling system validation",
+    terminalLabel: "Thermal Check - Cooling Validated",
+  },
+  {
+    id: "taper",
+    title: "Taper",
+    description: "Current reduces near full",
+    terminalLabel: "Taper - Current Reducing Near Full",
+  },
+  {
+    id: "top-off",
+    title: "Top Off",
+    description: "Balancing individual cells",
+    terminalLabel: "Top Off - Balancing Cells",
+  },
+  {
+    id: "complete",
+    title: "Complete",
+    description: "Ready to disconnect",
+    terminalLabel: "Complete - Ready to Disconnect",
+  },
+] satisfies ProgressStep[]
+
+const DEFAULT_STEPS: ProgressStep[] = CHARGING_PROGRESS_STEPS
 
 export function ProgressBar({
   steps = DEFAULT_STEPS,
@@ -263,13 +320,13 @@ export function ProgressBar({
   return (
     <section
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-6 shadow-sm backdrop-blur",
+        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
         "before:absolute before:-right-24 before:top-1/2 before:h-72 before:w-72 before:-translate-y-1/2 before:rounded-full before:bg-brand/10 before:blur-3xl before:content-['']",
         className
       )}
       aria-label={ariaLabel}
     >
-      <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+      <header className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
             Charging
@@ -284,7 +341,7 @@ export function ProgressBar({
         </span>
       </header>
 
-      <div className="overflow-x-auto py-4 ">
+      <div className="overflow-x-auto py-3 ">
         <div
           className="relative mx-2 grid  items-start gap-x-3"
           style={{
@@ -311,7 +368,7 @@ export function ProgressBar({
                       stepBubbleRefs.current[index] = node
                     }}
                     className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all",
+                      "flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all",
                       isCompleted
                         ? "border-brand bg-brand text-brand-foreground shadow-glow"
                         : isActive
@@ -344,7 +401,7 @@ export function ProgressBar({
                 </div>
 
                 {index < safeSteps.length - 1 ? (
-                  <div className="col-span-1 flex h-12 items-center">
+                  <div className="col-span-1 flex h-10 items-center">
                     <div className="relative h-1 w-full overflow-hidden rounded-full bg-muted">
                       <div
                         ref={(node) => {

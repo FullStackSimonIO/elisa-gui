@@ -138,12 +138,12 @@ export function EVCC({
     <section
       aria-label="Electric Vehicle Charge Controller"
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-6 shadow-sm backdrop-blur",
+        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
         "before:absolute before:-right-28 before:top-1/2 before:h-72 before:w-72 before:-translate-y-1/2 before:rounded-full before:bg-primary/15 before:blur-3xl before:content-['']",
         className
       )}
     >
-      <header className="mb-6">
+      <header className="mb-4">
         <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Electric Vehicle Charging Controller</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
           <h2 className="text-2xl font-semibold text-foreground">EVCC</h2>
@@ -153,7 +153,7 @@ export function EVCC({
         </div>
       </header>
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)]">
         <div className="space-y-4">
           {ACTIONS.map(({ key, label, icon: Icon, variant, description }) => {
             const infoLabel = actionInfoLabels?.[key] ?? description
@@ -197,8 +197,8 @@ export function EVCC({
           })}
         </div>
 
-        <div className="relative flex flex-col gap-6 rounded-3xl border border-border/60 bg-card/70 p-6">
-          <div className="relative flex min-h-[280px] flex-1 justify-between">
+        <div className="relative flex flex-col gap-5 rounded-3xl border border-border/60 bg-card/70 p-5">
+          <div className="relative flex min-h-[220px] flex-1 justify-between">
             <div className="absolute left-[22px] top-6 bottom-6 w-1.5 overflow-hidden rounded-full bg-muted">
               <div
                 aria-hidden
@@ -253,7 +253,7 @@ export function EVCC({
             </ul>
           </div>
 
-          <footer className="flex items-center justify-between rounded-2xl bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+          <footer className="flex items-center justify-between rounded-2xl bg-muted/30 px-3.5 py-2.5 text-sm text-muted-foreground">
             <span>Charging progress</span>
             <span className="font-semibold text-foreground">
               {currentStepKey === "completed" ? "Done" : chargingPercentLabel}

@@ -1,21 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { SidebarProvider } from "@/components/ui/sidebar";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import SidebarLayout from "@/components/Navigation/Sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { geistMono, geistSans, rubik } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Elisa GUI",
@@ -28,18 +19,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
-    <html lang="de" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex-row min-h-screen bg-background font-sans text-foreground justify-center items-center`}
-      >
-        <ThemeProvider>
-          
-          {children}
-          <Toaster richColors closeButton position="top-right" duration={4000} />
-        </ThemeProvider>
-      </body>
-    </html>
+    <SidebarProvider defaultOpen={false}>
+      <html lang="de" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} antialiased h-screen bg-background font-sans text-foreground`}
+        >
+          <ThemeProvider>
+            <div className="flex h-screen w-full overflow-hidden">
+              <SidebarLayout />
+
+              <SidebarInset className="flex h-full flex-1 flex-col bg-transparent">
+                <Navbar />
+                <div className="flex flex-1 overflow-hidden">
+                  {children}
+                </div>
+              </SidebarInset>
+            </div>
+            <Toaster richColors closeButton position="top-right" duration={4000} />
+          </ThemeProvider>
+        </body>
+      </html>
     </SidebarProvider>
   );
 }

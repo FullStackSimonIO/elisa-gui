@@ -1,15 +1,26 @@
-import React from 'react'
-import { ThemeToggle } from './theme-toggle'
-import Image from 'next/image'
+"use client"
+
+import Link from "next/link"
+
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const Navbar = () => {
   return (
-    <div className='bg-accent w-full h-[5vh]'>
-        <div className="text-background flex h-full w-full items-center justify-start p-4 font-semibold gap-4">
-            <Image src="/logo.png" alt="Elisa Logo" width={32} height={32} />
-            <p>Elisa - <span>Smart Charging</span></p>
-        </div>
-    </div>
+    <header className="flex h-16 w-full shrink-0 items-center justify-between gap-4 border-b border-border/60 bg-background/80 px-5 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger className="rounded-full border border-border/70 bg-muted/60 text-muted-foreground hover:bg-brand/20 hover:text-brand" />
+        <Link href="#" className="flex flex-col leading-tight text-sm">
+          <span className="font-semibold uppercase tracking-[0.4em] text-muted-foreground">Elisa</span>
+          <span className="text-xs font-semibold uppercase text-muted-foreground/70">Secure E-Vehicle Plug-and-Charge-System</span>
+        </Link>
+      </div>
+
+      <div className="flex items-center gap-3">
+        
+        <ThemeToggle />
+      </div>
+    </header>
   )
 }
 

@@ -3,25 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
-import ChargingAnimation from "@/components/ChargingAnimation"
 import EVCC, { type EVCCProps } from "@/components/EVCC"
-import ProgressBar from "@/components/ProgressBar"
+import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
 import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
-import { ThemeToggle } from "@/components/theme-toggle"
-import Navbar from "@/components/Navbar"
+import ChargingAnimation from "@/components/ChargingAnimation"
 
-const progressSteps = [
-  { id: "handshake", title: "Handshake", description: "Vehicle requests session" },
-  { id: "authorization", title: "Authorization", description: "Driver profile verified" },
-  { id: "connector-lock", title: "Connector Lock", description: "Plug secured" },
-  { id: "precharge", title: "Pre-Charge", description: "Voltage aligned" },
-  { id: "ramp-up", title: "Ramp Up", description: "Current increases" },
-  { id: "steady", title: "Steady State", description: "Charging at target rate" },
-  { id: "thermal-check", title: "Thermal Check", description: "Cooling system validation" },
-  { id: "taper", title: "Taper", description: "Current reduces near full" },
-  { id: "top-off", title: "Top Off", description: "Balancing individual cells" },
-  { id: "complete", title: "Complete", description: "Ready to disconnect" },
-]
+const progressSteps = CHARGING_PROGRESS_STEPS
 
 type EVCCInfoClickPayload = Parameters<NonNullable<EVCCProps["onInfoClick"]>>[0]
 
@@ -29,7 +16,7 @@ export default function Page() {
   const [progress, setProgress] = useState(0)
   const [isSimulating, setIsSimulating] = useState(false)
   const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
-  const processedStepRef = useRef(-1)
+  const completedStepRef = useRef(-1)
 
   const handleActionInfoClick = useCallback(
     ({ action, label, description }: EVCCInfoClickPayload) => {
@@ -43,7 +30,7 @@ export default function Page() {
   )
 
   const startSimulation = useCallback(() => {
-    processedStepRef.current = -1
+    completedStepRef.current = -1
     setTerminalLogs(() => [])
     setProgress(0)
     setIsSimulating(true)
@@ -56,7 +43,7 @@ export default function Page() {
   const resetSimulation = useCallback(() => {
     setIsSimulating(false)
     setProgress(0)
-    processedStepRef.current = -1
+    completedStepRef.current = -1
     setTerminalLogs(() => [])
   }, [])
 
@@ -102,70 +89,58 @@ export default function Page() {
     }
   }, [progress])
 
-  const isAnimationActive = isSimulating
-
   useEffect(() => {
     setTerminalLogs((prev) => {
       if (!isSimulating && progress === 0) {
-        processedStepRef.current = -1
+        completedStepRef.current = -1
         return []
       }
 
       const nextLogs = [...prev]
+      const targetCompletedIndex =
+        progress >= 1
+          ? progressSteps.length - 1
+          : Math.max(-1, currentStepIndex - 1)
 
-      if (
-        (isSimulating || progress > 0) &&
-        currentStepIndex > processedStepRef.current
-      ) {
-        for (let i = 0; i <= processedStepRef.current; i += 1) {
-          if (nextLogs[i] && nextLogs[i].status !== "success") {
-            nextLogs[i] = { ...nextLogs[i], status: "success" }
-          }
-        }
-
-        const step = progressSteps[currentStepIndex]
-        processedStepRef.current = currentStepIndex
-
-        nextLogs.push({
-          id: `${step.id}-${Date.now()}`,
-          label: `${currentStepIndex + 1}. ${step.title}`,
-          detail: step.description,
-          status:
-            progress >= 1 && currentStepIndex === progressSteps.length - 1
-              ? "success" as TerminalLogStatus
-              : "running" as TerminalLogStatus,
-          timestamp: new Date().toISOString(),
-        })
-
-        return nextLogs
+      if (targetCompletedIndex <= completedStepRef.current) {
+        return prev
       }
 
-      let changed = false
-      const updated = nextLogs.map((log, index) => {
-        let desiredStatus: TerminalLogEntry["status"] = log.status
+      for (
+        let index = completedStepRef.current + 1;
+        index <= targetCompletedIndex;
+        index += 1
+      ) {
+        const step = progressSteps[index]
+        if (!step) continue
 
-        if (index < currentStepIndex) {
-          desiredStatus = "success" as TerminalLogStatus
-        } else if (index === currentStepIndex) {
-          desiredStatus =
-            progress >= 1 && currentStepIndex === progressSteps.length - 1
-              ? "success" as TerminalLogStatus
-              : isAnimationActive
-                ? "running" as TerminalLogStatus
-                : "pending" as TerminalLogStatus
-        }
+        const timestamp = new Date()
 
-        if (desiredStatus !== log.status) {
-          changed = true
-          return { ...log, status: desiredStatus }
-        }
+        const label =
+          step.terminalLabel ??
+          [step.title, step.description].filter(Boolean).join(" - ")
 
-        return log
-      })
+        const detail =
+          step.description &&
+          label.toLowerCase().includes(step.description.toLowerCase())
+            ? undefined
+            : step.description
 
-      return changed ? updated : prev
+        nextLogs.push({
+          id: `${step.id}-completed-${timestamp.getTime()}`,
+          label,
+          detail,
+          status: "success",
+          timestamp: timestamp.toISOString(),
+          meta: "DONE",
+        })
+      }
+
+      completedStepRef.current = targetCompletedIndex
+
+      return nextLogs
     })
-  }, [currentStepIndex, isAnimationActive, isSimulating, progress])
+  }, [currentStepIndex, isSimulating, progress])
 
   useEffect(() => {
     if (progress < 1) return
@@ -194,29 +169,35 @@ export default function Page() {
   }, [progress])
 
   return (
-    <main className="relative flex flex-row min-h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6">
+    <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
       <div className="pointer-events-none absolute inset-0 opacity-70">
         <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
         <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-brand-200/30 blur-3xl" />
         <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
       </div>
 
-      
+    <div className="relative z-10 flex h-full w-full flex-col gap-6 2xl:gap-8 3xl:gap-10">
+        <div className="flex-shrink-0">
+          <ProgressBar
+            steps={progressSteps}
+            currentStepIndex={currentStepIndex}
+            progress={stepProgress}
+            showDescriptions
+            className="h-full w-full"
+            ariaLabel="Charging session progress"
+          />
+        </div>
 
-      <div className="relative z-10 mx-auto flex w-full  flex-col items-center gap-12 pb-24 pt-20">
-        
-
-        <ProgressBar
-              steps={progressSteps}
-              currentStepIndex={currentStepIndex}
-              progress={stepProgress}
-              showDescriptions
-              className="h-full w-full"
-              ariaLabel="Charging session progress"
+        <div className="grid min-h-0 flex-1 w-full grid-cols-1 gap-5 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)_minmax(0,1fr)] xl:gap-6 2xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)_minmax(0,1.05fr)] 3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.1fr)] 3xl:gap-10">
+          <div className="flex min-h-0 flex-col">
+            <ChargingAnimation
+              progress={progress}
+              isActive={isSimulating && progress > 0}
+              className="h-full min-h-[320px]"
             />
+          </div>
 
-        <div className="grid w-full grid-cols-1 gap-8 2xl:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] xl:gap-12">
-          <div className="grid grid-cols-1 gap-8">
+          <div className="flex min-h-0 flex-col">
             <EVCC
               status={evccStatus}
               chargingProgress={progress}
@@ -226,14 +207,12 @@ export default function Page() {
               onInfoClick={handleActionInfoClick}
               className="h-full"
             />
-            {/* <ChargingAnimation progress={progress} isActive={isAnimationActive} className="h-full" /> */}
           </div>
 
-          <div className="grid grid-cols-1 gap-8">
-            
+          <div className="flex min-h-0 flex-col 3xl:min-h-[520px]">
             <Terminal
               logs={terminalLogs}
-              className="min-h-[320px]"
+              className="flex-1 min-h-[220px] 3xl:min-h-[460px]"
               footerNote="Terminal Output"
             />
           </div>

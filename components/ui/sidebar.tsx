@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft } from "lucide-react"
+import { Menu } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -244,7 +244,7 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
+            "fixed top-16 bottom-0 z-40 hidden w-[--sidebar-width] transition-[left,right,width] duration-200 ease-linear md:flex",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -288,7 +288,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-      <PanelLeft />
+      <Menu />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
@@ -327,17 +327,53 @@ SidebarRail.displayName = "SidebarRail"
 const SidebarInset = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"main">
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
+  const { isMobile, state, setOpen, openMobile, setOpenMobile } = useSidebar()
+
+  const showBackdrop = React.useMemo(() => {
+    if (isMobile) {
+      return openMobile
+    }
+
+    return state === "expanded"
+  }, [isMobile, openMobile, state])
+
+  const handleBackdropClick = React.useCallback(() => {
+    if (isMobile) {
+      if (openMobile) {
+        setOpenMobile(false)
+      }
+      return
+    }
+
+    if (state === "expanded") {
+      setOpen(false)
+    }
+  }, [isMobile, openMobile, setOpenMobile, state, setOpen])
+
   return (
     <main
       ref={ref}
       className={cn(
-        "relative flex w-full flex-1 flex-col bg-background",
+        "relative flex min-w-0 flex-1 flex-col bg-background",
         "md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
         className
       )}
       {...props}
-    />
+    >
+      {showBackdrop ? (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={handleBackdropClick}
+          className={cn(
+            "absolute inset-0 z-30 cursor-pointer bg-transparent",
+            isMobile ? "block" : "hidden md:block"
+          )}
+        />
+      ) : null}
+      {children}
+    </main>
   )
 })
 SidebarInset.displayName = "SidebarInset"
@@ -398,7 +434,7 @@ const SidebarSeparator = React.forwardRef<
     <Separator
       ref={ref}
       data-sidebar="separator"
-      className={cn("mx-2 w-auto bg-sidebar-border", className)}
+      className={cn(" w-auto bg-sidebar-border", className)}
       {...props}
     />
   )

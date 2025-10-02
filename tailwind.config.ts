@@ -10,6 +10,11 @@ const config = {
   ],
   theme: {
     extend: {
+      screens: {
+        "3xl": "1920px",
+        "4xl": "2560px",
+        "5xl": "3200px",
+      },
       colors: {
         border: "var(--border)",
         input: "var(--input)",
@@ -86,6 +91,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+        heading: ["var(--font-heading)", "var(--font-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
         glow: "0 0 35px -5px var(--ring)",

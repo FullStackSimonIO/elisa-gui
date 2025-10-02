@@ -138,6 +138,11 @@ export function Terminal({
             {title}
           </p>
           <div className="flex flex-col gap-0.5 text-sm text-muted-foreground/80">
+            {prompt ? (
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground/60">
+                {prompt}
+              </span>
+            ) : null}
           </div>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">
