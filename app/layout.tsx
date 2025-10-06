@@ -30,7 +30,7 @@ export default function RootLayout({
 
               <SidebarInset className="flex h-full flex-1 flex-col bg-transparent">
                 <Navbar />
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex flex-1 overflow-x-hidden overflow-y-auto">
                   {children}
                 </div>
               </SidebarInset>

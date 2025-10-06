@@ -252,13 +252,13 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
   const statusToneClass = React.useMemo(() => {
     switch (overallStatus) {
       case "Transferring":
-        return "bg-brand/25 text-brand"
+        return "bg-gradient-to-r from-brand-300/40 via-brand-500/30 to-brand-400/40 text-brand"
       case "Completed":
-        return "bg-emerald-500/20 text-emerald-400"
+        return "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-emerald-200"
       case "Failed":
-        return "bg-destructive/20 text-destructive"
+        return "bg-gradient-to-r from-destructive/30 via-destructive/20 to-destructive/30 text-destructive"
       default:
-        return "bg-muted/40 text-muted-foreground"
+        return "bg-white/10 text-muted-foreground"
     }
   }, [overallStatus])
 
@@ -320,12 +320,14 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
   return (
     <section
       className={cn(
-        "certificate-transfer relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
-        "before:absolute before:-left-28 before:top-1/2 before:h-72 before:w-72 before:-translate-y-1/2 before:rounded-full before:bg-brand/10 before:blur-3xl before:content-['']",
-        "after:pointer-events-none after:absolute after:-right-20 after:top-1/4 after:h-64 after:w-64 after:rounded-full after:bg-brand-200/20 after:blur-[140px] after:content-['']",
+        "certificate-transfer relative isolate overflow-hidden rounded-[36px] border border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-5 shadow-[0_50px_120px_-70px_rgba(227,55,106,0.45)] backdrop-blur-2xl",
+        "dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/25 dark:to-slate-950/50",
+        "before:absolute before:-left-36 before:-top-28 before:h-72 before:w-72 before:rounded-[32px] before:bg-brand-400/30 before:blur-[140px] before:content-['']",
+        "after:pointer-events-none after:absolute after:-bottom-32 after:-right-24 after:h-80 after:w-80 after:bg-gradient-to-br after:from-brand-200/20 after:via-primary/15 after:to-brand-500/25 after:opacity-80 after:blur-[180px] after:content-['']",
+        "before:[clip-path:polygon(12%_0%,100%_8%,88%_100%,0%_88%)] after:[clip-path:polygon(0%_18%,78%_0%,100%_62%,18%_100%)]",
         className
       )}
-    data-active={effectiveIsActive}
+      data-active={effectiveIsActive}
       data-status={overallStatus.toLowerCase()}
       aria-live="polite"
     >
@@ -340,7 +342,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
           <Button
             variant="outline"
             size="sm"
-            className="mt-4 inline-flex items-center gap-2 rounded-full px-4"
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-foreground shadow-[0_12px_30px_-20px_rgba(227,55,106,0.4)] backdrop-blur-lg transition hover:border-brand-300/60 hover:bg-brand-300/15 dark:border-white/10 dark:bg-white/5"
             onClick={handleStartTransfer}
             disabled={isButtonDisabled}
             title={isExternallyControlled ? "Managed by parent state" : undefined}
@@ -350,7 +352,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
         </div>
         <span
           className={cn(
-            "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium",
+            "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3.5 py-1 text-xs font-medium backdrop-blur-lg dark:border-white/5 dark:bg-white/5",
             statusToneClass
           )}
         >
@@ -367,53 +369,61 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
         </span>
       </header>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]">
-        <div className="relative flex flex-col gap-6 rounded-3xl border border-border/60 bg-card/70 p-5">
-          <div className="grid items-center gap-4 md:grid-cols-3">
-            {PIPELINE_STEPS.map((step, index) => {
-              const Icon = step.icon
-              const isLast = index === PIPELINE_STEPS.length - 1
+    <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+  <div className="relative flex flex-col gap-5 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-5 shadow-[0_32px_90px_-70px_rgba(227,55,106,0.35)] backdrop-blur-xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/55">
+          <span className="pointer-events-none absolute inset-px rounded-[28px] border border-white/20 opacity-40 dark:border-white/10" />
+      <div className="relative -mx-3 overflow-x-auto px-3 pb-1.5">
+            <div className="flex min-w-[660px] items-stretch gap-4 md:min-w-0">
+              {PIPELINE_STEPS.map((step, index) => {
+                const Icon = step.icon
+                const isLast = index === PIPELINE_STEPS.length - 1
 
-              return (
-                <React.Fragment key={step.key}>
-                  <div
-                    className={cn(
-                      "relative flex flex-col gap-1 rounded-2xl border border-border/60 bg-background/60 p-4 text-sm transition",
-                      effectiveIsActive ? "shadow-glow" : "shadow-none"
-                    )}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15 text-brand">
-                        <Icon className="h-5 w-5" aria-hidden />
-                      </span>
-                      <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                        {index + 1}
-                      </span>
+                return (
+                  <React.Fragment key={step.key}>
+                    <div
+                      className={cn(
+                        "group relative flex min-w-[220px] flex-1 flex-col gap-2 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/22 via-white/10 to-white/12 p-4 text-sm shadow-[0_25px_60px_-50px_rgba(227,55,106,0.35)] transition-all duration-500",
+                        effectiveIsActive ? "shadow-glow" : "shadow-none"
+                      )}
+                    >
+                      <span className="pointer-events-none absolute inset-px rounded-[20px] border border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
+                      <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-brand-300/25 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-[18px] bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/45 text-brand shadow-[0_20px_50px_-45px_rgba(227,55,106,0.55)]">
+                          <Icon className="h-[22px] w-[22px]" aria-hidden />
+                        </span>
+                        <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <div className="mt-3 space-y-1">
+                        <p className="text-base font-semibold text-foreground">{step.label}</p>
+                        <p className="text-sm text-muted-foreground">{step.description}</p>
+                      </div>
                     </div>
-                    <div className="mt-3 space-y-1">
-                      <p className="text-base font-semibold text-foreground">{step.label}</p>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
-                    </div>
-                  </div>
 
-                  {!isLast ? (
-                    <div className="certificate-transfer__line hidden h-[3px] w-full rounded-full bg-muted md:block" />
-                  ) : null}
-                </React.Fragment>
-              )
-            })}
+                    {!isLast ? (
+                      <div className="flex w-12 shrink-0 items-center justify-center">
+                        <div className="certificate-transfer__line h-[2px] w-full rounded-full bg-white/20" />
+                      </div>
+                    ) : null}
+                  </React.Fragment>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="rounded-2xl bg-muted/40 px-4 py-4">
+          <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-white/10 px-4 py-3 backdrop-blur-lg dark:border-white/10 dark:bg-white/5">
+            <span className="pointer-events-none absolute inset-px rounded-[18px] border border-white/20 opacity-40 dark:border-white/10" />
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
               <span>Transfer progress</span>
               <span className="text-sm font-semibold text-foreground">{percentLabel}</span>
             </div>
-            <div className="mt-3 h-2 w-full rounded-full bg-muted">
+            <div className="mt-2.5 h-2 w-full rounded-full bg-white/20">
               <div
                 className={cn(
-                  "h-full rounded-full bg-gradient-to-r from-brand-300 via-brand to-primary transition-[width] duration-500 ease-out",
-                  effectiveIsActive ? "shadow-glow" : ""
+                  "h-full rounded-full bg-gradient-to-r from-brand-100 via-brand-400 to-brand-700 shadow-[0_18px_40px_-30px_rgba(227,55,106,0.45)] transition-[width] duration-500 ease-out",
+                  effectiveIsActive ? "animate-[pulse_2.8s_ease-in-out_infinite]" : ""
                 )}
                 style={{ width: `${Math.max(clampedProgress * 100, effectiveIsActive ? 6 : 0)}%` }}
               />
@@ -421,7 +431,8 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border/60 bg-card/70 p-5">
+  <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/25 via-white/10 to-white/10 p-5 shadow-[0_30px_80px_-60px_rgba(227,55,106,0.4)] backdrop-blur-xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/55">
+          <span className="pointer-events-none absolute inset-px rounded-[28px] border border-white/20 opacity-40 dark:border-white/10" />
           <header className="flex items-start justify-between gap-3">
             <div>
               <h3 className="text-lg font-semibold text-foreground">Certificate bundle</h3>
@@ -429,14 +440,14 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                 Each certificate moves through the pipeline once the transfer is active.
               </p>
             </div>
-            <span className="rounded-xl bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground">
+            <span className="rounded-xl border border-white/10 bg-white/10 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur dark:border-white/10 dark:bg-white/5">
               {derivedCertificates.length} items
             </span>
           </header>
 
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-4 space-y-3">
             {derivedCertificates.length === 0 ? (
-              <li className="rounded-2xl border border-dashed border-border/70 bg-card/60 px-4 py-5 text-sm text-muted-foreground">
+              <li className="rounded-[24px] border border-dashed border-white/20 bg-white/10 px-4 py-4 text-sm text-muted-foreground backdrop-blur">
                 No certificates detected. Provide bundle metadata to render items.
               </li>
             ) : (
@@ -445,22 +456,22 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                 const statusInfo: Record<CertificateStatus, { label: string; tone: string; icon: React.ReactNode }> = {
                   queued: {
                     label: "Queued",
-                    tone: "bg-muted/40 text-muted-foreground",
+                    tone: "bg-white/20 text-muted-foreground dark:bg-white/10",
                     icon: <Shield className="h-3.5 w-3.5" aria-hidden />,
                   },
                   transferring: {
                     label: "Transferring",
-                    tone: "bg-brand/20 text-brand",
+                    tone: "bg-gradient-to-r from-brand-300/40 via-brand-500/30 to-primary/40 text-brand",
                     icon: <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />,
                   },
                   verified: {
                     label: "Installed",
-                    tone: "bg-emerald-500/20 text-emerald-400",
+                    tone: "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-emerald-200",
                     icon: <CheckCircle className="h-3.5 w-3.5" aria-hidden />,
                   },
                   failed: {
                     label: "Failed",
-                    tone: "bg-destructive/20 text-destructive",
+                    tone: "bg-gradient-to-r from-destructive/30 via-destructive/20 to-destructive/30 text-destructive",
                     icon: <AlertTriangle className="h-3.5 w-3.5" aria-hidden />,
                   },
                 }
@@ -469,8 +480,10 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                   <li
                     key={certificate.id}
                     className={cn(
-                      "flex items-start justify-between gap-4 rounded-2xl border border-border/60 bg-background/60 p-4",
-                      status === "transferring" ? "shadow-glow" : ""
+                      "flex items-start justify-between gap-4 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/10 p-4 backdrop-blur-lg",
+                      status === "transferring"
+                        ? "shadow-[0_26px_60px_-50px_rgba(227,55,106,0.5)]"
+                        : "shadow-[0_18px_45px_-45px_rgba(87,15,37,0.35)]"
                     )}
                   >
                     <div className="space-y-1">
@@ -492,7 +505,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                     </div>
                     <span
                       className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
+                        "inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-medium backdrop-blur-lg dark:border-white/5",
                         statusInfo[status].tone
                       )}
                     >
@@ -507,7 +520,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
         </div>
       </div>
 
-      <footer className="mt-6 flex flex-wrap items-center gap-6 rounded-2xl bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+  <footer className="mt-4 flex flex-wrap items-center gap-5 rounded-[26px] border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-muted-foreground backdrop-blur dark:border-white/5 dark:bg-white/5">
         <div className="flex items-center gap-2">
           <Shield className="h-4 w-4" aria-hidden />
           <span className="text-xs uppercase tracking-[0.2em]">Started</span>
@@ -535,11 +548,11 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
           background: linear-gradient(
             90deg,
             rgba(255, 255, 255, 0) 0%,
-            rgba(227, 55, 106, 0.05) 20%,
-            rgba(227, 55, 106, 0.45) 45%,
-            rgba(255, 255, 255, 0.9) 50%,
-            rgba(227, 55, 106, 0.45) 55%,
-            rgba(227, 55, 106, 0.05) 80%,
+            rgba(255, 172, 198, 0.14) 18%,
+            rgba(227, 55, 106, 0.45) 42%,
+            rgba(255, 255, 255, 0.85) 50%,
+            rgba(227, 55, 106, 0.45) 58%,
+            rgba(255, 172, 198, 0.14) 82%,
             rgba(255, 255, 255, 0) 100%
           );
         }

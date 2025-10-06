@@ -89,11 +89,14 @@ export function CertificateTransferControls({
 
   return (
     <section
-      className={cn(
-        "certificate-transfer-controls relative overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
-        "before:absolute before:-left-24 before:top-1/2 before:h-64 before:w-64 before:-translate-y-1/2 before:rounded-full before:bg-brand/10 before:blur-3xl before:content-['']",
-        className
-      )}
+  className={cn(
+    "certificate-transfer-controls relative isolate overflow-hidden rounded-[36px] border border-white/20 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-5 shadow-[0_40px_80px_-45px_rgba(227,55,106,0.45)] backdrop-blur-2xl",
+    "dark:border-white/10 dark:from-slate-950/40 dark:via-slate-950/20 dark:to-slate-950/40",
+    "before:absolute before:-left-32 before:-top-24 before:h-64 before:w-64 before:rounded-[32px] before:bg-brand-300/40 before:blur-[120px] before:content-['']",
+    "after:absolute after:-bottom-24 after:-right-20 after:h-72 after:w-72 after:bg-gradient-to-br after:from-brand-200/20 after:via-primary/10 after:to-brand-500/20 after:opacity-70 after:blur-[140px] after:content-['']",
+    "before:[clip-path:polygon(12%_0%,100%_8%,88%_100%,0%_84%)] after:[clip-path:polygon(0%_18%,75%_0%,100%_70%,18%_100%)]",
+    className
+  )}
       aria-label="Certificate management actions"
     >
       <header className="flex flex-wrap items-center justify-between gap-3">
@@ -107,18 +110,20 @@ export function CertificateTransferControls({
         </div>
       </header>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
+  <div className="mt-5 grid gap-4 md:grid-cols-3">
         {normalizedActions.map((descriptor) => {
           const { key, label, description, icon: Icon, variant } = descriptor
 
           return (
             <article
               key={key}
-              className="group relative flex flex-col gap-4 rounded-2xl border border-border/60 bg-background/60 p-4 text-sm transition hover:border-primary/60 hover:shadow-lg"
+              className="group relative flex flex-col gap-4 overflow-hidden rounded-[26px] border border-white/10 bg-gradient-to-br from-white/25 via-white/10 to-white/20 p-4 text-sm shadow-[0_26px_60px_-40px_rgba(227,55,106,0.4)] transition-all duration-500 hover:-translate-y-1 hover:border-brand-300/60 hover:shadow-[0_46px_110px_-60px_rgba(227,55,106,0.6)] dark:border-white/5 dark:from-slate-950/40 dark:via-slate-950/30 dark:to-slate-950/50"
             >
+              <span className="pointer-events-none absolute inset-px rounded-[24px] border border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-brand-300/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="flex items-center justify-between">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15 text-brand">
-                  <Icon className="h-5 w-5" aria-hidden />
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/45 text-brand shadow-[0_18px_50px_-40px_rgba(227,55,106,0.55)]">
+                  <Icon className="h-[22px] w-[22px]" aria-hidden />
                 </span>
 
                 <Tooltip delayDuration={50}>
@@ -127,7 +132,7 @@ export function CertificateTransferControls({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-full border border-border/60 text-muted-foreground transition hover:text-foreground"
+                      className="h-9 w-9 rounded-full border border-white/20 bg-white/5 text-muted-foreground backdrop-blur-lg transition hover:border-brand-300/60 hover:text-foreground dark:border-white/10 dark:bg-white/5"
                       onClick={() => handleInfo(descriptor)}
                       aria-label={`${label} details`}
                     >
@@ -149,7 +154,7 @@ export function CertificateTransferControls({
               <Button
                 type="button"
                 variant={variant}
-                className="mt-auto justify-center rounded-2xl font-semibold"
+                className="mt-auto justify-center rounded-2xl border border-white/20 font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
                 onClick={() => handleAction(descriptor)}
               >
                 Execute

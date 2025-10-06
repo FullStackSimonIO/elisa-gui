@@ -68,8 +68,8 @@ const ACTIONS: Array<{
     key: "end",
     label: "End",
     icon: Power,
-    variant: "secondary",
     description: "Stop the current charging session",
+     variant: "secondary",
   },
   {
     key: "reset",
