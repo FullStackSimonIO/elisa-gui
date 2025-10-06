@@ -7,6 +7,7 @@ import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
 import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
 import ChargingAnimation from "@/components/ChargingAnimation"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 
 const progressSteps = CHARGING_PROGRESS_STEPS
 
@@ -176,47 +177,57 @@ export default function Page() {
         <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
       </div>
 
-    <div className="relative z-10 flex h-full w-full flex-col gap-6 2xl:gap-8 3xl:gap-10">
-        <div className="flex-shrink-0">
-          <ProgressBar
-            steps={progressSteps}
-            currentStepIndex={currentStepIndex}
-            progress={stepProgress}
-            showDescriptions
-            className="h-full w-full"
-            ariaLabel="Charging session progress"
-          />
-        </div>
+  <div className="relative z-10 flex h-full w-full flex-col gap-6 2xl:gap-8 3xl:gap-10">
+        <ResizablePanelGroup direction="vertical" className="flex-1 gap-5 xl:gap-6 3xl:gap-10">
+          <ResizablePanel defaultSize={55} minSize={40} className="flex">
+            <ResizablePanelGroup direction="horizontal" className="h-full flex-1 gap-5 xl:gap-6 3xl:gap-10">
+              <ResizablePanel minSize={20} defaultSize={32} className="flex min-h-0 flex-col">
+                <ProgressBar
+                  steps={progressSteps}
+                  currentStepIndex={currentStepIndex}
+                  progress={stepProgress}
+                  showDescriptions
+                  className="flex-1"
+                  ariaLabel="Charging session progress"
+                />
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel minSize={20} defaultSize={68} className="flex min-h-0 flex-col">
+                <ChargingAnimation
+                  progress={progress}
+                  isActive={isSimulating && progress > 0}
+                  className="flex-1 min-h-[320px]"
+                />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
 
-        <div className="grid min-h-0 flex-1 w-full grid-cols-1 gap-5 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)_minmax(0,1fr)] xl:gap-6 2xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)_minmax(0,1.05fr)] 3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1.1fr)] 3xl:gap-10">
-          <div className="flex min-h-0 flex-col">
-            <ChargingAnimation
-              progress={progress}
-              isActive={isSimulating && progress > 0}
-              className="h-full min-h-[320px]"
-            />
-          </div>
+          <ResizableHandle withHandle />
 
-          <div className="flex min-h-0 flex-col">
-            <EVCC
-              status={evccStatus}
-              chargingProgress={progress}
-              onStart={startSimulation}
-              onEnd={stopSimulation}
-              onReset={resetSimulation}
-              onInfoClick={handleActionInfoClick}
-              className="h-full"
-            />
-          </div>
-
-          <div className="flex min-h-0 flex-col 3xl:min-h-[520px]">
-            <Terminal
-              logs={terminalLogs}
-              className="flex-1 min-h-[220px] 3xl:min-h-[460px]"
-              footerNote="Terminal Output"
-            />
-          </div>
-        </div>
+          <ResizablePanel defaultSize={45} minSize={35} className="flex">
+            <ResizablePanelGroup direction="horizontal" className="h-full flex-1 gap-5 xl:gap-6 3xl:gap-10">
+              <ResizablePanel minSize={20} defaultSize={45} className="flex min-h-0 flex-col">
+                <EVCC
+                  status={evccStatus}
+                  chargingProgress={progress}
+                  onStart={startSimulation}
+                  onEnd={stopSimulation}
+                  onReset={resetSimulation}
+                  onInfoClick={handleActionInfoClick}
+                  className="flex-1"
+                />
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel minSize={20} defaultSize={55} className="flex min-h-0 flex-col">
+                <Terminal
+                  logs={terminalLogs}
+                  className="flex-1 min-h-[220px] 3xl:min-h-[460px]"
+                  footerNote="Terminal Output"
+                />
+              </ResizablePanel>
+            </ResizablePanelGroup>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </main>
   )

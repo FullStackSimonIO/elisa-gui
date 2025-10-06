@@ -165,7 +165,7 @@ export function EVCC({
                   aria-label={`${label} info`}
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-background"
+                  className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-foreground"
                   onClick={() =>
                     onInfoClick?.({
                       action: key,
