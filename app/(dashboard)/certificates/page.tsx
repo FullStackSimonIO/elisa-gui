@@ -26,100 +26,158 @@ type CertificateStep = {
   meta?: string
 }
 
+type ActionDefinition = {
+  label: string
+  prompt: string
+  steps: CertificateStep[]
+  completion: {
+    label: string
+    detail: string
+    meta: string
+  }
+}
+
 const SIMULATION_DURATION_MS = 8000
 
-const ACTION_LABELS: Record<CertificateActionKey, string> = {
-  "pre-install": "Pre-install certificates",
-  distribute: "Distribute certificates",
-  reset: "Reset certificates",
+const ACTION_DEFINITIONS: Record<CertificateActionKey, ActionDefinition> = {
+  "pre-install": {
+    label: "Pre-install certificates",
+    prompt: "evcc@preinstall",
+    steps: [
+      {
+        id: "stage",
+        label: "Staging certificate bundle",
+        description: "Preparing OEM payload for secure channel",
+        meta: "STEP 01",
+      },
+      {
+        id: "validate",
+        label: "Validating OEM manifest",
+        description: "Checking bundle signatures against OEM PKI",
+        meta: "STEP 02",
+      },
+      {
+        id: "upload",
+        label: "Uploading certificate package",
+        description: "Streaming PEM artifacts to controller storage",
+        meta: "STEP 03",
+      },
+      {
+        id: "attestation",
+        label: "Attesting hardware secure module",
+        description: "Verifying TPM nonce and key material",
+        meta: "STEP 04",
+      },
+    ],
+    completion: {
+      label: "OEM bundle staged successfully",
+      detail: "EVCC controller confirmed trust chain installation.",
+      meta: "DONE",
+    },
+  },
+  distribute: {
+    label: "Distribute certificates",
+    prompt: "evcc@mesh",
+    steps: [
+      {
+        id: "mesh-scan",
+        label: "Scanning EVCC mesh",
+        description: "Enumerating target modules for distribution",
+        meta: "STEP 01",
+      },
+      {
+        id: "push",
+        label: "Pushing bundle to nodes",
+        description: "Replicating credentials with delta compression",
+        meta: "STEP 02",
+      },
+      {
+        id: "integrity",
+        label: "Integrity verification",
+        description: "Cross-checking fingerprints across EVCC devices",
+        meta: "STEP 03",
+      },
+      {
+        id: "handover",
+        label: "Issuing activation",
+        description: "Restarting trust daemons with refreshed secrets",
+        meta: "STEP 04",
+      },
+    ],
+    completion: {
+      label: "Distribution completed",
+      detail: "All EVCC modules report synchronized certificates.",
+      meta: "SYNC",
+    },
+  },
+  reset: {
+    label: "Reset certificates",
+    prompt: "evcc@reset",
+    steps: [
+      {
+        id: "drain",
+        label: "Draining active sessions",
+        description: "Gracefully closing certificate consumers",
+        meta: "STEP 01",
+      },
+      {
+        id: "revoke",
+        label: "Revoking bundle",
+        description: "Revoking serials from controller trust store",
+        meta: "STEP 02",
+      },
+      {
+        id: "wipe",
+        label: "Wiping secure storage",
+        description: "Shredding persisted keys and cache entries",
+        meta: "STEP 03",
+      },
+      {
+        id: "baseline",
+        label: "Restoring factory anchors",
+        description: "Reloading OEM baseline certificate set",
+        meta: "STEP 04",
+      },
+    ],
+    completion: {
+      label: "Certificate store reset",
+      detail: "Device restored to OEM baseline anchor set.",
+      meta: "RESET",
+    },
+  },
 }
+
+const ACTION_ENTRIES = Object.entries(ACTION_DEFINITIONS) as Array<
+  [CertificateActionKey, ActionDefinition]
+>
+
+const ACTION_LABELS = ACTION_ENTRIES.reduce(
+  (acc, [key, definition]) => {
+    acc[key] = definition.label
+    return acc
+  },
+  {} as Record<CertificateActionKey, string>
+)
 
 const TERMINAL_PROMPTS: Record<CertificateActionKey | "standby", string> = {
   standby: "evcc@controller",
-  "pre-install": "evcc@preinstall",
-  distribute: "evcc@mesh",
-  reset: "evcc@reset",
+  ...ACTION_ENTRIES.reduce(
+    (acc, [key, definition]) => {
+      acc[key] = definition.prompt
+      return acc
+    },
+    {} as Record<CertificateActionKey, string>
+  ),
 }
 
 const CERTIFICATE_STEPS: Record<CertificateActionKey | "default", CertificateStep[]> = {
-  "pre-install": [
-    {
-      id: "stage",
-      label: "Staging certificate bundle",
-      description: "Preparing OEM payload for secure channel",
-      meta: "STEP 01",
+  ...ACTION_ENTRIES.reduce(
+    (acc, [key, definition]) => {
+      acc[key] = definition.steps
+      return acc
     },
-    {
-      id: "validate",
-      label: "Validating OEM manifest",
-      description: "Checking bundle signatures against OEM PKI",
-      meta: "STEP 02",
-    },
-    {
-      id: "upload",
-      label: "Uploading certificate package",
-      description: "Streaming PEM artifacts to controller storage",
-      meta: "STEP 03",
-    },
-    {
-      id: "attestation",
-      label: "Attesting hardware secure module",
-      description: "Verifying TPM nonce and key material",
-      meta: "STEP 04",
-    },
-  ],
-  distribute: [
-    {
-      id: "mesh-scan",
-      label: "Scanning EVCC mesh",
-      description: "Enumerating target modules for distribution",
-      meta: "STEP 01",
-    },
-    {
-      id: "push",
-      label: "Pushing bundle to nodes",
-      description: "Replicating credentials with delta compression",
-      meta: "STEP 02",
-    },
-    {
-      id: "integrity",
-      label: "Integrity verification",
-      description: "Cross-checking fingerprints across EVCC devices",
-      meta: "STEP 03",
-    },
-    {
-      id: "handover",
-      label: "Issuing activation",
-      description: "Restarting trust daemons with refreshed secrets",
-      meta: "STEP 04",
-    },
-  ],
-  reset: [
-    {
-      id: "drain",
-      label: "Draining active sessions",
-      description: "Gracefully closing certificate consumers",
-      meta: "STEP 01",
-    },
-    {
-      id: "revoke",
-      label: "Revoking bundle",
-      description: "Revoking serials from controller trust store",
-      meta: "STEP 02",
-    },
-    {
-      id: "wipe",
-      label: "Wiping secure storage",
-      description: "Shredding persisted keys and cache entries",
-      meta: "STEP 03",
-    },
-    {
-      id: "baseline",
-      label: "Restoring factory anchors",
-      description: "Reloading OEM baseline certificate set",
-      meta: "STEP 04",
-    },
-  ],
+    {} as Record<CertificateActionKey, CertificateStep[]>
+  ),
   default: [],
 }
 
@@ -131,21 +189,13 @@ const COMPLETION_MESSAGES: Record<
     meta?: string
   }
 > = {
-  "pre-install": {
-    label: "OEM bundle staged successfully",
-    detail: "EVCC controller confirmed trust chain installation.",
-    meta: "DONE",
-  },
-  distribute: {
-    label: "Distribution completed",
-    detail: "All EVCC modules report synchronized certificates.",
-    meta: "SYNC",
-  },
-  reset: {
-    label: "Certificate store reset",
-    detail: "Device restored to OEM baseline anchor set.",
-    meta: "RESET",
-  },
+  ...ACTION_ENTRIES.reduce(
+    (acc, [key, definition]) => {
+      acc[key] = definition.completion
+      return acc
+    },
+    {} as Record<CertificateActionKey, ActionDefinition["completion"]>
+  ),
   default: {
     label: "Workflow complete",
     detail: "All certificate operations finished without issues.",
