@@ -3,6 +3,8 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { Button } from "./ui/button"
+
 
 interface ChargingAnimationProps {
   /** Provide a custom SVG/illustration for the vehicle. */
@@ -116,6 +118,18 @@ export function ChargingAnimation({
   const pathRef = React.useRef<SVGPathElement>(null)
   const [pathLength, setPathLength] = React.useState<number>(0)
 
+  const handleTestGetEndpoint = React.useCallback(async () => {
+    try {
+      const response = await fetch("/api/pre-install-certificates", { cache: "no-store" });
+      if (!response.ok) throw new Error("Error");
+      const data = response.json();
+      console.log(data);
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+    }
+  }, [])
+
   React.useEffect(() => {
     if (!pathRef.current) return
     const length = pathRef.current.getTotalLength()
@@ -159,6 +173,7 @@ export function ChargingAnimation({
       aria-live="polite"
     >
       <div className="relative mx-auto flex h-64 w-full max-w-3xl items-end justify-between">
+        <Button onClick={handleTestGetEndpoint} variant="outline">Test GET Endpoint</Button>
         <div className="absolute inset-x-0 bottom-16 top-0">
           <svg
             className="h-full w-full"
