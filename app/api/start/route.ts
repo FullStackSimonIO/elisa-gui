@@ -2,3 +2,9 @@
 // First, we check if all certificates are installed
 // If not, we will call the Pre-Install Certificates API Route + finish the other actions
 // Else, we will start the actions that come after the Certificate Pre-Installation Process
+
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+    return NextResponse.json({ message: "Start Endpoint - Not yet implemented" });
+}
