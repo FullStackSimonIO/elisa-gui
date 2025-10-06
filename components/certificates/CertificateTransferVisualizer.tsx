@@ -65,7 +65,7 @@ const PIPELINE_STEPS: Array<{
   },
 ]
 
-const FALLBACK_CERTIFICATES: CertificateDescriptor[] = [
+export const FALLBACK_CERTIFICATES: CertificateDescriptor[] = [
   {
     id: "root-ca",
     name: "Root CA",

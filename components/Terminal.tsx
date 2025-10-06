@@ -128,7 +128,7 @@ export function Terminal({
   return (
     <section
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card/70 shadow-sm backdrop-blur",
+        "relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-border/70 bg-card/70 shadow-sm backdrop-blur lg:max-h-[calc(100vh-220px)]",
         className
       )}
     >
@@ -150,10 +150,10 @@ export function Terminal({
         </span>
       </header>
 
-      <div className="flex flex-1 flex-col gap-4 px-5 py-4">
+      <div className="flex flex-1 min-h-0 flex-col gap-4 px-5 py-4">
         <div
           ref={listRef}
-          className="scrollbar-thin flex-1 space-y-3 overflow-y-auto rounded-2xl bg-[#05030a]/92 px-4 py-5 font-mono text-[13px] text-brand-50"
+          className="scrollbar-thin flex-1 min-h-0 space-y-3 overflow-y-auto rounded-2xl bg-[#05030a]/92 px-4 py-5 font-mono text-[13px] text-brand-50"
           aria-live="polite"
         >
           {logs.length === 0 ? (
