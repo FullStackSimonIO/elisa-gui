@@ -18,7 +18,7 @@ type CertificationSchema = z.infer<typeof CertificateSchem>
 
 export async function GET(request: NextRequest) {
     // Fetch pre-installed certificates
-    const response: CertificationSchema = await fetch(`https://cat-fact.herokuapp.com/facts`, {
+    const response: CertificationSchema = await fetch(`https://test-endpoint.com/api/certificates`, {
         // Set your API token in environment variables for security
     headers: { Authorization: `Bearer ${process.env.EVCC_API_TOKEN}` },
     }).then(res => res.json()); // Parse the JSON response

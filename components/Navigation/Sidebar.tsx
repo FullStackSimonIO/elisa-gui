@@ -24,7 +24,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar"
+import { usePathname } from "next/navigation"
 
 const navigationItems = [
   {
@@ -43,12 +45,12 @@ const navigationItems = [
   {
     label: "Analytics",
     icon: BarChart3,
-    href: "#",
+    href: "/analytics",
   },
   {
     label: "Settings",
     icon: Settings,
-    href: "#",
+    href: "/settings",
   },
 ]
 
@@ -66,16 +68,18 @@ const supportItems = [
 ]
 
 const SidebarLayout = () => {
+  const  pathname = usePathname()
+  const { setOpen } = useSidebar()
   return (
     <Sidebar className="border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <SidebarHeader className="border-b border-border/50">
         <div className="flex items-center gap-2 rounded-xl bg-muted/30 p-3">
           <div className="flex size-9 items-center justify-center rounded-full bg-brand/15 text-brand">
-            <PlugZap className="size-4" />
+            <PlugZap className="size-4 text-background dark:text-foreground" />
           </div>
           <div className="text-sm leading-tight">
-            <p className="font-semibold text-background dark:text-white">Elisa Control</p>
-            <p className="text-xs font-semibold text-muted-background/70">Charging orchestration</p>
+            <p className="font-semibold text-background dark:text-foreground">Elisa Control</p>
+            <p className="text-xs font-semibold text-muted-background/70 dark:text-foreground/70">Charging orchestration</p>
           </div>
         </div>
       </SidebarHeader>
@@ -87,7 +91,7 @@ const SidebarLayout = () => {
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild isActive={item.active}>
+                  <SidebarMenuButton asChild  onClick={() => setOpen(false)} isActive={pathname === item.href}>
                     <Link href={item.href} className="flex items-center gap-2">
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
@@ -108,7 +112,7 @@ const SidebarLayout = () => {
               {supportItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.href} className="flex items-center gap-2">
+                    <Link href={item.href}className="flex items-center gap-2">
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
                     </Link>
@@ -121,9 +125,9 @@ const SidebarLayout = () => {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border/50">
-        <div className="rounded-lg border border-border/50 bg-muted/10 p-3 text-xs text-muted-foreground">
-          <p className="font-semibold uppercase tracking-[0.25em] text-muted-foreground/80">Session health</p>
-          <p className="mt-1 text-foreground">All systems nominal</p>
+        <div className="rounded-lg border border-border/50 bg-muted/10 p-3 text-xs ">
+          <p className="font-semibold uppercase tracking-[0.25em] text-background dark:text-foreground">Session health</p>
+          <p className="mt-1 text-background/70 dark:text-foreground/70">All systems nominal</p>
         </div>
       </SidebarFooter>
     </Sidebar>
