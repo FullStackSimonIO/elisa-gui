@@ -407,9 +407,10 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
               {/* Progress bar */}
               <div
                 className={cn(
-                  "h-full rounded-full bg-brand shadow-[0_18px_40px_-30px_rgba(227,55,106,0.45)] transition-[width] duration-500 ease-out"
+                  "certificate-transfer__progress-fill h-full rounded-full bg-brand shadow-[0_18px_40px_-30px_rgba(227,55,106,0.45)] transition-[width] duration-300 ease-linear will-change-[width]"
                 )}
-                style={{ width: `${Math.max(clampedProgress * 100, effectiveIsActive ? 6 : 0)}%` }}
+                data-active={effectiveIsActive}
+                style={{ width: `${clampedProgress * 100}%` }}
               />
             </div>
           </div>
@@ -560,6 +561,44 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
           100% {
             transform: translateX(100%);
             opacity: 0;
+          }
+        }
+
+        :global(.certificate-transfer__progress-fill) {
+          position: relative;
+          overflow: hidden;
+        }
+
+        :global(.certificate-transfer__progress-fill::after) {
+          content: "";
+          position: absolute;
+          top: -4px;
+          bottom: -4px;
+          left: -80%;
+          right: -80%;
+          background: linear-gradient(
+            110deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 190, 220, 0.12) 35%,
+            rgba(255, 255, 255, 0.65) 50%,
+            rgba(255, 190, 220, 0.12) 65%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          opacity: 0;
+          transform: translateX(-45%);
+        }
+
+        :global(.certificate-transfer__progress-fill[data-active="true"]::after) {
+          opacity: 0.9;
+          animation: certificate-progress-shimmer 1.6s linear infinite;
+        }
+
+        @keyframes certificate-progress-shimmer {
+          0% {
+            transform: translateX(-55%);
+          }
+          100% {
+            transform: translateX(55%);
           }
         }
       `}</style>
