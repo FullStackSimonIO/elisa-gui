@@ -4,6 +4,8 @@ import Link from "next/link"
 
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import DigitalClock from "./DigitalClock"
+import Battery from "./Battery"
 
 const Navbar = () => {
   return (
@@ -16,6 +18,8 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-3">
+        <Battery />
+        <DigitalClock className="ml-auto" />
         <ThemeToggle />
       </div>
     </header>

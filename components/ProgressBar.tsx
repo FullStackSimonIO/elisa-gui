@@ -372,7 +372,7 @@ export function ProgressBar({
                       isCompleted
                         ? "border-brand bg-brand text-brand-foreground shadow-glow"
                         : isActive
-                          ? "border-brand bg-card text-brand"
+                          ? "border-black bg-card text-brand "
                           : "border-border/70 bg-card text-muted-foreground"
                     )}
                   >

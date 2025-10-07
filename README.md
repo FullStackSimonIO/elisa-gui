@@ -8,28 +8,16 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5000](http://localhost:5000) with your browser to load the UX-Panel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Basic Information
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- At the Beginning, the Layout is empty, there is a Skeleton Placeholder with a Plus Icon in a responsive Grid Layout where the Admin Panel can be configured how the User wants
+- The Grid Layout has the Option to be dragged or compressed when Components are added, so maximum flexability is guaranteed
+- Also a light and a darkmode is implemented in the UX Panel
+- Predefined Components will be built, ready to import
+- Also predefined Interfaces will be built, e.g. a Charging Interface or a Certificate Interface
 
 ## Deploy on Vercel
 

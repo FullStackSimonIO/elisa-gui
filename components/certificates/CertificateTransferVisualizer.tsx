@@ -254,11 +254,11 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
       case "Transferring":
         return "bg-gradient-to-r from-brand-300/40 via-brand-500/30 to-brand-400/40 text-brand"
       case "Completed":
-        return "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-emerald-200"
+        return "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-foreground-200"
       case "Failed":
         return "bg-gradient-to-r from-destructive/30 via-destructive/20 to-destructive/30 text-destructive"
       default:
-        return "bg-white/10 text-muted-foreground"
+        return "bg-brand/10 text-brand"
     }
   }, [overallStatus])
 
@@ -309,13 +309,6 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
     return `${minutes}m ${seconds.toString().padStart(2, "0")}s`
   }, [effectiveEtaSeconds, effectiveIsActive])
 
-  const buttonLabel = React.useMemo(() => {
-    if (effectiveIsActive) return "Transferring..."
-    if (clampedProgress >= 1) return "Restart Transfer"
-    return "Start Transfer"
-  }, [clampedProgress, effectiveIsActive])
-
-  const isButtonDisabled = isExternallyControlled || effectiveIsActive
 
   return (
     <section
@@ -339,16 +332,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
           <h2 className="mt-2 text-2xl font-semibold text-foreground">
             Certificate Transfer
           </h2>
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 text-foreground shadow-[0_12px_30px_-20px_rgba(227,55,106,0.4)] backdrop-blur-lg transition hover:border-brand-300/60 hover:bg-brand-300/15 dark:border-white/10 dark:bg-white/5"
-            onClick={handleStartTransfer}
-            disabled={isButtonDisabled}
-            title={isExternallyControlled ? "Managed by parent state" : undefined}
-          >
-            {buttonLabel}
-          </Button>
+          
         </div>
         <span
           className={cn(
@@ -420,10 +404,10 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
               <span className="text-sm font-semibold text-foreground">{percentLabel}</span>
             </div>
             <div className="mt-2.5 h-2 w-full rounded-full bg-white/20">
+              {/* Progress bar */}
               <div
                 className={cn(
-                  "h-full rounded-full bg-gradient-to-r from-brand-100 via-brand-400 to-brand-700 shadow-[0_18px_40px_-30px_rgba(227,55,106,0.45)] transition-[width] duration-500 ease-out",
-                  effectiveIsActive ? "animate-[pulse_2.8s_ease-in-out_infinite]" : ""
+                  "h-full rounded-full bg-brand shadow-[0_18px_40px_-30px_rgba(227,55,106,0.45)] transition-[width] duration-500 ease-out"
                 )}
                 style={{ width: `${Math.max(clampedProgress * 100, effectiveIsActive ? 6 : 0)}%` }}
               />
@@ -456,7 +440,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                 const statusInfo: Record<CertificateStatus, { label: string; tone: string; icon: React.ReactNode }> = {
                   queued: {
                     label: "Queued",
-                    tone: "bg-white/20 text-muted-foreground dark:bg-white/10",
+                    tone: "bg-white/20 text-foreground dark:bg-white/10",
                     icon: <Shield className="h-3.5 w-3.5" aria-hidden />,
                   },
                   transferring: {
@@ -466,7 +450,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                   },
                   verified: {
                     label: "Installed",
-                    tone: "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-emerald-200",
+                    tone: "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-foreground",
                     icon: <CheckCircle className="h-3.5 w-3.5" aria-hidden />,
                   },
                   failed: {
