@@ -22,7 +22,7 @@ const formatter = new Intl.DateTimeFormat("de-DE", {
 })
 
 export function DigitalClock({
-  label = "Berlin",
+  label ,
   className,
   tickRate = 1000,
 }: DigitalClockProps) {

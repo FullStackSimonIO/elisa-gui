@@ -26,7 +26,7 @@ const BatteryStatus: React.FC<BatteryStatusProps> = ({
             <Icon className="h-4 w-4" aria-hidden="true"  />
             <div className="flex items-center gap-1 font-medium tracking-wide">
                 <span>{clamped}%</span>
-                {isCharging && <span className="uppercase text-[0.6rem]">charging</span>}
+                {isCharging && <span className="uppercase text-[0.6rem]">Charging Battery...</span>}
             </div>
         </div>
     )
