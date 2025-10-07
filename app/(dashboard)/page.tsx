@@ -1,12 +1,12 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 
 import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
-import Terminal, { type TerminalLogEntry, type TerminalLogStatus } from "@/components/Terminal"
 import ChargingAnimation from "@/components/ChargingAnimation"
+import ClockCard from "@/components/ClockCard"
 
 const progressSteps = CHARGING_PROGRESS_STEPS
 
@@ -15,8 +15,6 @@ type EVCCInfoClickPayload = Parameters<NonNullable<EVCCProps["onInfoClick"]>>[0]
 export default function Page() {
   const [progress, setProgress] = useState(0)
   const [isSimulating, setIsSimulating] = useState(false)
-  const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
-  const completedStepRef = useRef(-1)
 
   const handleActionInfoClick = useCallback(
     ({ action, label, description }: EVCCInfoClickPayload) => {
@@ -30,8 +28,6 @@ export default function Page() {
   )
 
   const startSimulation = useCallback(() => {
-    completedStepRef.current = -1
-    setTerminalLogs(() => [])
     setProgress(0)
     setIsSimulating(true)
   }, [])
@@ -43,8 +39,6 @@ export default function Page() {
   const resetSimulation = useCallback(() => {
     setIsSimulating(false)
     setProgress(0)
-    completedStepRef.current = -1
-    setTerminalLogs(() => [])
   }, [])
 
   useEffect(() => {
@@ -89,85 +83,6 @@ export default function Page() {
     }
   }, [progress])
 
-  useEffect(() => {
-    setTerminalLogs((prev) => {
-      if (!isSimulating && progress === 0) {
-        completedStepRef.current = -1
-        return []
-      }
-
-      const nextLogs = [...prev]
-      const targetCompletedIndex =
-        progress >= 1
-          ? progressSteps.length - 1
-          : Math.max(-1, currentStepIndex - 1)
-
-      if (targetCompletedIndex <= completedStepRef.current) {
-        return prev
-      }
-
-      for (
-        let index = completedStepRef.current + 1;
-        index <= targetCompletedIndex;
-        index += 1
-      ) {
-        const step = progressSteps[index]
-        if (!step) continue
-
-        const timestamp = new Date()
-
-        const label =
-          step.terminalLabel ??
-          [step.title, step.description].filter(Boolean).join(" - ")
-
-        const detail =
-          step.description &&
-          label.toLowerCase().includes(step.description.toLowerCase())
-            ? undefined
-            : step.description
-
-        nextLogs.push({
-          id: `${step.id}-completed-${timestamp.getTime()}`,
-          label,
-          detail,
-          status: "success",
-          timestamp: timestamp.toISOString(),
-          meta: "DONE",
-        })
-      }
-
-      completedStepRef.current = targetCompletedIndex
-
-      return nextLogs
-    })
-  }, [currentStepIndex, isSimulating, progress])
-
-  useEffect(() => {
-    if (progress < 1) return
-
-    setTerminalLogs((prev) => {
-      const normalized = prev.map((log) =>
-        log.status !== "success" ? { ...log, status: "success" as TerminalLogStatus } : log
-      )
-
-      if (normalized.some((log) => log.id === "session-complete")) {
-        return normalized
-      }
-
-      return [
-        ...normalized,
-        {
-          id: "session-complete",
-          label: "Session complete",
-          detail: "Vehicle confirmed full charge. Connector ready to release.",
-          status: "success" as TerminalLogStatus,
-          timestamp: new Date().toISOString(),
-          meta: "OK",
-        },
-      ]
-    })
-  }, [progress])
-
   return (
     <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
       <div className="pointer-events-none absolute inset-0 opacity-70">
@@ -204,12 +119,7 @@ export default function Page() {
             onInfoClick={handleActionInfoClick}
             className="flex h-full min-h-[320px] flex-col rounded-[28px]"
           />
-
-          <Terminal
-            logs={terminalLogs}
-            className="flex h-full min-h-[320px] flex-col rounded-[28px]"
-            footerNote="Terminal Output"
-          />
+          <ClockCard className="flex h-full min-h-[320px] flex-col" label="Berlin" />
         </section>
       </div>
     </main>

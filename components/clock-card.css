@@ -1,0 +1,73 @@
+.react-clock {
+  display: block;
+  position: relative;
+  width: 100% !important;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  padding: 1.25rem;
+  background: radial-gradient(circle at 28% 24%, rgba(236, 72, 153, 0.18), rgba(6, 9, 21, 0.85) 52%, rgba(4, 6, 14, 0.95));
+  box-shadow: 0 22px 60px -30px rgba(236, 72, 153, 0.45), inset 0 0 28px rgba(255, 255, 255, 0.04);
+}
+
+.react-clock__face {
+  fill: rgba(8, 12, 24, 0.72);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 24px 36px rgba(15, 23, 42, 0.55));
+}
+
+.react-clock__mark__body,
+.react-clock__minute-mark__body {
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.react-clock__hour-mark__body {
+  stroke: rgba(255, 255, 255, 0.65);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.45));
+}
+
+.react-clock__hand__body {
+  stroke-linecap: round;
+}
+
+.react-clock__hour-hand__body {
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 4;
+  filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.45));
+}
+
+.react-clock__minute-hand__body {
+  stroke: rgba(236, 72, 153, 0.85);
+  stroke-width: 3;
+  filter: drop-shadow(0 10px 14px rgba(236, 72, 153, 0.35));
+}
+
+.react-clock__second-hand__body {
+  stroke: rgba(255, 94, 188, 0.85);
+  stroke-width: 2;
+  filter: drop-shadow(0 12px 20px rgba(236, 72, 153, 0.45));
+}
+
+.react-clock__second-hand__body::after {
+  content: "";
+}
+
+.react-clock__second-hand__cap,
+.react-clock__minute-hand__cap,
+.react-clock__hour-hand__cap {
+  fill: rgba(236, 72, 153, 0.9);
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 1;
+}
+
+.react-clock__number__text {
+  fill: rgba(255, 255, 255, 0.88);
+  font-family: "Rubik", "Segoe UI", system-ui, sans-serif;
+  font-weight: 600;
+  text-shadow: 0 6px 12px rgba(15, 23, 42, 0.55);
+}
