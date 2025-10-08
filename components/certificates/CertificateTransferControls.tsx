@@ -82,7 +82,7 @@ export function CertificateTransferControls({
 
 
 
-  //  
+  // This handles the actual Action when the User clicks the Button to start the Certificate Transfer Process
   const handleAction = React.useCallback(
     (descriptor: CertificateActionDescriptor) => {
       onAction?.(descriptor.key)
@@ -90,12 +90,15 @@ export function CertificateTransferControls({
     [onAction]
   )
 
+  // Similarly, this handles the Info-Button Clicks
   const handleInfo = React.useCallback(
     (descriptor: CertificateActionDescriptor) => {
       onInfo?.(descriptor)
     },
     [onInfo]
   )
+
+
 
   return (
     <section
@@ -119,6 +122,7 @@ export function CertificateTransferControls({
       </header>
 
   <div className="mt-6 flex w-full flex-col items-center gap-3.5">
+        {/*Map over the Actions, render the Buttons incl. the Client Side Functionality */}
         {normalizedActions.map((descriptor) => {
           const { key, label, description, icon: Icon, variant } = descriptor
 
@@ -136,7 +140,7 @@ export function CertificateTransferControls({
                     variant="ghost"
                     size="icon"
                     className="absolute right-4 top-4 h-8 w-8 rounded-full border border-white/20 bg-white/5 text-muted-foreground backdrop-blur-lg transition hover:border-brand-300/60 hover:text-background hover:dark:text-foreground dark:border-white/10 dark:bg-white/5 dark:hover:bg-accent"
-                    onClick={() => handleInfo(descriptor)}
+                    onClick={() => handleInfo(descriptor)} // Info-Handler gets executed on Click
                     aria-label={`${label} details`}
                   >
                     <Info className="h-4 w-4" aria-hidden />
@@ -167,7 +171,7 @@ export function CertificateTransferControls({
                 type="button"
                 variant={variant}
                 className="mt-auto w-full justify-center rounded-2xl border border-white/20 py-2.5 font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
-                onClick={() => handleAction(descriptor)}
+                onClick={() => handleAction(descriptor)} // Action-Handler gets executed on Click
               >
                 Execute
               </Button>
