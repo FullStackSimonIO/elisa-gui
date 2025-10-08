@@ -105,11 +105,18 @@ export default function Page() {
         </section>
 
         <section className="grid flex-1 grid-cols-1 gap-6 xl:grid-cols-3 2xl:gap-8 3xl:gap-10">
-          <ChargingAnimation
-            progress={progress}
-            isActive={isSimulating && progress > 0}
-            className="rounded-[28px]"
-          />
+          <div className="flex h-full min-h-0 flex-col gap-6 2xl:gap-8">
+            <div className="flex-1 min-h-0">
+              <ClockCard className="h-full" label="Berlin" />
+            </div>
+            <div className="flex-1 min-h-0">
+              <ChargingAnimation
+                progress={progress}
+                isActive={isSimulating && progress > 0}
+                className="h-full rounded-[28px]"
+              />
+            </div>
+          </div>
 
           <EVCC
             status={evccStatus}
@@ -121,7 +128,7 @@ export default function Page() {
             className="rounded-[28px]"
           />
           
-          <ClockCard className="" label="Berlin" />
+          <Terminal logs={[]} className="rounded-[28px]" />
         </section>
       </div>
     </main>

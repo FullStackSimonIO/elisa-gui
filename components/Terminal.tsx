@@ -128,38 +128,45 @@ export function Terminal({
   return (
     <section
       className={cn(
-        "relative flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-border/70 bg-card/80 shadow-sm backdrop-blur lg:max-h-[calc(100vh-220px)]",
+        "relative isolate flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10 lg:max-h-[calc(100vh-220px)]",
         className
       )}
     >
-      <header className="flex items-center justify-between gap-3 border-b border-border/50 bg-white/60 px-5 py-4 dark:bg-black/20">
+      {/* Background glow effects */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -right-24 top-1/4 h-64 w-64 rounded-full bg-brand/15 blur-3xl" />
+        <div className="absolute -left-16 bottom-1/3 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
+        <div className="absolute right-1/3 -bottom-12 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
+      </div>
+
+      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950/40 px-5 py-4 backdrop-blur-sm">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
             {title}
           </p>
-          <div className="flex flex-col gap-0.5 text-sm text-muted-foreground/80">
+          <div className="flex flex-col gap-0.5 text-sm text-slate-400">
             {prompt ? (
-              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground/60">
+              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
                 {prompt}
               </span>
             ) : null}
           </div>
         </div>
-  <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-brand">
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
           Live
         </span>
       </header>
 
-      <div className="flex flex-1 min-h-0 flex-col gap-4 px-5 py-4">
+      <div className="relative z-10 flex flex-1 min-h-0 flex-col gap-4 px-5 py-4">
         <div
           ref={listRef}
-          className="scrollbar-thin flex-1 min-h-0 space-y-3 overflow-y-auto rounded-2xl bg-white/90 px-4 py-5 font-mono text-[13px] text-slate-800 shadow-inner dark:bg-[#05030a]/92 dark:text-brand-50"
+          className="scrollbar-thin flex-1 min-h-0 space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-5 font-mono text-[13px] shadow-lg backdrop-blur-sm dark:text-brand-50"
           aria-live="polite"
         >
           {logs.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-sm text-muted-foreground">
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-sm text-slate-400">
               <span>Awaiting backend events…</span>
-              <span className="text-xs text-muted-foreground/70">
+              <span className="text-xs text-slate-500">
                 Start a session to stream execution steps.
               </span>
             </div>
@@ -173,7 +180,7 @@ export function Terminal({
                 <div
                   key={log.id}
                   data-terminal-line
-                  className="group flex items-start gap-3 rounded-xl border border-white/80 bg-white/75 px-3 py-2 transition hover:border-brand/40 hover:bg-white dark:border-transparent dark:bg-white/[0.02] dark:hover:border-brand/30 dark:hover:bg-white/[0.05]"
+                  className="group flex items-start gap-3 rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2 shadow-sm backdrop-blur-sm transition hover:border-brand/40 hover:bg-slate-900/60 hover:shadow-md"
                 >
                   <span
                     className={cn(
@@ -182,7 +189,7 @@ export function Terminal({
                     )}
                   />
                   <div className="flex flex-1 flex-col gap-1">
-                    <div className="flex flex-wrap items-center gap-2 text-slate-900 dark:text-brand-50">
+                    <div className="flex flex-wrap items-center gap-2 text-brand-50">
                       <Icon
                         className={cn(
                           "size-4",
@@ -190,24 +197,24 @@ export function Terminal({
                           status === "running" ? "animate-spin" : undefined
                         )}
                       />
-                      <span className="font-semibold text-foreground dark:text-brand-100">
+                      <span className="font-semibold text-brand-100">
                         {log.label}
                       </span>
                       {log.meta ? (
-                        <span className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground dark:text-brand-200/80">
+                        <span className="text-[11px] uppercase tracking-wider text-slate-400">
                           {log.meta}
                         </span>
                       ) : null}
-                      <span className="ml-auto text-[11px] text-muted-foreground/80 dark:text-brand-300/70">
+                      <span className="ml-auto text-[11px] text-slate-500">
                         {formatTimestamp(log.timestamp)}
                       </span>
                     </div>
                     {log.detail ? (
-                      <p className="text-[12px] text-muted-foreground dark:text-brand-200/80">
+                      <p className="text-[12px] text-slate-400">
                         {log.detail}
                       </p>
                     ) : null}
-                    <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground/80 dark:text-brand-300/60">
+                    <span className="text-[10px] uppercase tracking-wider text-slate-500">
                       {meta.label}
                     </span>
                   </div>
@@ -218,7 +225,7 @@ export function Terminal({
         </div>
       </div>
 
-      <footer className="flex items-center justify-between gap-3 border-t border-border/50 bg-white/70 px-5 py-3 text-xs text-muted-foreground dark:bg-black/20">
+      <footer className="relative z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-slate-950/60 px-5 py-3 text-xs text-slate-400 shadow-lg backdrop-blur-sm">
         <span>{footerNote}</span>
         <span className="font-mono text-brand">status: ok</span>
       </footer>

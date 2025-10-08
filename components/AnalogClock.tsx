@@ -1,22 +1,22 @@
 "use client"
 
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 
+// Each Number between 0-9 is represented by a digit character
 const DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as const
-
-type DigitChar = (typeof DIGITS)[number]
-
+type DigitChar = (typeof DIGITS)[number] 
 const DIGIT_HEIGHT_REM = 4.2
 const DIGIT_WIDTH_REM = 3
 
+// Interface for the current time state
 interface ClockSnapshot {
   segments: string[]
   timeLabel: string
   dateLabel: string
 }
 
+// Actual Types for the Digital Clock Component are defined here
 export interface AnalogClockProps {
   label?: string
   timeZone?: string
@@ -26,10 +26,12 @@ export interface AnalogClockProps {
   showDate?: boolean
 }
 
+// Type Guard for Digit Characters
 function isDigitChar(value: string): value is DigitChar {
   return DIGITS.includes(value as DigitChar)
 }
 
+// This Function uses the Array of Digits and creates the Ticker for each digit
 function DigitTicker({ value, reduceMotion }: { value: string; reduceMotion: boolean }) {
   const safeValue: DigitChar = isDigitChar(value) ? value : DIGITS[0]
   const index = DIGITS.indexOf(safeValue)
@@ -69,6 +71,7 @@ function DigitTicker({ value, reduceMotion }: { value: string; reduceMotion: boo
   )
 }
 
+// This Component represents the Colon between Hours, Minutes and Seconds
 function Colon() {
   return (
     <span className="relative flex h-[4.2rem] w-[1.5rem] items-center justify-center text-5xl font-semibold text-brand-100/85 drop-shadow-[0_0_12px_rgba(236,72,153,0.45)] animate-[pulse_2s_ease-in-out_infinite]">
@@ -77,9 +80,11 @@ function Colon() {
   )
 }
 
+// Here, the State of the current time is built and formatted based on the Timezone and whether to show seconds
 function buildSnapshot(timeZone: string, showSeconds: boolean): ClockSnapshot {
   const now = new Date()
 
+  // Using Intl.DateTimeFormat to format time and date based on locale and timezone
   const timeFormatter = new Intl.DateTimeFormat("de-DE", {
     hour: "2-digit",
     minute: "2-digit",
@@ -88,6 +93,7 @@ function buildSnapshot(timeZone: string, showSeconds: boolean): ClockSnapshot {
     timeZone,
   })
 
+  // Formatter for the date part
   const dateFormatter = new Intl.DateTimeFormat("de-DE", {
     weekday: "short",
     day: "2-digit",
@@ -95,6 +101,7 @@ function buildSnapshot(timeZone: string, showSeconds: boolean): ClockSnapshot {
     timeZone,
   })
 
+  // Extracting parts of the formatted time to get hours, minutes, and seconds
   const parts = timeFormatter.formatToParts(now)
   const lookup = (type: "hour" | "minute" | "second") =>
     parts.find((part) => part.type === type)?.value ?? "00"
@@ -117,6 +124,9 @@ function buildSnapshot(timeZone: string, showSeconds: boolean): ClockSnapshot {
   }
 }
 
+
+
+// Main Analog Clock Component
 export function AnalogClock({
   label = "Berlin",
   timeZone = "Europe/Berlin",
@@ -125,9 +135,10 @@ export function AnalogClock({
   showSeconds = true,
   showDate = true,
 }: AnalogClockProps) {
-  const [reduceMotion, setReduceMotion] = React.useState(false)
-  const [snapshot, setSnapshot] = React.useState<ClockSnapshot>(() => buildSnapshot(timeZone, showSeconds))
+  const [reduceMotion, setReduceMotion] = React.useState(false) // State to respect user preference for reduced motion
+  const [snapshot, setSnapshot] = React.useState<ClockSnapshot>(() => buildSnapshot(timeZone, showSeconds)) // Initial state of the clock
 
+  // 
   React.useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return
     const media = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -137,12 +148,14 @@ export function AnalogClock({
     return () => media.removeEventListener("change", handleChange)
   }, [])
 
+  // Update the Clock based on chosen Tickrate
   React.useEffect(() => {
     if (typeof window === "undefined") return
 
     const update = () => setSnapshot(buildSnapshot(timeZone, showSeconds))
     update()
 
+    
     const intervalId = window.setInterval(update, Math.max(250, tickRate))
     return () => window.clearInterval(intervalId)
   }, [showSeconds, tickRate, timeZone])
@@ -163,13 +176,18 @@ export function AnalogClock({
         <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
       </div>
 
-      <header className="flex flex-col items-center gap-1">
-        <span className="text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-muted-foreground/80">
+      <header className="flex flex-col items-center gap-1 ">
+        <span className="text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-foreground">
           {label}
         </span>
-        <span className="text-[0.5rem] uppercase tracking-[0.45em] text-muted-foreground/60">
+        <span className="text-[0.6rem] font-bold uppercase tracking-[0.45em] text-foreground/90">
+                {showDate ? <span>{snapshot.dateLabel}</span> : null}
+        </span>
+        <span className="text-[0.5rem] uppercase tracking-[0.45em] text-muted-foreground/80">
           {timeZone.replace("/", " • ")}
         </span>
+        
+
       </header>
 
       <div className="flex flex-1 items-center justify-center">
@@ -183,11 +201,6 @@ export function AnalogClock({
           )}
         </div>
       </div>
-
-      <footer className="flex flex-col items-center gap-1 text-xs uppercase tracking-[0.32em] text-muted-foreground/70">
-        <span>{snapshot.timeLabel}</span>
-        {showDate ? <span>{snapshot.dateLabel}</span> : null}
-      </footer>
     </article>
   )
 }

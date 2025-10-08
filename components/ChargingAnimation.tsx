@@ -154,14 +154,19 @@ export function ChargingAnimation({
   return (
     <section
       className={cn(
-        "charging-animation relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/70 p-6 shadow-sm backdrop-blur ",
-        "before:pointer-events-none before:absolute before:-right-20 before:top-1/2 before:h-64 before:w-64 before:-translate-y-1/2 before:rounded-full before:bg-brand/15 before:blur-3xl before:content-['']",
+        "charging-animation relative isolate flex h-full min-h-[16rem] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 p-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
         className
       )}
       data-active={isActive}
       aria-live="polite"
     >
-      <div className="relative mx-auto flex h-64 w-full max-w-3xl items-end justify-between">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-16 top-10 h-48 w-48 rounded-full bg-brand/25 blur-3xl" />
+        <div className="absolute right-0 top-16 h-56 w-56 rounded-full bg-brand-300/20 blur-3xl" />
+        <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
+      </div>
+
+      <div className="relative mx-auto flex h-full w-full max-w-3xl items-end justify-between">
 
         <div className="absolute inset-x-0 bottom-16 top-0">
           <svg
@@ -246,10 +251,13 @@ export function ChargingAnimation({
         </div>
       </div>
 
-      <footer className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-        
-        <span className="text-xs uppercase tracking-[0.3em] text-brand">
-          {(clamped * 100).toFixed(0)}%
+      <footer className="relative mt-6 flex flex-wrap items-center justify-center gap-3 rounded-2xl bg-slate-950/60 px-4 py-3 text-sm ring-1 ring-white/10">
+        <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-brand-100">
+          <span className={cn(
+            "h-2 w-2 rounded-full bg-brand-100 transition-opacity duration-300",
+            isActive && "animate-pulse"
+          )} aria-hidden />
+          {(clamped * 100).toFixed(0)}% {isActive ? "charging" : "ready"}
         </span>
       </footer>
 

@@ -320,24 +320,29 @@ export function ProgressBar({
   return (
     <section
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
-        "before:absolute before:-right-24 before:top-1/2 before:h-72 before:w-72 before:-translate-y-1/2 before:rounded-full before:bg-brand/10 before:blur-3xl before:content-['']",
+        "relative isolate overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
         className
       )}
       aria-label={ariaLabel}
     >
-      <header className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-16 top-10 h-48 w-48 rounded-full bg-brand/25 blur-3xl" />
+        <div className="absolute right-0 top-16 h-56 w-56 rounded-full bg-brand-300/20 blur-3xl" />
+        <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
+      </div>
+
+      <header className="relative mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
+          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-muted-foreground/80">
             Charging
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-foreground">
-            Progress:
+          <h2 className="mt-2 text-2xl font-semibold text-brand-50">
+            Progress
           </h2>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">
-          <span className="h-2 w-2 rounded-full bg-brand" aria-hidden />
-          {Math.round((ariaValue / safeSteps.length) * 100)}% complete
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-brand-100 shadow-[0_8px_24px_-12px_rgba(236,72,153,0.4)]">
+          <span className="h-2 w-2 rounded-full bg-brand-100 animate-pulse" aria-hidden />
+          {Math.round((ariaValue / safeSteps.length) * 100)}%
         </span>
       </header>
 
@@ -370,10 +375,10 @@ export function ProgressBar({
                     className={cn(
                       "flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all",
                       isCompleted
-                        ? "border-brand bg-brand text-brand-foreground shadow-glow"
+                        ? "border-brand bg-brand text-brand-foreground shadow-[0_0_20px_rgba(236,72,153,0.5)]"
                         : isActive
-                          ? "border-black bg-card text-brand "
-                          : "border-border/70 bg-card text-muted-foreground"
+                          ? "border-brand bg-slate-900/70 text-brand shadow-[0_0_12px_rgba(236,72,153,0.3)]"
+                          : "border-white/20 bg-slate-950/60 text-muted-foreground/70"
                     )}
                   >
                     {index + 1}
@@ -386,14 +391,14 @@ export function ProgressBar({
                       className={cn(
                         "text-xs font-semibold uppercase tracking-wide",
                         isCompleted || isActive
-                          ? "text-foreground"
-                          : "text-muted-foreground"
+                          ? "text-brand-50"
+                          : "text-muted-foreground/70"
                       )}
                     >
                       {step.title}
                     </p>
                     {showDescriptions && step.description ? (
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground/60">
                         {step.description}
                       </p>
                     ) : null}
@@ -402,12 +407,12 @@ export function ProgressBar({
 
                 {index < safeSteps.length - 1 ? (
                   <div className="col-span-1 flex h-10 items-center">
-                    <div className="relative h-1 w-full overflow-hidden rounded-full bg-muted">
+                    <div className="relative h-1 w-full overflow-hidden rounded-full bg-slate-950/70 ring-1 ring-white/10">
                       <div
                         ref={(node) => {
                           connectorRefs.current[index] = node
                         }}
-                        className="absolute left-0 top-0 h-full w-full origin-left rounded-full bg-gradient-to-r from-brand via-brand to-brand/80"
+                        className="absolute left-0 top-0 h-full w-full origin-left rounded-full bg-gradient-to-r from-brand via-brand to-brand/80 shadow-[0_0_12px_rgba(236,72,153,0.4)]"
                         style={{
                           transform: `scaleX(${Math.max(
                             0,

@@ -14,37 +14,38 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 
+
+// Here, the possible Statuses for each Certificate are defined
 export type CertificateStatus = "queued" | "transferring" | "verified" | "failed"
 
+// Here, the structure for each Certificate is defined
 export interface CertificateDescriptor {
-  id: string
-  name: string
-  issuedBy?: string
-  size?: string
-  fingerprint?: string
-  status?: CertificateStatus
+  id: string // Unique identifier for the certificate
+  name: string // User-friendly name of the certificate
+  issuedBy?: string // Authority that issued the certificate
+  size?: string // Size of the certificate file
+  fingerprint?: string // Fingerprint of the certificate
+  status?: CertificateStatus // Current status of the certificate
 }
 
+// Here, the Props for the actual Certificate Transfer Visualizer are defined & imported from above
 export interface CertificateTransferVisualizerProps {
-  /** Indicates that the transfer workflow has started. */
-  isActive?: boolean
-  /** Normalised transfer progress between 0 and 1. */
-  progress?: number
-  /** Optional certificate bundle metadata to render. */
-  certificates?: CertificateDescriptor[]
-  /** When the transfer was initiated. */
-  startedAt?: Date | string
-  /** Estimated seconds remaining until completion. */
-  estimatedSecondsRemaining?: number
-  className?: string
+  isActive?: boolean // Defines Active State of the Transfer Process
+  progress?: number // Normalized progress between 0 and 1
+  certificates?: CertificateDescriptor[] // Array of Certificate Descriptors to, defined above
+  startedAt?: Date | string // ISO timestamp or Date
+  estimatedSecondsRemaining?: number // Estimated time remaining for the transfer process - Will be calculated if not provided
+  className?: string // Additional Tailwind Classes for CN-Helper Function
 }
 
+// The Pipeline Steps for the Animation are defined here
 const PIPELINE_STEPS: Array<{
   key: string
   label: string
   description: string
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
 }> = [
+  // Currently Hardcoded Values - Could be made dynamic in the future or changed, if needed
   {
     key: "pki",
     label: "OEM PKI",
@@ -65,6 +66,7 @@ const PIPELINE_STEPS: Array<{
   },
 ]
 
+// Mock Data for Certificates - to be replaced with actual data from the Backend
 export const FALLBACK_CERTIFICATES: CertificateDescriptor[] = [
   {
     id: "root-ca",
@@ -89,9 +91,13 @@ export const FALLBACK_CERTIFICATES: CertificateDescriptor[] = [
   },
 ]
 
+// States for the Certificates - could be extended in the future if needed
 type OverallStatus = "Idle" | "Transferring" | "Completed" | "Failed"
 
+// Hard Coded Duration for the Simulation - only used if no external control is applied
+// Should be replaced with a Function that estimates the Duration based on the number of Certificates received from the Backend
 const SIMULATION_DURATION_MS = 8000
+
 
 export function CertificateTransferVisualizer(props: CertificateTransferVisualizerProps) {
   const {
@@ -103,24 +109,26 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
     className,
   } = props
 
+  // Internal State Management for the Simulation - if no external control is applied
   const [internalActive, setInternalActive] = React.useState(false)
   const [internalProgress, setInternalProgress] = React.useState(0)
   const [internalStartedAt, setInternalStartedAt] = React.useState<Date | undefined>()
   const [internalEta, setInternalEta] = React.useState<number | undefined>()
   const animationFrameRef = React.useRef<number | null>(null)
 
+  // Determine which props are being controlled externally
   const isActiveControlled = isActiveProp !== undefined
   const progressControlled = progressProp !== undefined
   const startedAtControlled = startedAtProp !== undefined
   const etaControlled = estimatedSecondsRemainingProp !== undefined
   const isExternallyControlled =
     isActiveControlled || progressControlled || startedAtControlled || etaControlled
-
   const effectiveIsActive = isActiveControlled ? Boolean(isActiveProp) : internalActive
   const effectiveProgress = progressControlled ? progressProp ?? 0 : internalProgress
   const effectiveStartedAt = startedAtControlled ? startedAtProp : internalStartedAt
   const effectiveEtaSeconds = etaControlled ? estimatedSecondsRemainingProp : internalEta
 
+  
   React.useEffect(() => {
     if (isExternallyControlled) {
       return

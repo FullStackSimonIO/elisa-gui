@@ -138,23 +138,29 @@ export function EVCC({
     <section
       aria-label="Electric Vehicle Charge Controller"
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-border/70 bg-card/60 p-5 shadow-sm backdrop-blur",
-        "before:absolute before:-right-28 before:top-1/2 before:h-72 before:w-72 before:-translate-y-1/2 before:rounded-full before:bg-primary/15 before:blur-3xl before:content-['']",
+        "relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
         className
       )}
     >
-      <header className="mb-4">
-        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Electric Vehicle Charging Controller</p>
+      {/* Background glow effects */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -right-24 top-1/4 h-64 w-64 rounded-full bg-brand/15 blur-3xl" />
+        <div className="absolute -left-16 bottom-1/3 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
+        <div className="absolute right-1/3 -bottom-12 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
+      </div>
+
+      <header className="relative z-10 mb-4">
+        <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Electric Vehicle Charging Controller</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
-          <h2 className="text-2xl font-semibold text-foreground">EVCC</h2>
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+          <h2 className="text-2xl font-semibold text-brand-50">EVCC</h2>
+          <span className="rounded-full bg-brand/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
             Status: {STEPS[safeStatusIndex]?.label}
           </span>
         </div>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)]">
-        <div className="space-y-4">
+      <div className="relative z-10 flex flex-1 flex-col lg:flex-row gap-8 min-h-0">
+        <div className="space-y-4 lg:w-[200px] shrink-0">
           {ACTIONS.map(({ key, label, icon: Icon, variant, description }) => {
             const infoLabel = actionInfoLabels?.[key] ?? description
             const onClick = actionHandlers[key]
@@ -165,7 +171,7 @@ export function EVCC({
                   aria-label={`${label} info`}
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-full border border-border/60 bg-card/70 text-muted-foreground transition hover:border-primary/60 hover:text-foreground"
+                  className="h-9 w-9 rounded-full border border-white/10 bg-slate-950/60 text-slate-400 shadow-lg transition hover:border-brand/60 hover:text-brand-50"
                   onClick={() =>
                     onInfoClick?.({
                       action: key,
@@ -180,12 +186,12 @@ export function EVCC({
                   variant={variant}
                   onClick={onClick}
                   className={cn(
-                    "flex-1 justify-start gap-3 rounded-2xl text-base font-semibold shadow-sm transition",
+                    "flex-1 justify-start gap-3 rounded-2xl text-base font-semibold shadow-lg transition",
                     variant === "secondary"
-                      ? "bg-secondary/70 text-secondary-foreground hover:bg-secondary"
+                      ? "bg-slate-800/70 text-slate-200 ring-1 ring-white/10 hover:bg-slate-800"
                       : variant === "outline"
-                        ? "border-border/70 bg-card text-muted-foreground hover:border-primary/70 hover:text-background"
-                        : "bg-gradient-to-r from-primary/90 via-primary to-primary/80 text-primary-foreground hover:from-primary/80 hover:via-primary/90 hover:to-primary"
+                        ? "border-white/10 bg-slate-950/60 text-slate-300 hover:border-brand/70 hover:text-brand-50"
+                        : "bg-gradient-to-r from-brand/90 via-brand to-brand/80 text-white shadow-[0_0_30px_rgba(236,72,153,0.3)] hover:from-brand/80 hover:via-brand/90 hover:to-brand"
                   )}
                 >
                   <Icon className="size-4" aria-hidden />
@@ -197,12 +203,12 @@ export function EVCC({
           })}
         </div>
 
-        <div className="relative flex flex-1 flex-col rounded-3xl border border-border/60 bg-card/70 p-5 pb-20">
-          <div className="relative flex h-full flex-1 justify-between">
-            <div className="absolute left-[22px] top-0 bottom-0 w-1.5 overflow-hidden rounded-full bg-muted">
+        <div className="relative flex flex-1 flex-col rounded-3xl border border-white/10 bg-slate-950/60 p-5 pb-20 shadow-lg backdrop-blur-sm min-h-0">
+          <div className="relative flex h-full min-h-full flex-1 justify-between">
+            <div className="absolute left-[22px] top-0 bottom-0 w-1.5 overflow-hidden rounded-full bg-slate-950/70 ring-1 ring-white/10">
               <div
                 aria-hidden
-                className="absolute inset-0 origin-top rounded-full bg-gradient-to-b from-primary/70 via-primary to-primary/60 transition-transform duration-700 ease-out"
+                className="absolute inset-0 origin-top rounded-full bg-gradient-to-b from-brand/70 via-brand to-brand/60 shadow-[0_0_15px_rgba(236,72,153,0.5)] transition-transform duration-700 ease-out"
                 style={{ transform: `scaleY(${lineProgress})` }}
               />
             </div>
@@ -226,10 +232,10 @@ export function EVCC({
                         className={cn(
                           "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all",
                           isComplete
-                            ? "border-primary bg-primary text-primary-foreground shadow-glow"
+                            ? "border-brand bg-brand text-white shadow-[0_0_20px_rgba(236,72,153,0.6)]"
                             : isActive
-                              ? "border-primary/80 bg-card text-primary"
-                              : "border-border/70 bg-card text-muted-foreground"
+                              ? "border-brand/80 bg-slate-900 text-brand shadow-[0_0_15px_rgba(236,72,153,0.4)]"
+                              : "border-white/10 bg-slate-950/60 text-slate-400"
                         )}
                       >
                         <span className="text-sm font-semibold">{index + 1}</span>
@@ -239,14 +245,14 @@ export function EVCC({
                       <p
                         className={cn(
                           "text-base font-semibold",
-                          isActive || isComplete ? "text-foreground" : "text-muted-foreground"
+                          isActive || isComplete ? "text-brand-50" : "text-slate-400"
                         )}
                       >
                         {isChargingStep && safeStatusIndex === index && safeStatusIndex !== STEPS.length - 1
                           ? `${step.label} • ${chargingPercentLabel}`
                           : step.label}
                       </p>
-                      <p className="text-sm text-muted-foreground/80">{step.description}</p>
+                      <p className="text-sm text-slate-500">{step.description}</p>
                     </div>
                   </li>
                 )
@@ -254,9 +260,9 @@ export function EVCC({
             </ul>
           </div>
 
-          <footer className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-muted/30 px-3.5 py-2.5 text-sm text-muted-foreground">
+          <footer className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-slate-950/60 px-3.5 py-2.5 text-sm text-slate-400 shadow-lg ring-1 ring-white/10 backdrop-blur">
             <span>Charging progress</span>
-            <span className="font-semibold text-foreground">
+            <span className="font-semibold text-brand-50">
               {currentStepKey === "completed" ? "Done" : chargingPercentLabel}
             </span>
           </footer>
