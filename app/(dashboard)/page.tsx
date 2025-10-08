@@ -10,6 +10,7 @@ import ClockCard from "@/components/ClockCard"
 import Terminal from "@/components/Terminal"
 import BatteryVisualization from "@/components/BatteryVisualization"
 import SmallSkeleton from "@/components/Skeleton/SmallSkeleton"
+import { DraggableGrid, type GridItem } from "@/components/DraggableGrid"
 
 const progressSteps = CHARGING_PROGRESS_STEPS
 
@@ -86,6 +87,43 @@ export default function Page() {
     }
   }, [progress])
 
+  const gridItems = useMemo<GridItem[]>(() => [
+    {
+      id: "clock",
+      component: (
+        <ClockCard className="h-full min-h-0" label="Berlin" showSeconds={false} />
+      ),
+    },
+    {
+      id: "battery",
+      component: (
+        <BatteryVisualization 
+          level={Math.round(progress * 100)} 
+          isCharging={isSimulating}
+          className="h-full min-h-0"
+        />
+      ),
+    },
+    {
+      id: "charging",
+      component: (
+        <ChargingAnimation
+          progress={progress}
+          isActive={isSimulating && progress > 0}
+          className="h-full min-h-0 rounded-[28px]"
+        />
+      ),
+    },
+    {
+      id: "skeleton",
+      component: (
+        <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 flex items-center justify-center shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10">
+          <SmallSkeleton />
+        </div>
+      ),
+    },
+  ], [progress, isSimulating])
+
   return (
     <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
       <div className="pointer-events-none absolute inset-0 opacity-70">
@@ -107,22 +145,10 @@ export default function Page() {
         </section>
 
         <section className="grid flex-1 grid-cols-1 gap-6 xl:grid-cols-3 2xl:gap-8 3xl:gap-10">
-          <div className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-6 2xl:gap-8">
-            <ClockCard className="h-full min-h-0" label="Berlin" showSeconds={false} />
-            <BatteryVisualization 
-              level={Math.round(progress * 100)} 
-              isCharging={isSimulating}
-              className="h-full min-h-0"
-            />
-            <ChargingAnimation
-              progress={progress}
-              isActive={isSimulating && progress > 0}
-              className="h-full min-h-0 rounded-[28px]"
-            />
-            <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 flex items-center justify-center shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10">
-              <SmallSkeleton />
-            </div>
-          </div>
+          <DraggableGrid
+            items={gridItems}
+            className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-6 2xl:gap-8"
+          />
 
           <EVCC
             status={evccStatus}

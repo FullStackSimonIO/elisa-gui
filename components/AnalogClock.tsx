@@ -163,7 +163,7 @@ export function AnalogClock({
   return (
     <article
       className={cn(
-        "relative flex h-full min-h-[15rem] flex-col items-center justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 text-center text-xs uppercase tracking-[0.32em] text-muted-foreground backdrop-blur-2xl shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] dark:border-white/10",
+        "relative flex h-full min-h-[15rem] flex-col items-center justify-center gap-8 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 text-center text-xs uppercase tracking-[0.32em] text-muted-foreground backdrop-blur-2xl shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] dark:border-white/10",
         className
       )}
       aria-label={`Digital clock for ${label}`}
@@ -176,7 +176,19 @@ export function AnalogClock({
         <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
       </div>
 
-      <header className="flex flex-col items-center gap-2 mt-12">
+     
+      <div>
+        <div className="flex items-end gap-3">
+          {snapshot.segments.map((segment, index) =>
+            segment === ":" ? (
+              <Colon key={`colon-${index}`} />
+            ) : (
+              <DigitTicker key={`digit-${index}`} value={segment} reduceMotion={reduceMotion} />
+            )
+          )}
+        </div>
+      </div>
+       <div className="flex flex-col items-center gap-2">
         <span className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-50">
           {label}
         </span>
@@ -188,19 +200,8 @@ export function AnalogClock({
         </span>
         
 
-      </header>
-
-      <div className="flex flex-1 items-center justify-center mt-4">
-        <div className="flex items-end gap-3">
-          {snapshot.segments.map((segment, index) =>
-            segment === ":" ? (
-              <Colon key={`colon-${index}`} />
-            ) : (
-              <DigitTicker key={`digit-${index}`} value={segment} reduceMotion={reduceMotion} />
-            )
-          )}
-        </div>
       </div>
+
     </article>
   )
 }
