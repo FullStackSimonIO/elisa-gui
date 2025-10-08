@@ -4,14 +4,16 @@ import * as React from "react"
 import { BatteryCharging, BatteryFull, BatteryMedium, BatteryLow } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+// Interface for Battery Status
 interface BatteryStatusProps {
-    level?: number
-    isCharging?: boolean
-    className?: string
-    label?: string
+    level?: number // Battery level percentage as an Integer (0-100)
+    isCharging?: boolean // Boolean indicating if we currently have an ongoing charging process
+    className?: string // Additional class names that use the CN utility function
+    label?: string // Aria-label for accessibility
 }
 
 const BatteryStatus: React.FC<BatteryStatusProps> = ({
+    // Mock-Data for now - to be replaced with actual data from the Backend
     level = 19,
     isCharging = false,
     className,

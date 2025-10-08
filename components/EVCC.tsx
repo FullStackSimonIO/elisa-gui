@@ -197,9 +197,9 @@ export function EVCC({
           })}
         </div>
 
-        <div className="relative flex flex-1 flex-col rounded-3xl border border-border/60 bg-card/70 p-5 pb-24">
-          <div className="relative flex flex-1 justify-between">
-            <div className="absolute left-[22px] top-0 bottom-20 w-1.5 overflow-hidden rounded-full bg-muted">
+        <div className="relative flex flex-1 flex-col rounded-3xl border border-border/60 bg-card/70 p-5 pb-20">
+          <div className="relative flex h-full flex-1 justify-between">
+            <div className="absolute left-[22px] top-0 bottom-0 w-1.5 overflow-hidden rounded-full bg-muted">
               <div
                 aria-hidden
                 className="absolute inset-0 origin-top rounded-full bg-gradient-to-b from-primary/70 via-primary to-primary/60 transition-transform duration-700 ease-out"
@@ -207,7 +207,7 @@ export function EVCC({
               />
             </div>
 
-            <ul className="flex w-full flex-1 flex-col justify-between pb-16 pl-0">
+            <ul className="flex w-full h-full flex-1 flex-col gap-y-4 pb-4 pl-0">
               {STEPS.map((step, index) => {
                 const isActive = index === safeStatusIndex
                 const isComplete =
@@ -215,9 +215,10 @@ export function EVCC({
                   (step.key === "charging" && currentStepKey === "charging") ||
                   (step.key === "completed" && currentStepKey === "completed")
                 const isChargingStep = step.key === "charging"
+                const isLastStep = index === STEPS.length - 1
 
                 return (
-                  <li key={step.key} className="flex items-start gap-6"
+                  <li key={step.key} className={cn("flex items-start gap-6", isLastStep ? "mt-auto" : "")}
                     aria-current={isActive ? "step" : undefined}
                   >
                     <div className="relative flex shrink-0 flex-col items-center">

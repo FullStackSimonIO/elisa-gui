@@ -7,6 +7,7 @@ import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
 import ChargingAnimation from "@/components/ChargingAnimation"
 import ClockCard from "@/components/ClockCard"
+import Terminal from "@/components/Terminal"
 
 const progressSteps = CHARGING_PROGRESS_STEPS
 
@@ -98,7 +99,7 @@ export default function Page() {
             currentStepIndex={currentStepIndex}
             progress={stepProgress}
             showDescriptions
-            className="h-full min-h-[220px] rounded-[28px]"
+            className="rounded-[28px]"
             ariaLabel="Charging session progress"
           />
         </section>
@@ -107,7 +108,7 @@ export default function Page() {
           <ChargingAnimation
             progress={progress}
             isActive={isSimulating && progress > 0}
-            className="flex h-full min-h-[300px] flex-col rounded-[28px]"
+            className="rounded-[28px]"
           />
 
           <EVCC
@@ -117,9 +118,10 @@ export default function Page() {
             onEnd={stopSimulation}
             onReset={resetSimulation}
             onInfoClick={handleActionInfoClick}
-            className="flex h-full min-h-[320px] flex-col rounded-[28px]"
+            className="rounded-[28px]"
           />
-          <ClockCard className="flex h-full min-h-[320px] flex-col" label="Berlin" />
+          
+          <ClockCard className="" label="Berlin" />
         </section>
       </div>
     </main>

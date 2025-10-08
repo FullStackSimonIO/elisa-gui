@@ -2,33 +2,32 @@
 
 import * as React from "react"
 import { Info, ShieldCheck, Share2, RotateCcw } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
+// Here, the possible Actions for the Certificate Management are defined
 export type CertificateActionKey = "pre-install" | "distribute" | "reset"
 
+// Here, the structure for each Action is defined
 export interface CertificateActionDescriptor {
-  key: CertificateActionKey
-  label: string
-  description: string
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
-  variant?: React.ComponentProps<typeof Button>["variant"]
+  key: CertificateActionKey // Unique identifier for the action
+  label: string // Short, user-friendly name for the Action
+  description: string // Detailed Explanation of what the action does
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>> // Every Action is represented by an Icon
+  variant?: React.ComponentProps<typeof Button>["variant"] // Button Variants for Styling
 }
 
+// Here, the Props for the actual Certificate Transfer Controlling are defined & imported from above 
 export interface CertificateTransferControlsProps {
-  /** Callback when the primary button is clicked. */
-  onAction?: (key: CertificateActionKey) => void
-  /** Callback when the info button is clicked or hovered (optional). */
-  onInfo?: (descriptor: CertificateActionDescriptor) => void
-  /** Override the default action descriptors. */
-  actions?: CertificateActionDescriptor[]
-  className?: string
+  onAction?: (key: CertificateActionKey) => void // Callback Function that is executed when the Action-Button is clicked
+  onInfo?: (descriptor: CertificateActionDescriptor) => void // Callback Function for the Info-Button
+  actions?: CertificateActionDescriptor[] // Array of Action Descriptors to customize available actions
+  className?: string // CN-Helper Function for managint TailwindCSS-Classes 
 }
 
 
-// Predefined set of actions from Elisa Documentation
+// Pre-defined User Actions - Currently filled with Mock-Data
 const DEFAULT_ACTIONS: CertificateActionDescriptor[] = [
   {
     key: "pre-install",
@@ -56,25 +55,34 @@ const DEFAULT_ACTIONS: CertificateActionDescriptor[] = [
   },
 ]
 
+
 export function CertificateTransferControls({
   onAction,
   onInfo,
   actions = DEFAULT_ACTIONS,
   className,
 }: CertificateTransferControlsProps) {
+
+  // Caches the Calculation of the available Actions - if the "Actions" prop changes, the memoized value is recalculated
   const normalizedActions = React.useMemo(() => {
     const byKey = new Map<CertificateActionKey, CertificateActionDescriptor>()
+    // Include all default Actions defined above first
     for (const action of DEFAULT_ACTIONS) {
       byKey.set(action.key, action)
     }
 
+    // Override the Actions that are passed via the Props (from the Backend)
     for (const action of actions) {
       byKey.set(action.key, action)
     }
 
+    // Return the final list of Actions in the order they were defined in the DEFAULT_ACTIONS array
     return Array.from(byKey.values())
   }, [actions])
 
+
+
+  //  
   const handleAction = React.useCallback(
     (descriptor: CertificateActionDescriptor) => {
       onAction?.(descriptor.key)

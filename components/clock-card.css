@@ -38,7 +38,7 @@
 .react-clock__hour-hand__body {
   stroke: rgba(255, 255, 255, 0.9);
   stroke-width: 4;
-  filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.45));
+  filter: drop-shadow(0 6px 12px rgba(13, 65, 185, 0.45));
 }
 
 .react-clock__minute-hand__body {

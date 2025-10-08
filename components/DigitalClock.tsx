@@ -30,6 +30,7 @@ export function DigitalClock({
 
   React.useEffect(() => {
     const updateTime = () => {
+      
       setTimeString(formatter.format(new Date()))
     }
 
