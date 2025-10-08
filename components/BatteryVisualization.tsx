@@ -88,14 +88,11 @@ export function BatteryVisualization({
 
       {/* Header */}
       <header className="relative z-10 flex shrink-0 flex-col items-center gap-1">
-        <p className="text-[0.65rem] font-medium uppercase tracking-wider text-slate-400">
+        <p className="text-3xl font-medium uppercase tracking-wider text-foreground">
           Battery Status
         </p>
-        <div className="flex items-center gap-2">
-          <Battery className="h-4 w-4 text-brand-50" />
-          <h2 className="text-xl font-bold text-brand-50">{clamped}%</h2>
-        </div>
-        <span className={cn("text-xs font-semibold uppercase tracking-wider", statusColor)}>
+        
+        <span className={cn("text-lg font-semibold uppercase tracking-wider", statusColor)}>
           {statusText}
         </span>
       </header>

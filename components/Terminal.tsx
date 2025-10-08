@@ -141,18 +141,11 @@ export function Terminal({
 
       <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950/40 px-5 py-4 backdrop-blur-sm">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
+          <p className="text-3xl font-semibold uppercase tracking-wider text-brand-50">
             {title}
           </p>
-          <div className="flex flex-col gap-0.5 text-sm text-slate-400">
-            {prompt ? (
-              <span className="font-mono text-[11px] uppercase tracking-wider text-slate-500">
-                {prompt}
-              </span>
-            ) : null}
-          </div>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3.5 py-1.5 text-xl font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
           Live
         </span>
       </header>
@@ -160,15 +153,12 @@ export function Terminal({
       <div className="relative z-10 flex flex-1 min-h-0 flex-col gap-4 px-5 py-4">
         <div
           ref={listRef}
-          className="scrollbar-thin flex-1 min-h-0 space-y-3 overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-5 font-mono text-[13px] shadow-lg backdrop-blur-sm dark:text-brand-50"
+          className="scrollbar-thin flex-1 min-h-0 space-y-4 overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-5 font-mono shadow-lg backdrop-blur-sm dark:text-brand-50"
           aria-live="polite"
         >
           {logs.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-sm text-slate-400">
-              <span>Awaiting backend events…</span>
-              <span className="text-xs text-slate-500">
-                Start a session to stream execution steps.
-              </span>
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-slate-400">
+              <span className="text-3xl font-semibold">Awaiting backend events…</span>
             </div>
           ) : (
             logs.map((log) => {
@@ -180,42 +170,18 @@ export function Terminal({
                 <div
                   key={log.id}
                   data-terminal-line
-                  className="group flex items-start gap-3 rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2 shadow-sm backdrop-blur-sm transition hover:border-brand/40 hover:bg-slate-900/60 hover:shadow-md"
+                  className="group flex items-start gap-4 rounded-xl border border-white/10 bg-slate-900/40 px-4 py-3 shadow-sm backdrop-blur-sm transition hover:border-brand/40 hover:bg-slate-900/60 hover:shadow-md"
                 >
-                  <span
-                    className={cn(
-                      "mt-1 inline-flex size-2.5 shrink-0 rounded-full",
-                      meta.dotClass
-                    )}
-                  />
-                  <div className="flex flex-1 flex-col gap-1">
-                    <div className="flex flex-wrap items-center gap-2 text-brand-50">
-                      <Icon
-                        className={cn(
-                          "size-4",
-                          meta.iconClass,
-                          status === "running" ? "animate-spin" : undefined
-                        )}
-                      />
-                      <span className="font-semibold text-brand-100">
-                        {log.label}
-                      </span>
-                      {log.meta ? (
-                        <span className="text-[11px] uppercase tracking-wider text-slate-400">
-                          {log.meta}
-                        </span>
-                      ) : null}
-                      <span className="ml-auto text-[11px] text-slate-500">
-                        {formatTimestamp(log.timestamp)}
-                      </span>
-                    </div>
-                    {log.detail ? (
-                      <p className="text-[12px] text-slate-400">
-                        {log.detail}
-                      </p>
-                    ) : null}
-                    <span className="text-[10px] uppercase tracking-wider text-slate-500">
-                      {meta.label}
+                  <div className="flex flex-1 items-center gap-4">
+                    <Icon
+                      className={cn(
+                        "size-8 shrink-0",
+                        meta.iconClass,
+                        status === "running" ? "animate-spin" : undefined
+                      )}
+                    />
+                    <span className="text-3xl font-semibold text-brand-100">
+                      {log.label}
                     </span>
                   </div>
                 </div>
@@ -225,9 +191,8 @@ export function Terminal({
         </div>
       </div>
 
-      <footer className="relative z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-slate-950/60 px-5 py-3 text-xs text-slate-400 shadow-lg backdrop-blur-sm">
-        <span>{footerNote}</span>
-        <span className="font-mono text-brand">status: ok</span>
+      <footer className="relative z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-slate-950/60 px-5 py-3 text-slate-400 shadow-lg backdrop-blur-sm">
+        <span className="text-3xl font-semibold">{footerNote}</span>
       </footer>
     </section>
   )

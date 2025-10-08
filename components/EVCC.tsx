@@ -150,10 +150,10 @@ export function EVCC({
       </div>
 
       <header className="relative z-10 mb-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Electric Vehicle Charging Controller</p>
+        
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
-          <h2 className="text-2xl font-semibold text-brand-50">EVCC</h2>
-          <span className="rounded-full bg-brand/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
+          <h2 className="text-3xl font-semibold text-brand-50">EVCC</h2>
+          <span className="rounded-full bg-brand/15 px-3.5 py-1.5 text-xl font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
             Status: {STEPS[safeStatusIndex]?.label}
           </span>
         </div>
@@ -186,7 +186,7 @@ export function EVCC({
                   variant={variant}
                   onClick={onClick}
                   className={cn(
-                    "flex-1 justify-start gap-3 rounded-2xl text-base font-semibold shadow-lg transition",
+                    "flex-1 justify-start gap-3 rounded-2xl shadow-lg transition",
                     variant === "secondary"
                       ? "bg-slate-800/70 text-slate-200 ring-1 ring-white/10 hover:bg-slate-800"
                       : variant === "outline"
@@ -194,8 +194,8 @@ export function EVCC({
                         : "bg-gradient-to-r from-brand/90 via-brand to-brand/80 text-white shadow-[0_0_30px_rgba(236,72,153,0.3)] hover:from-brand/80 hover:via-brand/90 hover:to-brand"
                   )}
                 >
-                  <Icon className="size-4" aria-hidden />
-                  <span className="text-base font-semibold">{label}</span>
+                  <Icon className="size-6" aria-hidden />
+                  <span className="text-3xl font-semibold">{label}</span>
                 </Button>
                 <span className="sr-only">{infoLabel}</span>
               </div>
@@ -230,7 +230,7 @@ export function EVCC({
                     <div className="relative flex shrink-0 flex-col items-center">
                       <span
                         className={cn(
-                          "flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all",
+                          "flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all",
                           isComplete
                             ? "border-brand bg-brand text-white shadow-[0_0_20px_rgba(236,72,153,0.6)]"
                             : isActive
@@ -238,13 +238,13 @@ export function EVCC({
                               : "border-white/10 bg-slate-950/60 text-slate-400"
                         )}
                       >
-                        <span className="text-sm font-semibold">{index + 1}</span>
+                        <span className="text-2xl font-semibold">{index + 1}</span>
                       </span>
                     </div>
                     <div className="space-y-1 pt-1">
                       <p
                         className={cn(
-                          "text-base font-semibold",
+                          "text-3xl font-semibold",
                           isActive || isComplete ? "text-brand-50" : "text-slate-400"
                         )}
                       >
@@ -252,7 +252,6 @@ export function EVCC({
                           ? `${step.label} • ${chargingPercentLabel}`
                           : step.label}
                       </p>
-                      <p className="text-sm text-slate-500">{step.description}</p>
                     </div>
                   </li>
                 )
@@ -260,9 +259,9 @@ export function EVCC({
             </ul>
           </div>
 
-          <footer className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-slate-950/60 px-3.5 py-2.5 text-sm text-slate-400 shadow-lg ring-1 ring-white/10 backdrop-blur">
-            <span>Charging progress</span>
-            <span className="font-semibold text-brand-50">
+          <footer className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-slate-950/60 px-3.5 py-2.5 text-slate-400 shadow-lg ring-1 ring-white/10 backdrop-blur">
+            <span className="text-3xl font-semibold">Charging progress</span>
+            <span className="text-3xl font-semibold text-brand-50">
               {currentStepKey === "completed" ? "Done" : chargingPercentLabel}
             </span>
           </footer>

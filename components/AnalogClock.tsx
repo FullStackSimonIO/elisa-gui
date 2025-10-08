@@ -189,13 +189,11 @@ export function AnalogClock({
         </div>
       </div>
        <div className="flex flex-col items-center gap-2">
-        <span className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-50">
-          {label}
-        </span>
-        <span className="text-xs font-bold uppercase tracking-[0.25em] text-slate-300">
+        
+        <span className="text-lg font-bold uppercase tracking-[0.25em] text-slate-300">
                 {showDate ? <span>{snapshot.dateLabel}</span> : null}
         </span>
-        <span className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
+        <span className="text-lg uppercase tracking-[0.3em] text-slate-400">
           {timeZone.replace("/", " • ")}
         </span>
         

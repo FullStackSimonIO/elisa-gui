@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <SidebarProvider defaultOpen={false}>
-      <html lang="de" suppressHydrationWarning>
+      <html lang="de" className="dark" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} antialiased h-screen bg-background font-sans text-foreground`}
         >

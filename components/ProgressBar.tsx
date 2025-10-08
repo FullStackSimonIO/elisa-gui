@@ -39,61 +39,52 @@ export const CHARGING_PROGRESS_STEPS = [
   {
     id: "handshake",
     title: "Handshake",
-    description: "Vehicle requests session",
+
     terminalLabel: "Handshake - Requesting Session",
   },
   {
     id: "authorization",
     title: "Authorization",
-    description: "Driver profile verified",
+
     terminalLabel: "Authorization - Profile Verified",
   },
   {
     id: "connector-lock",
-    title: "Connector Lock",
-    description: "Plug secured",
+    title: "Connector",
     terminalLabel: "Connector Lock - Plug Secured",
   },
-  {
-    id: "precharge",
-    title: "Pre-Charge",
-    description: "Voltage aligned",
-    terminalLabel: "Pre-Charge - Voltage Aligned",
-  },
+
   {
     id: "ramp-up",
     title: "Ramp Up",
-    description: "Current increases",
     terminalLabel: "Ramp Up - Current Increasing",
   },
   {
     id: "steady",
-    title: "Steady State",
-    description: "Charging at target rate",
+    title: "Steady",
     terminalLabel: "Steady State - Charging at Target Rate",
   },
   {
     id: "thermal-check",
-    title: "Thermal Check",
-    description: "Cooling system validation",
+    title: "Thermal",
+
     terminalLabel: "Thermal Check - Cooling Validated",
   },
   {
     id: "taper",
     title: "Taper",
-    description: "Current reduces near full",
     terminalLabel: "Taper - Current Reducing Near Full",
   },
   {
     id: "top-off",
     title: "Top Off",
-    description: "Balancing individual cells",
+
     terminalLabel: "Top Off - Balancing Cells",
   },
   {
     id: "complete",
     title: "Complete",
-    description: "Ready to disconnect",
+
     terminalLabel: "Complete - Ready to Disconnect",
   },
 ] satisfies ProgressStep[]
@@ -332,14 +323,6 @@ export function ProgressBar({
       </div>
 
       <header className="relative mb-4 flex flex-wrap items-baseline justify-between gap-3">
-        <div>
-          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-muted-foreground/80">
-            Charging
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-brand-50">
-            Progress
-          </h2>
-        </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-brand-100 shadow-[0_8px_24px_-12px_rgba(236,72,153,0.4)]">
           <span className="h-2 w-2 rounded-full bg-brand-100 animate-pulse" aria-hidden />
           {Math.round((ariaValue / safeSteps.length) * 100)}%
@@ -373,7 +356,7 @@ export function ProgressBar({
                       stepBubbleRefs.current[index] = node
                     }}
                     className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all",
+                      "flex h-20 w-20 items-center justify-center rounded-full border-4 text-3xl font-semibold transition-all",
                       isCompleted
                         ? "border-brand bg-brand text-brand-foreground shadow-[0_0_20px_rgba(236,72,153,0.5)]"
                         : isActive
@@ -389,7 +372,7 @@ export function ProgressBar({
                         stepLabelRefs.current[index] = node
                       }}
                       className={cn(
-                        "text-xs font-semibold uppercase tracking-wide",
+                        "text-3xl pt-2 font-semibold uppercase tracking-wide",
                         isCompleted || isActive
                           ? "text-brand-50"
                           : "text-muted-foreground/70"

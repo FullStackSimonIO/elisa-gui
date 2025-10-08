@@ -104,16 +104,7 @@ export default function Page() {
         />
       ),
     },
-    {
-      id: "charging",
-      component: (
-        <ChargingAnimation
-          progress={progress}
-          isActive={isSimulating && progress > 0}
-          className="h-full min-h-0 rounded-[28px]"
-        />
-      ),
-    },
+   
     {
       id: "skeleton",
       component: (
