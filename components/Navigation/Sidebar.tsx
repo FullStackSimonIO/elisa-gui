@@ -68,18 +68,18 @@ const supportItems = [
 ]
 
 const SidebarLayout = () => {
-  const  pathname = usePathname()
+  const pathname = usePathname()
   const { setOpen } = useSidebar()
   return (
-    <Sidebar className="border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/75">
-      <SidebarHeader className="border-b border-border/50">
-        <div className="flex items-center gap-2 rounded-xl bg-muted/30 p-3">
-          <div className="flex size-9 items-center justify-center rounded-full bg-brand/15 text-brand">
-            <PlugZap className="size-4 text-background dark:text-foreground" />
+    <Sidebar className="border-border/40 bg-sidebar/90 text-sidebar-foreground shadow-lg backdrop-blur transition-colors duration-300 supports-[backdrop-filter]:bg-sidebar/75 dark:border-sidebar-border/60 dark:bg-sidebar/95">
+      <SidebarHeader className="border-b border-border/40 pb-4 dark:border-sidebar-border/60">
+        <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/70 p-3 shadow-sm backdrop-blur-sm transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
+          <div className="flex size-9 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm dark:bg-primary/20 dark:text-primary-foreground">
+            <PlugZap className="size-4" />
           </div>
           <div className="text-sm leading-tight">
-            <p className="font-semibold text-background dark:text-foreground">Elisa Control</p>
-            <p className="text-xs font-semibold text-muted-background/70 dark:text-foreground/70">Charging orchestration</p>
+            <p className="font-semibold text-sidebar-foreground">Elisa</p>
+            <p className="text-xs text-muted-foreground">Electric Vehicle Charging Control</p>
           </div>
         </div>
       </SidebarHeader>
@@ -91,8 +91,17 @@ const SidebarLayout = () => {
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild  onClick={() => setOpen(false)} isActive={pathname === item.href}>
-                    <Link href={item.href} className="flex items-center gap-2">
+                  <SidebarMenuButton
+                    asChild
+                    onClick={() => setOpen(false)}
+                    isActive={pathname === item.href}
+                    className="border border-transparent bg-white/40 text-sidebar-foreground transition-colors duration-200 hover:border-accent hover:bg-accent/30 hover:text-accent-foreground dark:border-transparent dark:bg-transparent dark:text-sidebar-foreground data-[active=true]:border-accent data-[active=true]:bg-accent/35 data-[active=true]:text-accent-foreground"
+                  >
+                    <Link
+                      href={item.href}
+                      aria-current={pathname === item.href ? "page" : undefined}
+                      className="flex w-full items-center gap-2"
+                    >
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
                     </Link>
@@ -111,8 +120,11 @@ const SidebarLayout = () => {
             <SidebarMenu>
               {supportItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.href}className="flex items-center gap-2">
+                  <SidebarMenuButton
+                    asChild
+                    className="border border-transparent bg-white/40 text-sidebar-foreground transition-colors duration-200 hover:border-accent hover:bg-accent/30 hover:text-accent-foreground dark:border-transparent dark:bg-transparent"
+                  >
+                    <Link href={item.href} className="flex items-center gap-2">
                       <item.icon className="size-4" />
                       <span>{item.label}</span>
                     </Link>
@@ -124,10 +136,10 @@ const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border/50">
-        <div className="rounded-lg border border-border/50 bg-muted/10 p-3 text-xs ">
-          <p className="font-semibold uppercase tracking-[0.25em] text-background dark:text-foreground">Session health</p>
-          <p className="mt-1 text-background/70 dark:text-foreground/70">All systems nominal</p>
+      <SidebarFooter className="border-t border-border/40 pt-4 dark:border-sidebar-border/60">
+        <div className="rounded-xl border border-border/60 bg-white/70 p-3 text-xs leading-relaxed shadow-inner transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
+          <p className="font-semibold uppercase tracking-[0.25em] text-sidebar-foreground/80">Session health</p>
+          <p className="mt-1 text-muted-foreground">All systems nominal</p>
         </div>
       </SidebarFooter>
     </Sidebar>
