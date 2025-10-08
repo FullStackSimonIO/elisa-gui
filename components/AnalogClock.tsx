@@ -155,7 +155,7 @@ export function AnalogClock({
     const update = () => setSnapshot(buildSnapshot(timeZone, showSeconds))
     update()
 
-    
+
     const intervalId = window.setInterval(update, Math.max(250, tickRate))
     return () => window.clearInterval(intervalId)
   }, [showSeconds, tickRate, timeZone])
@@ -176,21 +176,21 @@ export function AnalogClock({
         <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
       </div>
 
-      <header className="flex flex-col items-center gap-1 ">
-        <span className="text-[0.6rem] font-semibold uppercase tracking-[0.5em] text-foreground">
+      <header className="flex flex-col items-center gap-2 mt-12">
+        <span className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-50">
           {label}
         </span>
-        <span className="text-[0.6rem] font-bold uppercase tracking-[0.45em] text-foreground/90">
+        <span className="text-xs font-bold uppercase tracking-[0.25em] text-slate-300">
                 {showDate ? <span>{snapshot.dateLabel}</span> : null}
         </span>
-        <span className="text-[0.5rem] uppercase tracking-[0.45em] text-muted-foreground/80">
+        <span className="text-[0.65rem] uppercase tracking-[0.3em] text-slate-400">
           {timeZone.replace("/", " • ")}
         </span>
         
 
       </header>
 
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 items-center justify-center mt-4">
         <div className="flex items-end gap-3">
           {snapshot.segments.map((segment, index) =>
             segment === ":" ? (

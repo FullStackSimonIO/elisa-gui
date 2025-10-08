@@ -105,17 +105,15 @@ export default function Page() {
         </section>
 
         <section className="grid flex-1 grid-cols-1 gap-6 xl:grid-cols-3 2xl:gap-8 3xl:gap-10">
-          <div className="flex h-full min-h-0 flex-col gap-6 2xl:gap-8">
-            <div className="flex-1 min-h-0">
-              <ClockCard className="h-full" label="Berlin" />
-            </div>
-            <div className="flex-1 min-h-0">
-              <ChargingAnimation
-                progress={progress}
-                isActive={isSimulating && progress > 0}
-                className="h-full rounded-[28px]"
-              />
-            </div>
+          <div className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-6 2xl:gap-8">
+            <ClockCard className="h-full min-h-0" label="Berlin" showSeconds={false} />
+            <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60"></div>
+            <ChargingAnimation
+              progress={progress}
+              isActive={isSimulating && progress > 0}
+              className="h-full min-h-0 rounded-[28px]"
+            />
+            <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60"></div>
           </div>
 
           <EVCC
