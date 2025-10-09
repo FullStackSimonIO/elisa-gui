@@ -103,7 +103,7 @@ export function CertificateTransferControls({
   return (
     <section
   className={cn(
-  "certificate-transfer-controls relative isolate flex min-h-[460px] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-white/20 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-6 text-center shadow-[0_36px_76px_-48px_rgba(227,55,106,0.45)] backdrop-blur-2xl",
+  "certificate-transfer-controls relative isolate flex flex-col items-center overflow-hidden rounded-[32px] border border-white/20 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-6 text-center shadow-[0_36px_76px_-48px_rgba(227,55,106,0.45)] backdrop-blur-2xl",
     "dark:border-white/10 dark:from-slate-950/40 dark:via-slate-950/20 dark:to-slate-950/40",
     "before:absolute before:-left-32 before:-top-24 before:h-64 before:w-64 before:rounded-[32px] before:bg-brand-300/40 before:blur-[120px] before:content-['']",
     "after:absolute after:-bottom-24 after:-right-20 after:h-72 after:w-72 after:bg-gradient-to-br after:from-brand-200/20 after:via-primary/10 after:to-brand-500/20 after:opacity-70 after:blur-[140px] after:content-['']",
@@ -112,16 +112,13 @@ export function CertificateTransferControls({
   )}
       aria-label="Certificate management actions"
     >
-      <header className="flex flex-col items-center gap-1 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-          Certificate Workflow
-        </p>
-        <h2 className="mt-1.5 text-xl font-semibold text-foreground">
+      <header className="flex flex-col items-center gap-2 text-center flex-shrink-0">
+        <h2 className="text-3xl font-semibold text-foreground">
           Manage Certificates
         </h2>
       </header>
 
-  <div className="mt-6 flex w-full flex-col items-center gap-3.5">
+  <div className="mt-8 flex w-full flex-col items-center gap-5 overflow-y-auto flex-1 min-h-0">
         {/*Map over the Actions, render the Buttons incl. the Client Side Functionality */}
         {normalizedActions.map((descriptor) => {
           const { key, label, description, icon: Icon, variant } = descriptor
@@ -129,7 +126,7 @@ export function CertificateTransferControls({
           return (
             <article
               key={key}
-              className="group relative flex w-full max-w-sm flex-col items-center gap-3 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/25 via-white/10 to-white/20 p-5 text-center text-sm shadow-[0_22px_58px_-42px_rgba(227,55,106,0.35)] transition-all duration-500 hover:-translate-y-1 hover:border-brand-300/60 hover:shadow-[0_40px_96px_-64px_rgba(227,55,106,0.55)] dark:border-white/5 dark:from-slate-950/40 dark:via-slate-950/30 dark:to-slate-950/50"
+              className="group relative flex w-full max-w-sm flex-col items-center gap-4 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/25 via-white/10 to-white/20 p-6 text-center shadow-[0_22px_58px_-42px_rgba(227,55,106,0.35)] transition-all duration-500 hover:-translate-y-1 hover:border-brand-300/60 hover:shadow-[0_40px_96px_-64px_rgba(227,55,106,0.55)] dark:border-white/5 dark:from-slate-950/40 dark:via-slate-950/30 dark:to-slate-950/50"
             >
               <span className="pointer-events-none absolute inset-px rounded-[20px] border border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
               <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-brand-300/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -139,11 +136,11 @@ export function CertificateTransferControls({
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-4 top-4 h-8 w-8 rounded-full border border-white/20 bg-white/5 text-muted-foreground backdrop-blur-lg transition hover:border-brand-300/60 hover:text-background hover:dark:text-foreground dark:border-white/10 dark:bg-white/5 dark:hover:bg-accent"
+                    className="absolute right-5 top-5 h-10 w-10 rounded-full border border-white/20 bg-white/5 text-muted-foreground backdrop-blur-lg transition hover:border-brand-300/60 hover:text-background hover:dark:text-foreground dark:border-white/10 dark:bg-white/5 dark:hover:bg-accent"
                     onClick={() => handleInfo(descriptor)} // Info-Handler gets executed on Click
                     aria-label={`${label} details`}
                   >
-                    <Info className="h-4 w-4" aria-hidden />
+                    <Info className="h-5 w-5" aria-hidden />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent
@@ -151,26 +148,25 @@ export function CertificateTransferControls({
                   align="center"
                   alignOffset={-12}
                   collisionPadding={{ right: 24, left: 12 }}
-                  className="w-fit max-w-[240px] rounded-2xl border border-border/50 bg-card/95 px-3.5 py-2.5 text-left text-xs leading-relaxed shadow-lg backdrop-blur-md [&>svg]:hidden dark:border-border/40 dark:bg-slate-950/95"
+                  className="w-fit max-w-[280px] rounded-2xl border border-border/50 bg-card/95 px-4 py-3 text-left text-base leading-relaxed shadow-lg backdrop-blur-md [&>svg]:hidden dark:border-border/40 dark:bg-slate-950/95"
                 > 
-                  <p className="text-sm font-semibold text-foreground">{label}</p>
-                  <p className="mt-1 text-muted-foreground">{description}</p>
+                  <p className="text-lg font-semibold text-foreground">{label}</p>
+                  <p className="mt-1.5 text-muted-foreground">{description}</p>
                 </TooltipContent>
               </Tooltip>
 
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/40 text-brand shadow-[0_16px_46px_-42px_rgba(227,55,106,0.5)]">
-                <Icon className="h-[22px] w-[22px]" aria-hidden />
+              <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/40 text-brand shadow-[0_16px_46px_-42px_rgba(227,55,106,0.5)]">
+                <Icon className="h-[32px] w-[32px]" aria-hidden />
               </span>
 
-              <div className="space-y-1.5">
-                <h3 className="text-base font-semibold text-foreground">{label}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-semibold text-foreground">{label}</h3>
               </div>
 
               <Button
                 type="button"
                 variant={variant}
-                className="mt-auto w-full justify-center rounded-2xl border border-white/20 py-2.5 font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
+                className="h-24 mt-auto w-full justify-center rounded-2xl border border-white/20 py-3 text-5xl font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
                 onClick={() => handleAction(descriptor)} // Action-Handler gets executed on Click
               >
                 Execute

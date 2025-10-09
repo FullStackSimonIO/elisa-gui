@@ -128,7 +128,7 @@ export const Terminal = React.memo(function Terminal({
   return (
     <section
       className={cn(
-        "relative isolate flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 shadow-lg dark:border-white/10 lg:max-h-[calc(100vh-220px)]",
+        "relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 shadow-lg dark:border-white/10",
         className
       )}
     >

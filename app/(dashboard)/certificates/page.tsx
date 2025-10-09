@@ -655,26 +655,26 @@ const CertificatesPage = () => {
   const etaValue = isActive ? etaSeconds : progress >= 1 ? 0 : undefined
 
   return (
-    <section className="flex w-full flex-1 flex-col gap-6 px-6 pb-8 pt-6 xl:gap-8 xl:px-8">
-      <div className="grid min-h-0 gap-6 lg:grid-cols-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1.05fr)_minmax(0,0.9fr)] xl:items-stretch">
+    <section className="flex w-full flex-1 flex-col gap-6 px-6 pb-8 pt-6 xl:gap-8 xl:px-8 max-h-screen overflow-hidden">
+      <div className="grid h-full max-h-full min-h-0 gap-6 lg:grid-cols-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1.05fr)_minmax(0,0.9fr)] items-stretch">
         <CertificateTransferVisualizer
           isActive={isActive}
           progress={progress}
           startedAt={startedAtValue}
           estimatedSecondsRemaining={etaValue}
-          className="h-full rounded-[36px]"
+          className="h-full max-h-full rounded-[36px] flex flex-col"
         />
         <Terminal
           logs={logs}
           title="Certificate orchestrator"
           prompt={terminalPrompt}
           footerNote={footerNote}
-          className="h-full rounded-[36px] border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/10 shadow-[0_40px_90px_-50px_rgba(227,55,106,0.45)] backdrop-blur-2xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/50"
+          className="h-full max-h-full rounded-[36px] border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/10 shadow-[0_40px_90px_-50px_rgba(227,55,106,0.45)] backdrop-blur-2xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/50 flex flex-col"
         />
         <CertificateTransferControls
           onAction={handleAction}
           onInfo={handleInfo}
-          className="h-full rounded-[36px]"
+          className="h-full max-h-full rounded-[36px] flex flex-col"
         />
       </div>
     </section>
