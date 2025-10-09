@@ -20,6 +20,7 @@ export default function Page() {
   const [progress, setProgress] = useState(0)
   const [isSimulating, setIsSimulating] = useState(false)
   const [isChargingStarted, setIsChargingStarted] = useState(false)
+  const [isVehicleConnected, setIsVehicleConnected] = useState(false)
   const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
 
   const handleActionInfoClick = useCallback(
@@ -37,6 +38,7 @@ export default function Page() {
     setProgress(0)
     setIsSimulating(true)
     setIsChargingStarted(false)
+    setIsVehicleConnected(false)
     setTerminalLogs([])
     
     // Add initial log
@@ -54,7 +56,7 @@ export default function Page() {
       ))
     }, 500)
 
-    // Simulate terminal logs
+    // Vehicle connected - THIS TRIGGERS READY STATE
     setTimeout(() => {
       setTerminalLogs(prev => [...prev, {
         id: "2",
@@ -62,6 +64,8 @@ export default function Page() {
         status: "success",
         timestamp: new Date().toISOString(),
       }])
+      // Set vehicle connected to trigger "ready-to-charge" state
+      setIsVehicleConnected(true)
     }, 1000)
 
     setTimeout(() => {
@@ -104,6 +108,7 @@ export default function Page() {
   const stopSimulation = useCallback(() => {
     setIsSimulating(false)
     setIsChargingStarted(false)
+    setIsVehicleConnected(false)
     setTerminalLogs(prev => [...prev, {
       id: `${prev.length + 1}`,
       label: "Charging stopped by user",
@@ -115,6 +120,7 @@ export default function Page() {
   const resetSimulation = useCallback(() => {
     setIsSimulating(false)
     setIsChargingStarted(false)
+    setIsVehicleConnected(false)
     setProgress(0)
     setTerminalLogs([{
       id: "reset",
@@ -155,11 +161,11 @@ export default function Page() {
     if (progress >= 1) return "completed" as const
     // Only show "charging" when backend has confirmed charging started
     if (isSimulating && isChargingStarted && progress > 0) return "charging"
-    // Show "ready-to-charge" when simulation started but charging not yet confirmed
-    if (isSimulating) return "ready-to-charge"
-    if (progress > 0) return "ready-to-charge"
+    // Show "ready-to-charge" when vehicle is connected (after "Vehicle connected" terminal log)
+    if (isVehicleConnected) return "ready-to-charge"
+    // Show "plugged-in" during initialization before vehicle connects
     return "plugged-in"
-  }, [isSimulating, isChargingStarted, progress])
+  }, [isSimulating, isChargingStarted, isVehicleConnected, progress])
 
   const { currentStepIndex, stepProgress } = useMemo(() => {
     if (progress >= 1) {
@@ -220,11 +226,11 @@ export default function Page() {
   ], [progress, isSimulating, isChargingStarted])
 
   return (
-    <main className="relative flex h-full min-h-full w-full flex-1 flex-col bg-gradient-to-b from-brand-50 via-white to-brand-100 px-8 text-foreground dark:from-background dark:via-background dark:to-background sm:px-10 xl:px-12 2xl:px-16 3xl:px-20">
+    <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 p-4 text-foreground dark:from-background dark:via-background dark:to-background">
       {/* Removed expensive blur backgrounds for better performance on Raspberry Pi */}
       
-      {/* Optimized for 3840x1100 ultra-wide display - full vertical space utilization */}
-      <div className="relative z-10 flex h-full min-h-full w-full max-w-[3800px] mx-auto flex-col gap-6 py-4">
+      {/* Ultra-wide 3840x1100 - minimal gaps for maximum vertical space */}
+      <div className="relative z-10 flex h-full w-full max-w-[3800px] mx-auto flex-col gap-3 overflow-hidden">
         <section className="w-full shrink-0">
           <ProgressBar
             steps={progressSteps}
@@ -236,10 +242,10 @@ export default function Page() {
           />
         </section>
 
-        <section className="grid flex-1 min-h-0 grid-cols-1 gap-6 xl:grid-cols-3 2xl:gap-8">
+        <section className="grid flex-1 min-h-0 grid-cols-1 gap-4 xl:grid-cols-3 overflow-hidden">
           <DraggableGrid
             items={gridItems}
-            className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-6 2xl:gap-8"
+            className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-4"
           />
 
           <EVCC

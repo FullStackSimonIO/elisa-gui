@@ -22,7 +22,7 @@ export default function RootLayout({
     <SidebarProvider defaultOpen={false}>
       <html lang="de" className="dark" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} antialiased h-screen min-h-screen bg-background font-sans text-foreground overflow-hidden`}
+          className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} antialiased h-screen min-h-screen bg-background font-sans text-foreground overflow-hidden `}
         >
           <ThemeProvider>
             <div className="flex h-screen min-h-screen w-full overflow-hidden">
@@ -32,8 +32,8 @@ export default function RootLayout({
                 {/* Fixed Menu Button - Top Left */}
                 <MenuButton />
 
-                {/* Optimized for 3840x1100 - full height utilization */}
-                <div className="flex flex-1 h-full overflow-x-hidden overflow-y-auto pb-6 pt-20">
+                {/* Ultra-wide 3840x1100 - ZERO padding for maximum space */}
+                <div className="flex flex-1 h-full overflow-hidden">
                   {children}
                 </div>
               </SidebarInset>

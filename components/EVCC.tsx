@@ -211,9 +211,12 @@ export const EVCC = React.memo(function EVCC({
             <ul className="flex w-full h-full flex-1 flex-col gap-y-14 pb-4 pl-0">
               {STEPS.map((step, index) => {
                 const isActive = index === safeStatusIndex
-                const isComplete =
-                  index < safeStatusIndex ||
-                  (step.key === "charging" && currentStepKey === "charging") ||
+                // Only mark as complete if we've actually moved past this step
+                // Don't mark "ready" as complete just because we're on "charging"
+                const isComplete = 
+                  (step.key === "plugged-in" && safeStatusIndex > 0) ||
+                  (step.key === "ready-to-charge" && safeStatusIndex > 1 && currentStepKey !== "ready-to-charge") ||
+                  (step.key === "charging" && currentStepKey === "completed") ||
                   (step.key === "completed" && currentStepKey === "completed")
                 const isChargingStep = step.key === "charging"
                 const isLastStep = index === STEPS.length - 1
