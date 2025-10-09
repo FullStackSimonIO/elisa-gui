@@ -5,7 +5,6 @@ import { toast } from "sonner"
 
 import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
-import ChargingAnimation from "@/components/ChargingAnimation"
 import ClockCard from "@/components/ClockCard"
 import Terminal, { type TerminalLogEntry } from "@/components/Terminal"
 import BatteryVisualization from "@/components/BatteryVisualization"

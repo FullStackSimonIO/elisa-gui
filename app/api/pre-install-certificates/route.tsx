@@ -3,20 +3,20 @@
 // If there are NO certificates installed, it will automatically fetch and install them from a predefined source
 // Else, the workflow will automatically skip this step and continue with the next step in the process
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import * as z from "zod"
 
 // Certification Schema is defined here for hardening the Input Data on Client Side
-const CertificateSchem = z.object({
+const CertificateSchema = z.object({
     id: z.string(),
     name: z.string()
 })
 
-type CertificationSchema = z.infer<typeof CertificateSchem>
+type CertificationSchema = z.infer<typeof CertificateSchema>
 
 
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     // Fetch pre-installed certificates
     const response: CertificationSchema = await fetch(`https://test-endpoint.com/api/certificates`, {
         // Set your API token in environment variables for security

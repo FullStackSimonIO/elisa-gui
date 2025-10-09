@@ -8,9 +8,7 @@ export type MonthlyChargingChartProps = {
     className?: string;
 }
 
-export type MonthlyChargingDataProps = {
-    
-}
+export type MonthlyChargingDataProps = Record<string, unknown>
 
 const MonthlyChargingChart = ({ name, data, color, className}: MonthlyChargingChartProps) => {
   return (

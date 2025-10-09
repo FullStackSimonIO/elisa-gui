@@ -9,6 +9,7 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
   DragOverlay,
 } from "@dnd-kit/core"
 import {
@@ -107,8 +108,8 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
 
 
   // Handlers for Drag Start and Drag End events
-  function handleDragStart(event: any) {
-    setActiveId(event.active.id)
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(String(event.active.id))
   }
 
   
