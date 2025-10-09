@@ -160,18 +160,18 @@ export function EVCC({
       </header>
 
       <div className="relative z-10 flex flex-1 flex-col lg:flex-row gap-8 min-h-0">
-        <div className="space-y-4 lg:w-[200px] shrink-0">
+        <div className="space-y-6 flex-1 shrink-0">
           {ACTIONS.map(({ key, label, icon: Icon, variant, description }) => {
             const infoLabel = actionInfoLabels?.[key] ?? description
             const onClick = actionHandlers[key]
 
             return (
-              <div key={key} className="flex items-center gap-3">
+              <div key={key} className="flex items-center gap-4">
                 <Button
                   aria-label={`${label} info`}
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-full border border-white/10 bg-slate-950/60 text-slate-400 shadow-lg transition hover:border-brand/60 hover:text-brand-50"
+                  className="h-20 w-20 rounded-full border border-white/10 bg-slate-950/60 text-slate-400 shadow-lg transition hover:border-brand/60 hover:text-brand-50 [&_svg]:!size-16"
                   onClick={() =>
                     onInfoClick?.({
                       action: key,
@@ -180,13 +180,13 @@ export function EVCC({
                     })
                   }
                 >
-                  <Info className="size-4" />
+                  <Info className="w-16 h-16" />
                 </Button>
                 <Button
                   variant={variant}
                   onClick={onClick}
                   className={cn(
-                    "flex-1 justify-start gap-3 rounded-2xl shadow-lg transition",
+                    "flex-1 justify-start gap-4 rounded-2xl shadow-lg transition h-20",
                     variant === "secondary"
                       ? "bg-slate-800/70 text-slate-200 ring-1 ring-white/10 hover:bg-slate-800"
                       : variant === "outline"
@@ -194,8 +194,8 @@ export function EVCC({
                         : "bg-gradient-to-r from-brand/90 via-brand to-brand/80 text-white shadow-[0_0_30px_rgba(236,72,153,0.3)] hover:from-brand/80 hover:via-brand/90 hover:to-brand"
                   )}
                 >
-                  <Icon className="size-6" aria-hidden />
-                  <span className="text-3xl font-semibold">{label}</span>
+                  <Icon className="w-24 h-24" aria-hidden />
+                  <span className="text-5xl font-semibold">{label}</span>
                 </Button>
                 <span className="sr-only">{infoLabel}</span>
               </div>
@@ -203,7 +203,7 @@ export function EVCC({
           })}
         </div>
 
-        <div className="relative flex flex-1 flex-col rounded-3xl border border-white/10 bg-slate-950/60 p-5 pb-20 shadow-lg backdrop-blur-sm min-h-0">
+        <div className="relative flex flex-col rounded-3xl border border-white/10 bg-slate-950/60 p-5 pb-20 shadow-lg backdrop-blur-sm min-h-0 lg:w-[400px] shrink-0">
           <div className="relative flex h-full min-h-full flex-1 justify-between">
             <div className="absolute left-[22px] top-0 bottom-0 w-1.5 overflow-hidden rounded-full bg-slate-950/70 ring-1 ring-white/10">
               <div
