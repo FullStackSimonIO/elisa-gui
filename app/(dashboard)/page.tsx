@@ -220,11 +220,11 @@ export default function Page() {
   ], [progress, isSimulating, isChargingStarted])
 
   return (
-    <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-6 py-6 text-foreground dark:from-background dark:via-background dark:to-background sm:px-8 xl:px-10 2xl:px-12 3xl:px-16">
+    <main className="relative flex h-full min-h-full w-full flex-1 flex-col bg-gradient-to-b from-brand-50 via-white to-brand-100 px-8 text-foreground dark:from-background dark:via-background dark:to-background sm:px-10 xl:px-12 2xl:px-16 3xl:px-20">
       {/* Removed expensive blur backgrounds for better performance on Raspberry Pi */}
       
-      {/* Optimized for 3840x1100 ultra-wide display - added vertical padding and spacing */}
-      <div className="relative z-10 flex h-full w-full max-w-[3800px] mx-auto flex-col gap-8 py-2 2xl:gap-10 3xl:gap-12">
+      {/* Optimized for 3840x1100 ultra-wide display - full vertical space utilization */}
+      <div className="relative z-10 flex h-full min-h-full w-full max-w-[3800px] mx-auto flex-col gap-6 py-4">
         <section className="w-full shrink-0">
           <ProgressBar
             steps={progressSteps}
@@ -236,10 +236,10 @@ export default function Page() {
           />
         </section>
 
-        <section className="grid flex-1 min-h-0 grid-cols-1 gap-8 xl:grid-cols-3 2xl:gap-10 3xl:gap-12">
+        <section className="grid flex-1 min-h-0 grid-cols-1 gap-6 xl:grid-cols-3 2xl:gap-8">
           <DraggableGrid
             items={gridItems}
-            className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-8 2xl:gap-10"
+            className="grid h-full min-h-0 grid-cols-2 grid-rows-2 gap-6 2xl:gap-8"
           />
 
           <EVCC
@@ -249,10 +249,10 @@ export default function Page() {
             onEnd={stopSimulation}
             onReset={resetSimulation}
             onInfoClick={handleActionInfoClick}
-            className="rounded-[28px]"
+            className="rounded-[28px] h-full min-h-0"
           />
           
-          <Terminal logs={terminalLogs} className="rounded-[28px]" />
+          <Terminal logs={terminalLogs} className="rounded-[28px] h-full min-h-0" />
         </section>
       </div>
     </main>
