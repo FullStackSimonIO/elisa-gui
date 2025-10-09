@@ -80,7 +80,7 @@ const ACTIONS: Array<{
   },
 ]
 
-export function EVCC({
+export const EVCC = React.memo(function EVCC({
   status = "plugged-in",
   chargingProgress = 0,
   className,
@@ -128,26 +128,21 @@ export function EVCC({
     `${Math.round(clampedCharge * 100)}%`,
   [clampedCharge])
 
-  const actionHandlers: Record<ActionKey, (() => void) | undefined> = {
+  const actionHandlers = React.useMemo<Record<ActionKey, (() => void) | undefined>>(() => ({
     start: onStart,
     end: onEnd,
     reset: onReset,
-  }
+  }), [onStart, onEnd, onReset])
 
   return (
     <section
       aria-label="Electric Vehicle Charge Controller"
       className={cn(
-        "relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
+        "relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 px-6 py-6 shadow-lg dark:border-white/10",
         className
       )}
     >
-      {/* Background glow effects */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -right-24 top-1/4 h-64 w-64 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute -left-16 bottom-1/3 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
-        <div className="absolute right-1/3 -bottom-12 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
-      </div>
+      {/* Removed blur effects for better performance on Raspberry Pi */}
 
       <header className="relative z-10 mb-4">
         
@@ -203,7 +198,7 @@ export function EVCC({
           })}
         </div>
 
-        <div className="relative flex flex-col rounded-3xl border border-white/10 bg-slate-950/60 p-5 pb-20 shadow-lg backdrop-blur-sm min-h-0 lg:w-[400px] shrink-0">
+        <div className="relative flex flex-col rounded-3xl border border-white/10 bg-slate-950 p-5 pb-20 shadow-lg min-h-0 lg:w-[400px] shrink-0">
           <div className="relative flex h-full min-h-full flex-1 justify-between">
             <div className="absolute left-[22px] top-0 bottom-0 w-1.5 overflow-hidden rounded-full bg-slate-950/70 ring-1 ring-white/10">
               <div
@@ -262,6 +257,6 @@ export function EVCC({
       </div>
     </section>
   )
-}
+})
 
 export default EVCC

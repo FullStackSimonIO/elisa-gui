@@ -78,7 +78,7 @@ function formatTimestamp(value?: string | Date) {
   })
 }
 
-export function Terminal({
+export const Terminal = React.memo(function Terminal({
   logs,
   title = "Backend terminal",
   prompt = "evcc@backend",
@@ -128,18 +128,13 @@ export function Terminal({
   return (
     <section
       className={cn(
-        "relative isolate flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10 lg:max-h-[calc(100vh-220px)]",
+        "relative isolate flex h-full min-h-[320px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 shadow-lg dark:border-white/10 lg:max-h-[calc(100vh-220px)]",
         className
       )}
     >
-      {/* Background glow effects */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -right-24 top-1/4 h-64 w-64 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute -left-16 bottom-1/3 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
-        <div className="absolute right-1/3 -bottom-12 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
-      </div>
+      {/* Removed blur effects for better performance on Raspberry Pi */}
 
-      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950/40 px-5 py-4 backdrop-blur-sm">
+      <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950 px-5 py-4">
         <div>
           <p className="text-3xl font-semibold uppercase tracking-wider text-brand-50">
             {title}
@@ -153,7 +148,7 @@ export function Terminal({
       <div className="relative z-10 flex flex-1 min-h-0 flex-col gap-4 px-5 py-4">
         <div
           ref={listRef}
-          className="scrollbar-thin flex-1 min-h-0 space-y-4 overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-5 font-mono shadow-lg backdrop-blur-sm dark:text-brand-50"
+          className="scrollbar-thin flex-1 min-h-0 space-y-4 overflow-y-auto rounded-2xl border border-white/10 bg-slate-950 px-4 py-5 font-mono shadow-lg dark:text-brand-50"
           aria-live="polite"
         >
           {logs.length === 0 ? (
@@ -170,7 +165,7 @@ export function Terminal({
                 <div
                   key={log.id}
                   data-terminal-line
-                  className="group flex items-start gap-4 rounded-xl border border-white/10 bg-slate-900/40 px-4 py-3 shadow-sm backdrop-blur-sm transition hover:border-brand/40 hover:bg-slate-900/60 hover:shadow-md"
+                  className="group flex items-start gap-4 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 shadow-sm transition hover:border-brand/40 hover:bg-slate-800 hover:shadow-md"
                 >
                   <div className="flex flex-1 items-center gap-4">
                     <Icon
@@ -191,11 +186,11 @@ export function Terminal({
         </div>
       </div>
 
-      <footer className="relative z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-slate-950/60 px-5 py-3 text-slate-400 shadow-lg backdrop-blur-sm">
+      <footer className="relative z-10 flex items-center justify-between gap-3 border-t border-white/10 bg-slate-950 px-5 py-3 text-slate-400 shadow-lg">
         <span className="text-3xl font-semibold">{footerNote}</span>
       </footer>
     </section>
   )
-}
+})
 
 export default Terminal

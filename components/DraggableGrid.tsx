@@ -26,7 +26,7 @@ interface DraggableCardProps {
   children: React.ReactNode
 }
 
-function DraggableCard({ id, children }: DraggableCardProps) {
+const DraggableCard = React.memo(function DraggableCard({ id, children }: DraggableCardProps) {
   const {
     attributes,
     listeners,
@@ -36,11 +36,11 @@ function DraggableCard({ id, children }: DraggableCardProps) {
     isDragging,
   } = useSortable({ id })
 
-  const style = {
+  const style = React.useMemo(() => ({
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-  }
+  }), [transform, transition, isDragging])
 
   return (
     <div
@@ -53,7 +53,7 @@ function DraggableCard({ id, children }: DraggableCardProps) {
       {children}
     </div>
   )
-}
+})
 
 // Structure of Grid Items
 export interface GridItem {
@@ -68,7 +68,7 @@ interface DraggableGridProps {
   className?: string
 }
 
-export function DraggableGrid({ items: initialItems, onReorder, className }: DraggableGridProps) {
+export const DraggableGrid = React.memo(function DraggableGrid({ items: initialItems, onReorder, className }: DraggableGridProps) {
 
   // State Hooks to manage the Order of the Container Items / Components
   const [items, setItems] = React.useState<GridItem[]>(initialItems)
@@ -108,12 +108,12 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
 
 
   // Handlers for Drag Start and Drag End events
-  function handleDragStart(event: DragStartEvent) {
+  const handleDragStart = React.useCallback((event: DragStartEvent) => {
     setActiveId(String(event.active.id))
-  }
+  }, [])
 
   
-  function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = React.useCallback((event: DragEndEvent) => {
     const { active, over } = event
 
     setActiveId(null)
@@ -128,9 +128,14 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
         return newItems
       })
     }
-  }
+  }, [onReorder])
 
-  const activeItem = activeId ? items.find((item) => item.id === activeId) : null
+  const activeItem = React.useMemo(() => 
+    activeId ? items.find((item) => item.id === activeId) : null,
+    [activeId, items]
+  )
+  
+  const itemIds = React.useMemo(() => items.map((item) => item.id), [items])
 
   return (
     <DndContext
@@ -139,7 +144,7 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={items.map((item) => item.id)} strategy={rectSortingStrategy}>
+      <SortableContext items={itemIds} strategy={rectSortingStrategy}>
         <div className={className}>
           {items.map((item) => (
             <DraggableCard key={item.id} id={item.id}>
@@ -157,4 +162,4 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
       </DragOverlay>
     </DndContext>
   )
-}
+})

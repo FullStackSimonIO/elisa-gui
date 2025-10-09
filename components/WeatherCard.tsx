@@ -46,7 +46,7 @@ const WEATHER_ICONS: Record<
   },
 }
 
-export function WeatherCard({
+export const WeatherCard = React.memo(function WeatherCard({
   condition = "sunny",
   temperature = 22,
   location = "Berlin",
@@ -54,27 +54,26 @@ export function WeatherCard({
   windSpeed = 12,
   className,
 }: WeatherCardProps) {
-  const weatherData = WEATHER_ICONS[condition]
+  const weatherData = React.useMemo(() => WEATHER_ICONS[condition], [condition])
   const Icon = weatherData.icon
+
+  const iconClassName = React.useMemo(() => cn(
+    "h-32 w-32 text-brand-100",
+    condition === "sunny" && "text-amber-300",
+    condition === "cloudy" && "text-slate-300",
+    condition === "rainy" && "text-cyan-300",
+    condition === "snowy" && "text-blue-200"
+  ), [condition])
 
   return (
     <section
       className={cn(
-        "relative isolate flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 p-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
+        "relative isolate flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 p-6 shadow-lg dark:border-white/10",
         className
       )}
       aria-label={`Weather in ${location}`}
     >
-      {/* Background glow effects */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div
-          className={cn(
-            "absolute -right-16 top-0 h-48 w-48 rounded-full blur-3xl",
-            weatherData.gradient
-          )}
-        />
-        <div className="absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-brand/15 blur-3xl" />
-      </div>
+      {/* Removed blur effects for better performance on Raspberry Pi */}
 
       {/* Header */}
       
@@ -83,25 +82,10 @@ export function WeatherCard({
       <div className="flex flex-1 flex-col items-center justify-center gap-4">
         <div className="relative">
           <Icon
-            className={cn(
-              "h-32 w-32 text-brand-100",
-              condition === "sunny" && "text-amber-300",
-              condition === "cloudy" && "text-slate-300",
-              condition === "rainy" && "text-cyan-300",
-              condition === "snowy" && "text-blue-200"
-            )}
+            className={iconClassName}
             aria-hidden="true"
           />
-          <div
-            className={cn(
-              "absolute inset-0 rounded-full blur-2xl opacity-40",
-              condition === "sunny" && "bg-amber-400",
-              condition === "cloudy" && "bg-slate-400",
-              condition === "rainy" && "bg-cyan-400",
-              condition === "snowy" && "bg-blue-300"
-            )}
-            aria-hidden="true"
-          />
+          {/* Removed blur glow for performance */}
         </div>
 
         <div className="text-center">
@@ -115,6 +99,6 @@ export function WeatherCard({
      
     </section>
   )
-}
+})
 
 export default WeatherCard

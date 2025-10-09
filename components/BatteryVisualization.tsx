@@ -10,7 +10,7 @@ interface BatteryVisualizationProps {
   className?: string
 }
 
-export function BatteryVisualization({
+export const BatteryVisualization = React.memo(function BatteryVisualization({
   level = 75,
   isCharging = false,
   className,
@@ -75,16 +75,12 @@ export function BatteryVisualization({
   return (
     <article
       className={cn(
-        "relative isolate flex h-full min-h-0 flex-col items-center justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-4 py-4 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
+        "relative isolate flex h-full min-h-0 flex-col items-center justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 px-4 py-4 shadow-lg dark:border-white/10",
         className
       )}
       aria-label={`Battery level ${clamped}%${isCharging ? ", charging" : ""}`}
     >
-      {/* Background glow effects */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -right-20 top-1/4 h-48 w-48 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute -left-16 bottom-1/3 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
-      </div>
+      {/* Removed blur effects for better performance on Raspberry Pi */}
 
       {/* Header */}
       <header className="relative z-10 flex shrink-0 flex-col items-center gap-1">
@@ -156,6 +152,6 @@ export function BatteryVisualization({
       )}
     </article>
   )
-}
+})
 
 export default BatteryVisualization

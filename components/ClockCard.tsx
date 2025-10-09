@@ -12,7 +12,10 @@ export interface ClockCardProps {
   tickRate?: number
   showSeconds?: boolean
 }
-export function ClockCard({
+
+import { memo } from "react"
+
+export const ClockCard = memo(function ClockCard({
   className,
   label = "Berlin",
   timeZone = "Europe/Berlin",
@@ -30,6 +33,6 @@ export function ClockCard({
       className={cn("h-full", className)}
     />
   )
-}
+})
 
 export default ClockCard

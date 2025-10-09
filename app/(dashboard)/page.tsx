@@ -199,7 +199,7 @@ export default function Page() {
     {
       id: "skeleton",
       component: (
-        <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 flex items-center justify-center shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10">
+        <div className="h-full min-h-0 rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 flex items-center justify-center shadow-lg dark:border-white/10">
           <SmallSkeleton />
         </div>
       ),
@@ -220,13 +220,9 @@ export default function Page() {
   ], [progress, isSimulating, isChargingStarted])
 
   return (
-    <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
-      <div className="pointer-events-none absolute inset-0 opacity-70">
-        <div className="absolute -left-24 top-10 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-brand-200/30 blur-3xl" />
-        <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-400/10 blur-[120px]" />
-      </div>
-
+    <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
+      {/* Removed expensive blur backgrounds for better performance on Raspberry Pi */}
+      
       <div className="relative z-10 flex h-full w-full flex-col gap-6 2xl:gap-8 3xl:gap-10">
         <section className="w-full">
           <ProgressBar

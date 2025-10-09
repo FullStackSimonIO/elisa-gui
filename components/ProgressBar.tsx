@@ -91,7 +91,7 @@ export const CHARGING_PROGRESS_STEPS = [
 
 const DEFAULT_STEPS: ProgressStep[] = CHARGING_PROGRESS_STEPS
 
-export function ProgressBar({
+export const ProgressBar = React.memo(function ProgressBar({
   steps = DEFAULT_STEPS,
   currentStepId,
   currentStepIndex,
@@ -322,16 +322,12 @@ export function ProgressBar({
   return (
     <section
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-4 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
+        "relative isolate overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 px-6 py-4 shadow-lg dark:border-white/10",
         className
       )}
       aria-label={ariaLabel}
     >
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-16 top-10 h-48 w-48 rounded-full bg-brand/25 blur-3xl" />
-        <div className="absolute right-0 top-16 h-56 w-56 rounded-full bg-brand-300/20 blur-3xl" />
-        <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
-      </div>
+      {/* Removed blur effects for better performance on Raspberry Pi */}
 
       <header className="relative mb-3 flex flex-wrap items-baseline justify-end gap-3">
         <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1.5 text-3xl font-semibold uppercase tracking-[0.3em] text-brand-100 shadow-[0_8px_24px_-12px_rgba(236,72,153,0.4)]">
@@ -424,6 +420,6 @@ export function ProgressBar({
       </div>
     </section>
   )
-}
+})
 
 export default ProgressBar
