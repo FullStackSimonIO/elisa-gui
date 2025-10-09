@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import SidebarLayout from "@/components/Navigation/Sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { geistMono, geistSans, rubik } from "@/lib/fonts";
+import { MenuButton } from "@/components/MenuButton";
 
 export const metadata: Metadata = {
   title: "Elisa GUI",
@@ -28,14 +28,30 @@ export default function RootLayout({
             <div className="flex h-screen w-full overflow-hidden">
               <SidebarLayout />
 
-              <SidebarInset className="flex h-full flex-1 flex-col bg-transparent">
-                <Navbar />
-                <div className="flex flex-1 overflow-x-hidden overflow-y-auto">
+              <SidebarInset className="relative flex h-full flex-1 flex-col bg-transparent">
+                {/* Fixed Menu Button - Top Left */}
+                <MenuButton />
+
+                <div className="flex flex-1 overflow-x-hidden overflow-y-auto pt-6">
                   {children}
                 </div>
               </SidebarInset>
             </div>
-            <Toaster richColors closeButton position="top-right" duration={4000} />
+            <Toaster 
+              richColors 
+              closeButton 
+              position="top-right" 
+              duration={4000}
+              toastOptions={{
+                style: {
+                  fontSize: '1.5rem',
+                  padding: '1.5rem 2rem',
+                  minWidth: '400px',
+                  minHeight: '100px',
+                },
+                className: 'text-4xl',
+              }}
+            />
           </ThemeProvider>
         </body>
       </html>

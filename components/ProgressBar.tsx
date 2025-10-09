@@ -236,7 +236,7 @@ export function ProgressBar({
         if (status === "completed") {
           bubble.style.transformOrigin = "center"
           animate(bubble, {
-            scale: [1, 1.08],
+            scale: [1, 1.02],
             opacity: [0.95, 1],
             duration: 440,
             easing: "easeOutBack",
@@ -311,7 +311,7 @@ export function ProgressBar({
   return (
     <section
       className={cn(
-        "relative isolate overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-6 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
+        "relative isolate overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/75 via-slate-900/50 to-slate-900/60 px-6 py-4 shadow-[0_30px_70px_-44px_rgba(236,72,153,0.5)] backdrop-blur-2xl dark:border-white/10",
         className
       )}
       aria-label={ariaLabel}
@@ -322,18 +322,18 @@ export function ProgressBar({
         <div className="absolute inset-x-[18%] bottom-0 h-40 rounded-full bg-primary/12 blur-[120px]" />
       </div>
 
-      <header className="relative mb-4 flex flex-wrap items-baseline justify-between gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-brand-100 shadow-[0_8px_24px_-12px_rgba(236,72,153,0.4)]">
+      <header className="relative mb-3 flex flex-wrap items-baseline justify-end gap-3">
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1.5 text-3xl font-semibold uppercase tracking-[0.3em] text-brand-100 shadow-[0_8px_24px_-12px_rgba(236,72,153,0.4)]">
           <span className="h-2 w-2 rounded-full bg-brand-100 animate-pulse" aria-hidden />
           {Math.round((ariaValue / safeSteps.length) * 100)}%
         </span>
       </header>
 
-      <div className="overflow-x-auto py-3 ">
+      <div className="overflow-x-auto py-2">
         <div
-          className="relative mx-2 grid  items-start gap-x-3"
+          className="relative mx-2 grid items-start gap-x-2"
           style={{
-            gridTemplateColumns: `repeat(${safeSteps.length * 2 - 1}, minmax(64px, 1fr))`,
+            gridTemplateColumns: `repeat(${safeSteps.length * 2 - 1}, minmax(56px, 1fr))`,
           }}
           role="progressbar"
           aria-valuemin={0}
@@ -356,7 +356,7 @@ export function ProgressBar({
                       stepBubbleRefs.current[index] = node
                     }}
                     className={cn(
-                      "flex h-20 w-20 items-center justify-center rounded-full border-4 text-3xl font-semibold transition-all",
+                      "flex h-16 w-16 items-center justify-center rounded-full border-4 text-2xl font-semibold transition-all will-change-transform",
                       isCompleted
                         ? "border-brand bg-brand text-brand-foreground shadow-[0_0_20px_rgba(236,72,153,0.5)]"
                         : isActive
@@ -366,13 +366,13 @@ export function ProgressBar({
                   >
                     {index + 1}
                   </span>
-                  <div className="mt-3 space-y-1">
+                  <div className="mt-2 space-y-1 min-h-[60px]">
                     <p
                       ref={(node) => {
                         stepLabelRefs.current[index] = node
                       }}
                       className={cn(
-                        "text-3xl pt-2 font-semibold uppercase tracking-wide",
+                        "text-3xl pt-1 font-semibold uppercase tracking-wide will-change-transform",
                         isCompleted || isActive
                           ? "text-brand-50"
                           : "text-muted-foreground/70"
@@ -390,7 +390,7 @@ export function ProgressBar({
 
                 {index < safeSteps.length - 1 ? (
                   <div className="col-span-1 flex h-10 items-center">
-                    <div className="relative h-1 w-full overflow-hidden rounded-full bg-slate-950/70 ring-1 ring-white/10">
+                    <div className="relative h-1 w-full overflow-hidden rounded-full bg-muted-foreground ring-1 ring-white/10">
                       <div
                         ref={(node) => {
                           connectorRefs.current[index] = node

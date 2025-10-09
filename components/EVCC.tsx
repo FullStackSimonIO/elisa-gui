@@ -36,7 +36,7 @@ const STEPS: Array<{ key: StepKey; label: string; description: string }> = [
   },
   {
     key: "ready-to-charge",
-    label: "Ready To Charge",
+    label: "Ready",
     description: "Vehicle is negotiating session",
   },
   {
@@ -153,14 +153,14 @@ export function EVCC({
         
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
           <h2 className="text-3xl font-semibold text-brand-50">EVCC</h2>
-          <span className="rounded-full bg-brand/15 px-3.5 py-1.5 text-xl font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
+          <span className="rounded-full bg-brand/15 px-5 py-3 text-3xl font-semibold uppercase tracking-wider text-muted-foregrounds shadow-lg ring-1 ring-white/10">
             Status: {STEPS[safeStatusIndex]?.label}
           </span>
         </div>
       </header>
 
       <div className="relative z-10 flex flex-1 flex-col lg:flex-row gap-8 min-h-0">
-        <div className="space-y-6 flex-1 shrink-0">
+        <div className="space-y-16 flex-1 shrink-0">
           {ACTIONS.map(({ key, label, icon: Icon, variant, description }) => {
             const infoLabel = actionInfoLabels?.[key] ?? description
             const onClick = actionHandlers[key]
@@ -186,7 +186,7 @@ export function EVCC({
                   variant={variant}
                   onClick={onClick}
                   className={cn(
-                    "flex-1 justify-start gap-4 rounded-2xl shadow-lg transition h-20",
+                    "flex-1 justify-start gap-4 rounded-2xl shadow-lg transition h-28 [&_svg]:!size-16",
                     variant === "secondary"
                       ? "bg-slate-800/70 text-slate-200 ring-1 ring-white/10 hover:bg-slate-800"
                       : variant === "outline"
@@ -194,8 +194,8 @@ export function EVCC({
                         : "bg-gradient-to-r from-brand/90 via-brand to-brand/80 text-white shadow-[0_0_30px_rgba(236,72,153,0.3)] hover:from-brand/80 hover:via-brand/90 hover:to-brand"
                   )}
                 >
-                  <Icon className="w-24 h-24" aria-hidden />
-                  <span className="text-5xl font-semibold">{label}</span>
+                  <Icon className="w-20 h-20" aria-hidden />
+                  <span className="text-5xl uppercase font-semibold">{label}</span>
                 </Button>
                 <span className="sr-only">{infoLabel}</span>
               </div>
@@ -213,7 +213,7 @@ export function EVCC({
               />
             </div>
 
-            <ul className="flex w-full h-full flex-1 flex-col gap-y-4 pb-4 pl-0">
+            <ul className="flex w-full h-full flex-1 flex-col gap-y-14 pb-4 pl-0">
               {STEPS.map((step, index) => {
                 const isActive = index === safeStatusIndex
                 const isComplete =
@@ -244,7 +244,7 @@ export function EVCC({
                     <div className="space-y-1 pt-1">
                       <p
                         className={cn(
-                          "text-3xl font-semibold",
+                          "text-5xl font-semibold",
                           isActive || isComplete ? "text-brand-50" : "text-slate-400"
                         )}
                       >
@@ -258,13 +258,6 @@ export function EVCC({
               })}
             </ul>
           </div>
-
-          <footer className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl bg-slate-950/60 px-3.5 py-2.5 text-slate-400 shadow-lg ring-1 ring-white/10 backdrop-blur">
-            <span className="text-3xl font-semibold">Charging progress</span>
-            <span className="text-3xl font-semibold text-brand-50">
-              {currentStepKey === "completed" ? "Done" : chargingPercentLabel}
-            </span>
-          </footer>
         </div>
       </div>
     </section>

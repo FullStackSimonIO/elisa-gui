@@ -145,7 +145,7 @@ export function Terminal({
             {title}
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3.5 py-1.5 text-xl font-semibold uppercase tracking-wider text-brand shadow-lg ring-1 ring-white/10">
+        <span className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-5 py-3 text-3xl font-semibold uppercase tracking-wider text-muted-foreground shadow-lg ring-1 ring-white/10">
           Live
         </span>
       </header>

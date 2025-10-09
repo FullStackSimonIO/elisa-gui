@@ -72,14 +72,14 @@ const SidebarLayout = () => {
   const { setOpen } = useSidebar()
   return (
     <Sidebar className="border-border/40 bg-sidebar/90 text-sidebar-foreground shadow-lg backdrop-blur transition-colors duration-300 supports-[backdrop-filter]:bg-sidebar/75 dark:border-sidebar-border/60 dark:bg-sidebar/95">
-      <SidebarHeader className="border-b border-border/40 pb-4 dark:border-sidebar-border/60">
-        <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white/70 p-3 shadow-sm backdrop-blur-sm transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
-          <div className="flex size-9 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm dark:bg-primary/20 dark:text-primary-foreground">
-            <PlugZap className="size-4" />
+      <SidebarHeader className="border-b border-border/40 pb-6 pt-6 dark:border-sidebar-border/60">
+        <div className="flex items-center gap-5 rounded-2xl border border-border/60 bg-white/70 p-6 shadow-sm backdrop-blur-sm transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
+          <div className="flex size-16 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm dark:bg-primary/20 dark:text-primary-foreground">
+            <PlugZap className="size-10" />
           </div>
-          <div className="text-sm leading-tight">
-            <p className="font-semibold text-sidebar-foreground">Elisa</p>
-            <p className="text-xs text-muted-foreground">Electric Vehicle Charging Control</p>
+          <div className="leading-tight">
+            <p className="text-3xl font-bold text-sidebar-foreground">Elisa</p>
+            <p className="text-xl text-muted-foreground">EV Charging Control</p>
           </div>
         </div>
       </SidebarHeader>
@@ -100,10 +100,10 @@ const SidebarLayout = () => {
                     <Link
                       href={item.href}
                       aria-current={pathname === item.href ? "page" : undefined}
-                      className="flex w-full items-center gap-2"
+                      className="flex w-full items-center gap-4"
                     >
-                      <item.icon className="size-4" />
-                      <span>{item.label}</span>
+                      <item.icon className="size-8" />
+                      <span className="text-3xl font-semibold">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -124,9 +124,9 @@ const SidebarLayout = () => {
                     asChild
                     className="border border-transparent bg-white/40 text-sidebar-foreground transition-colors duration-200 hover:border-accent hover:bg-accent/30 hover:text-accent-foreground dark:border-transparent dark:bg-transparent"
                   >
-                    <Link href={item.href} className="flex items-center gap-2">
-                      <item.icon className="size-4" />
-                      <span>{item.label}</span>
+                    <Link href={item.href} className="flex items-center gap-4">
+                      <item.icon className="size-8" />
+                      <span className="text-3xl font-semibold">{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -136,10 +136,10 @@ const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border/40 pt-4 dark:border-sidebar-border/60">
-        <div className="rounded-xl border border-border/60 bg-white/70 p-3 text-xs leading-relaxed shadow-inner transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
-          <p className="font-semibold uppercase tracking-[0.25em] text-sidebar-foreground/80">Session health</p>
-          <p className="mt-1 text-muted-foreground">All systems nominal</p>
+      <SidebarFooter className="border-t border-border/40 pt-6 dark:border-sidebar-border/60">
+        <div className="rounded-xl border border-border/60 bg-white/70 p-6 leading-relaxed shadow-inner transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
+          <p className="text-2xl font-bold uppercase tracking-[0.25em] text-sidebar-foreground/80">Session health</p>
+          <p className="mt-2 text-xl text-muted-foreground">All systems nominal</p>
         </div>
       </SidebarFooter>
     </Sidebar>

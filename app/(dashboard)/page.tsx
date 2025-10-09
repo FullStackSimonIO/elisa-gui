@@ -7,10 +7,11 @@ import EVCC, { type EVCCProps } from "@/components/EVCC"
 import ProgressBar, { CHARGING_PROGRESS_STEPS } from "@/components/ProgressBar"
 import ChargingAnimation from "@/components/ChargingAnimation"
 import ClockCard from "@/components/ClockCard"
-import Terminal from "@/components/Terminal"
+import Terminal, { type TerminalLogEntry } from "@/components/Terminal"
 import BatteryVisualization from "@/components/BatteryVisualization"
 import SmallSkeleton from "@/components/Skeleton/SmallSkeleton"
 import { DraggableGrid, type GridItem } from "@/components/DraggableGrid"
+import WeatherCard from "@/components/WeatherCard"
 
 const progressSteps = CHARGING_PROGRESS_STEPS
 
@@ -19,6 +20,8 @@ type EVCCInfoClickPayload = Parameters<NonNullable<EVCCProps["onInfoClick"]>>[0]
 export default function Page() {
   const [progress, setProgress] = useState(0)
   const [isSimulating, setIsSimulating] = useState(false)
+  const [isChargingStarted, setIsChargingStarted] = useState(false)
+  const [terminalLogs, setTerminalLogs] = useState<TerminalLogEntry[]>([])
 
   const handleActionInfoClick = useCallback(
     ({ action, label, description }: EVCCInfoClickPayload) => {
@@ -34,19 +37,97 @@ export default function Page() {
   const startSimulation = useCallback(() => {
     setProgress(0)
     setIsSimulating(true)
+    setIsChargingStarted(false)
+    setTerminalLogs([])
+    
+    // Add initial log
+    setTerminalLogs([{
+      id: "1",
+      label: "Initializing charging session",
+      status: "running",
+      timestamp: new Date().toISOString(),
+    }])
+
+    // Complete initialization
+    setTimeout(() => {
+      setTerminalLogs(prev => prev.map(log => 
+        log.id === "1" ? { ...log, status: "success" as const } : log
+      ))
+    }, 500)
+
+    // Simulate terminal logs
+    setTimeout(() => {
+      setTerminalLogs(prev => [...prev, {
+        id: "2",
+        label: "Vehicle connected",
+        status: "success",
+        timestamp: new Date().toISOString(),
+      }])
+    }, 1000)
+
+    setTimeout(() => {
+      setTerminalLogs(prev => [...prev, {
+        id: "3",
+        label: "Authentication successful",
+        status: "success",
+        timestamp: new Date().toISOString(),
+      }])
+    }, 2000)
+
+    setTimeout(() => {
+      setTerminalLogs(prev => [...prev, {
+        id: "4",
+        label: "Power delivery negotiated",
+        status: "success",
+        timestamp: new Date().toISOString(),
+      }])
+    }, 3000)
+
+    setTimeout(() => {
+      setTerminalLogs(prev => [...prev, {
+        id: "5",
+        label: "Charging started",
+        status: "running",
+        timestamp: new Date().toISOString(),
+      }])
+    }, 4000)
+
+    // Complete charging started - THIS TRIGGERS THE ACTUAL CHARGING
+    setTimeout(() => {
+      setTerminalLogs(prev => prev.map(log => 
+        log.id === "5" ? { ...log, status: "success" as const } : log
+      ))
+      // Only NOW start the actual charging progress
+      setIsChargingStarted(true)
+    }, 4500)
   }, [])
 
   const stopSimulation = useCallback(() => {
     setIsSimulating(false)
+    setIsChargingStarted(false)
+    setTerminalLogs(prev => [...prev, {
+      id: `${prev.length + 1}`,
+      label: "Charging stopped by user",
+      status: "success",
+      timestamp: new Date().toISOString(),
+    }])
   }, [])
 
   const resetSimulation = useCallback(() => {
     setIsSimulating(false)
+    setIsChargingStarted(false)
     setProgress(0)
+    setTerminalLogs([{
+      id: "reset",
+      label: "Session reset",
+      status: "success",
+      timestamp: new Date().toISOString(),
+    }])
   }, [])
 
+  // Only increment progress when charging has actually started (after backend confirms)
   useEffect(() => {
-    if (!isSimulating) return
+    if (!isSimulating || !isChargingStarted) return
     const interval = window.setInterval(() => {
       setProgress((prev) => {
         if (prev >= 1) return 1
@@ -56,19 +137,30 @@ export default function Page() {
     }, 60)
 
     return () => window.clearInterval(interval)
-  }, [isSimulating])
+  }, [isSimulating, isChargingStarted])
 
   useEffect(() => {
-    if (progress >= 1 && isSimulating) {
+    if (progress >= 1 && isSimulating && isChargingStarted) {
       setIsSimulating(false)
+      setIsChargingStarted(false)
+      setTerminalLogs(prev => [...prev, {
+        id: `${prev.length + 1}`,
+        label: "Charging completed",
+        status: "success",
+        timestamp: new Date().toISOString(),
+      }])
     }
-  }, [progress, isSimulating])
+  }, [progress, isSimulating, isChargingStarted])
+
   const evccStatus = useMemo(() => {
     if (progress >= 1) return "completed" as const
-    if (isSimulating) return progress > 0 ? "charging" : "ready-to-charge"
+    // Only show "charging" when backend has confirmed charging started
+    if (isSimulating && isChargingStarted && progress > 0) return "charging"
+    // Show "ready-to-charge" when simulation started but charging not yet confirmed
+    if (isSimulating) return "ready-to-charge"
     if (progress > 0) return "ready-to-charge"
     return "plugged-in"
-  }, [isSimulating, progress])
+  }, [isSimulating, isChargingStarted, progress])
 
   const { currentStepIndex, stepProgress } = useMemo(() => {
     if (progress >= 1) {
@@ -99,7 +191,7 @@ export default function Page() {
       component: (
         <BatteryVisualization 
           level={Math.round(progress * 100)} 
-          isCharging={isSimulating}
+          isCharging={isSimulating && isChargingStarted}
           className="h-full min-h-0"
         />
       ),
@@ -113,7 +205,20 @@ export default function Page() {
         </div>
       ),
     },
-  ], [progress, isSimulating])
+    {
+      id: "weather",
+      component: (
+        <WeatherCard 
+          condition="sunny"
+          temperature={22}
+          location="Berlin"
+          humidity={65}
+          windSpeed={12}
+          className="h-full min-h-0"
+        />
+      ),
+    },
+  ], [progress, isSimulating, isChargingStarted])
 
   return (
     <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-100 px-4 py-4 text-foreground transition-[background-color] duration-300 dark:from-background dark:via-background dark:to-background sm:px-6 xl:px-8 3xl:px-12 4xl:px-16">
@@ -151,7 +256,7 @@ export default function Page() {
             className="rounded-[28px]"
           />
           
-          <Terminal logs={[]} className="rounded-[28px]" />
+          <Terminal logs={terminalLogs} className="rounded-[28px]" />
         </section>
       </div>
     </main>

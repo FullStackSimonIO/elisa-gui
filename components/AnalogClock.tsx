@@ -45,7 +45,7 @@ function DigitTicker({ value, reduceMotion }: { value: string; reduceMotion: boo
       }}
     >
       <div
-        className="flex flex-col text-5xl font-semibold tabular-nums text-brand-50"
+        className="flex flex-col text-7xl font-semibold tabular-nums text-brand-50"
         style={{
           transform: `translateY(-${index * DIGIT_HEIGHT_REM}rem)`,
           transition: reduceMotion ? "none" : "transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)",
@@ -190,10 +190,10 @@ export function AnalogClock({
       </div>
        <div className="flex flex-col items-center gap-2">
         
-        <span className="text-lg font-bold uppercase tracking-[0.25em] text-slate-300">
+        <span className="text-3xl font-bold uppercase tracking-[0.25em] text-slate-300">
                 {showDate ? <span>{snapshot.dateLabel}</span> : null}
         </span>
-        <span className="text-lg uppercase tracking-[0.3em] text-slate-400">
+        <span className="text-3xl uppercase tracking-[0.3em] text-slate-400">
           {timeZone.replace("/", " • ")}
         </span>
         
