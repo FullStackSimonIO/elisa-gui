@@ -230,7 +230,7 @@ export function EVCC({
                     <div className="relative flex shrink-0 flex-col items-center">
                       <span
                         className={cn(
-                          "flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all",
+                          "flex h-18 w-18 items-center justify-center rounded-full border-2 transition-all",
                           isComplete
                             ? "border-brand bg-brand text-white shadow-[0_0_20px_rgba(236,72,153,0.6)]"
                             : isActive
@@ -238,7 +238,7 @@ export function EVCC({
                               : "border-white/10 bg-slate-950/60 text-slate-400"
                         )}
                       >
-                        <span className="text-2xl font-semibold">{index + 1}</span>
+                        <span className="text-5xl font-semibold">{index + 1}</span>
                       </span>
                     </div>
                     <div className="space-y-1 pt-1">

@@ -28,16 +28,16 @@ export function DigitalClock({
 }: DigitalClockProps) {
   const [timeString, setTimeString] = React.useState<string | null>(null)
 
+  // React Hook that updates the time based on the Tick Rate
   React.useEffect(() => {
     const updateTime = () => {
-      
       setTimeString(formatter.format(new Date()))
     }
-
     updateTime()
 
+    // Set up an interval to update the time at the specified tick rate
     const interval = window.setInterval(updateTime, Math.max(250, tickRate))
-
+    
     return () => window.clearInterval(interval)
   }, [tickRate])
 

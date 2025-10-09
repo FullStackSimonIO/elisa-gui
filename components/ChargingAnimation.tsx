@@ -1,3 +1,5 @@
+// LEGACY ANIMATION
+
 "use client"
 
 import * as React from "react"
@@ -26,6 +28,7 @@ interface ChargingAnimationProps {
 }
 
 const DefaultCar = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+  // Define the default car SVG component
   function DefaultCar(props, ref) {
     return (
       <svg

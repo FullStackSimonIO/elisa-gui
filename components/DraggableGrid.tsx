@@ -54,11 +54,13 @@ function DraggableCard({ id, children }: DraggableCardProps) {
   )
 }
 
+// Structure of Grid Items
 export interface GridItem {
   id: string
   component: React.ReactNode
 }
 
+//  Draggable Grid Props -> Is extended by an Array of chosen Grid Items
 interface DraggableGridProps {
   items: GridItem[]
   onReorder?: (items: GridItem[]) => void
@@ -66,6 +68,8 @@ interface DraggableGridProps {
 }
 
 export function DraggableGrid({ items: initialItems, onReorder, className }: DraggableGridProps) {
+
+  // State Hooks to manage the Order of the Container Items / Components
   const [items, setItems] = React.useState<GridItem[]>(initialItems)
   const [activeId, setActiveId] = React.useState<string | null>(null)
 
@@ -86,21 +90,28 @@ export function DraggableGrid({ items: initialItems, onReorder, className }: Dra
     })
   }, [initialItems])
 
+
+// useSensor Hook from dnd-kit to set up pointer and keyboard sensors
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8, // 8px movement required before drag starts
       },
     }),
+
+    // Keyboard Sensor for accessibility -> allows keyboard users to drag and drop items
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
 
+
+  // Handlers for Drag Start and Drag End events
   function handleDragStart(event: any) {
     setActiveId(event.active.id)
   }
 
+  
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
 

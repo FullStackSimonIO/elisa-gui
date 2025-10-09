@@ -74,19 +74,19 @@ const SidebarLayout = () => {
     <Sidebar className="border-border/40 bg-sidebar/90 text-sidebar-foreground shadow-lg backdrop-blur transition-colors duration-300 supports-[backdrop-filter]:bg-sidebar/75 dark:border-sidebar-border/60 dark:bg-sidebar/95">
       <SidebarHeader className="border-b border-border/40 pb-6 pt-6 dark:border-sidebar-border/60">
         <div className="flex items-center gap-5 rounded-2xl border border-border/60 bg-white/70 p-6 shadow-sm backdrop-blur-sm transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
-          <div className="flex size-16 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm dark:bg-primary/20 dark:text-primary-foreground">
-            <PlugZap className="size-10" />
+          <div className="flex size-28 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm dark:bg-primary/20 dark:text-primary-foreground">
+            <PlugZap className="size-18 text-foreground" />
           </div>
           <div className="leading-tight">
-            <p className="text-3xl font-bold text-sidebar-foreground">Elisa</p>
-            <p className="text-xl text-muted-foreground">EV Charging Control</p>
+            <p className="text-5xl font-bold text-sidebar-foreground">Elisa</p>
+            <p className="text-3xl text-muted-foreground">Secure Charging</p>
           </div>
         </div>
       </SidebarHeader>
-
+      
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-4xl text-foreground">Navigation:</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
@@ -115,7 +115,7 @@ const SidebarLayout = () => {
         <SidebarSeparator />
 
         <SidebarGroup>
-          <SidebarGroupLabel>Operations</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-4xl text-foreground">Operations:</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {supportItems.map((item) => (
@@ -138,8 +138,8 @@ const SidebarLayout = () => {
 
       <SidebarFooter className="border-t border-border/40 pt-6 dark:border-sidebar-border/60">
         <div className="rounded-xl border border-border/60 bg-white/70 p-6 leading-relaxed shadow-inner transition-colors duration-300 dark:border-sidebar-border/60 dark:bg-secondary/20">
-          <p className="text-2xl font-bold uppercase tracking-[0.25em] text-sidebar-foreground/80">Session health</p>
-          <p className="mt-2 text-xl text-muted-foreground">All systems nominal</p>
+          <p className="text-3xl font-bold uppercase tracking-[0.25em] text-foreground">Session health</p>
+          <p className="mt-2 text-2xl font-semibold text-muted-foreground">All systems nominal</p>
         </div>
       </SidebarFooter>
     </Sidebar>
