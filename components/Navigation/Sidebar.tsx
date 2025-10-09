@@ -68,7 +68,9 @@ const supportItems = [
 ]
 
 const SidebarLayout = () => {
+  // usePathname Hook to determine the current active route
   const pathname = usePathname()
+  // useSidebar Hook to control the sidebar state (open/close)
   const { setOpen } = useSidebar()
   return (
     <Sidebar className="border-border/40 bg-sidebar/90 text-sidebar-foreground shadow-lg backdrop-blur transition-colors duration-300 supports-[backdrop-filter]:bg-sidebar/75 dark:border-sidebar-border/60 dark:bg-sidebar/95">

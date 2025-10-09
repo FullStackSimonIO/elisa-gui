@@ -24,4 +24,9 @@ export async function GET() {
     }).then(res => res.json()); // Parse the JSON response
     console.log(response);
     return NextResponse.json(response); // Return the response as JSON
+
+    if (!response) {
+        return NextResponse.json({ message: "No pre-installed certificates found." }, { status: 404 });
+    }
+    return NextResponse.json(response)
 }

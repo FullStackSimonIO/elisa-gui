@@ -11,8 +11,10 @@ import {
 
 import { cn } from "@/lib/utils"
 
+// Define Terminal State Props
 export type TerminalLogStatus = "pending" | "running" | "success" | "error"
 
+// Define Terminal Log Entry Structure
 export interface TerminalLogEntry {
   id: string
   label: string
@@ -23,6 +25,7 @@ export interface TerminalLogEntry {
   meta?: string
 }
 
+// Define Terminal Component Props
 export interface TerminalProps {
   logs: TerminalLogEntry[]
   title?: string
@@ -32,6 +35,7 @@ export interface TerminalProps {
   footerNote?: string
 }
 
+// Status Metadata for Icons and Styles - This is just Mock Data
 const STATUS_META: Record<
   TerminalLogStatus,
   {
@@ -67,6 +71,7 @@ const STATUS_META: Record<
   },
 }
 
+// This just formates the Timestamp for every Log Entry into a human readable format - Currently not in use
 function formatTimestamp(value?: string | Date) {
   if (!value) return ""
   const date = value instanceof Date ? value : new Date(value)
@@ -78,6 +83,9 @@ function formatTimestamp(value?: string | Date) {
   })
 }
 
+
+
+// Optimized Terminal Component with the React Memoization to prevent unnecessary re-renders
 export const Terminal = React.memo(function Terminal({
   logs,
   title = "Backend terminal",
@@ -89,6 +97,7 @@ export const Terminal = React.memo(function Terminal({
   const listRef = React.useRef<HTMLDivElement | null>(null)
   const previousLength = React.useRef(0)
 
+  // Effect to handle auto-scrolling and animations on new log entries
   React.useEffect(() => {
     if (!listRef.current) return
     const currentLength = logs.length
@@ -132,8 +141,6 @@ export const Terminal = React.memo(function Terminal({
         className
       )}
     >
-      {/* Removed blur effects for better performance on Raspberry Pi */}
-
       <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950 px-5 py-4">
         <div>
           <p className="text-3xl font-semibold uppercase tracking-wider text-brand-50">

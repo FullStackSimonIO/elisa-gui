@@ -81,6 +81,7 @@ const ACTIONS: Array<{
 ]
 
 export const EVCC = React.memo(function EVCC({
+  // EVCC Status will be fetched over the Backend API - Default is "Null"
   status = "plugged-in",
   chargingProgress = 0,
   className,
@@ -142,7 +143,7 @@ export const EVCC = React.memo(function EVCC({
         className
       )}
     >
-      {/* Removed blur effects for better performance on Raspberry Pi */}
+      
 
       <header className="relative z-10 mb-4">
         

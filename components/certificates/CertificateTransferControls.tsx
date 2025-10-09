@@ -119,7 +119,6 @@ export function CertificateTransferControls({
       </header>
 
   <div className="mt-8 flex w-full flex-col items-center gap-5 overflow-y-auto flex-1 min-h-0">
-        {/*Map over the Actions, render the Buttons incl. the Client Side Functionality */}
         {normalizedActions.map((descriptor) => {
           const { key, label, description, icon: Icon, variant } = descriptor
 
@@ -160,13 +159,13 @@ export function CertificateTransferControls({
               </span>
 
               <div className="space-y-2">
-                <h3 className="text-2xl font-semibold text-foreground">{label}</h3>
+                <h3 className="text-4xl font-semibold text-foreground">{label}</h3>
               </div>
 
               <Button
                 type="button"
                 variant={variant}
-                className="h-24 mt-auto w-full justify-center rounded-2xl border border-white/20 py-3 text-5xl font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
+                className="h-24 mt-auto w-full justify-center rounded-2xl border border-white/20 py-3 text-4xl font-semibold backdrop-blur duration-500 hover:border-brand-400/70 dark:border-white/10"
                 onClick={() => handleAction(descriptor)} // Action-Handler gets executed on Click
               >
                 Execute
