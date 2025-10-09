@@ -32,7 +32,8 @@ export default function RootLayout({
                 {/* Fixed Menu Button - Top Left */}
                 <MenuButton />
 
-                <div className="flex flex-1 overflow-x-hidden overflow-y-auto pt-6">
+                {/* Added padding-top for ultra-wide displays to prevent squishing */}
+                <div className="flex flex-1 overflow-x-hidden overflow-y-auto pt-8 2xl:pt-10">
                   {children}
                 </div>
               </SidebarInset>
