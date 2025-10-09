@@ -156,10 +156,16 @@ export function ProgressBar({
 
     return safeSteps.map((_, index) => {
       if (index < inferredActiveIndex) return "completed"
-      if (index === inferredActiveIndex) return "active"
+      // If we're on the last step with full progress, mark it as completed
+      if (index === inferredActiveIndex) {
+        const isLastStep = index === safeSteps.length - 1
+        const hasFullProgress = clampedProgress >= 1
+        if (isLastStep && hasFullProgress) return "completed"
+        return "active"
+      }
       return "upcoming"
     })
-  }, [inferredActiveIndex, safeSteps])
+  }, [inferredActiveIndex, safeSteps, clampedProgress])
 
   const statuses = React.useMemo(
     () =>
@@ -205,6 +211,11 @@ export function ProgressBar({
       }
 
       if (leftStatus === "active") {
+        // If this is the second-to-last step and we're at full progress, fill the connector
+        const isSecondToLastStep = index === safeSteps.length - 2
+        if (isSecondToLastStep && clampedProgress >= 1) {
+          return 1
+        }
         return clampedProgress
       }
 

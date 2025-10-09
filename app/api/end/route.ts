@@ -1,11 +1,20 @@
-// This Endpoint is called, when the User ends the charging process forcefully
-// After Clicking the "End" Button in the UI
-// All running processes must be stopped and the UI should return to the initial state
-// This includes stopping any ongoing charging sessions, resetting states, and ensuring that the system is ready for the next session
+"use server"
 
-import { NextRequest, NextResponse } from "next/server";
+export async function endTransfer(prevState: any) {
+    const finishedState = { ...prevState, transferStatus: "ended" };
+    return finishedState;
 
-export async function GET(request: NextRequest) {
-    return NextResponse.json({ message: "End Endpoint - Not yet implemented" });
+    const res = await fetch('http://localhost:3000/api/end', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finishedState),
+    })
+    
+    const data = await res.json()
+    
+    if (!res.ok) {
+        throw new Error(data.message || 'Something went wrong')
+        }    
 }
-
