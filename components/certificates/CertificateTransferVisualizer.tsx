@@ -24,7 +24,7 @@ export interface CertificateDescriptor {
   name: string // User-friendly name of the certificate
   issuedBy?: string // Authority that issued the certificate
   size?: string // Size of the certificate file
-  fingerprint?: string // Fingerprint of the certificatejsx-ab9c638f89a1e702 relative overflow-hidden rounded-[22px] border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-lg dark:border-white/10 dark:bg-white/5
+  fingerprint?: string // Fingerprint of the certificate
   status?: CertificateStatus // Current status of the certificate
 }
 
@@ -105,7 +105,7 @@ const SIMULATION_DURATION_MS = 8000
  * This component visualizes the transfer process of certificates, showing the current status and progress.
  * Currently uses hardcoded Data to simulate the process.
  * @param props - Props for the Certificate Transfer Visualizer
- * @returns JSX.Element
+ * @returns - JSX Element representing the Certificate Transfer Visualizer
  */
 export function CertificateTransferVisualizer(props: CertificateTransferVisualizerProps) {
   const {
@@ -382,11 +382,11 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                         effectiveIsActive ? "shadow-glow" : "shadow-none"
                       )}
                     >
-                      <span className="pointer-events-none absolute inset-px rounded-[24px] bojsx-ab9c638f89a1e702 relative overflow-hidden rounded-[22px] border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-lg dark:border-white/10 dark:bg-white/5rder border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
+                      <span className="pointer-events-none absolute inset-px rounded-[24px] bojsx-ab9c638f89a1e702  overflow-hidden  border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-lg dark:bg-white/5rder  opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
                       <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-brand-300/25 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                       <div className="flex items-center justify-between">
                         <span className="inline-flex h-20 w-20 items-center justify-center rounded-[20px] bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/45 text-brand shadow-[0_20px_50px_-45px_rgba(227,55,106,0.55)]">
-                          <Icon className="h-[36px] w-[36px]" aria-hidden />
+                          <Icon className="h-[36px] w-[36px] text-foreground" aria-hidden />
                         </span>
                         <span className="text-2xl uppercase tracking-[0.2em] text-muted-foreground/70">
                           {index + 1}

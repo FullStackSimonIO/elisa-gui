@@ -143,7 +143,7 @@ export const Terminal = React.memo(function Terminal({
     >
       <header className="relative z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-slate-950 px-5 py-4">
         <div>
-          <p className="text-5xl font-semibold uppercase tracking-wider text-brand-50">
+          <p className="text-5xl font-semibold uppercase tracking-wider text-foreground">
             {title}
           </p>
         </div>
@@ -182,7 +182,7 @@ export const Terminal = React.memo(function Terminal({
                         status === "running" ? "animate-spin" : undefined
                       )}
                     />
-                    <span className="text-3xl font-semibold text-brand-100">
+                    <span className="text-3xl font-semibold text-foreground">
                       {log.label}
                     </span>
                   </div>
