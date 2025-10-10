@@ -228,6 +228,8 @@ export const ProgressBar = React.memo(function ProgressBar({
     prevConnectorValuesRef.current = []
   }, [safeSteps.length])
 
+
+  
   React.useEffect(() => {
     statuses.forEach((status, index) => {
       const bubble = stepBubbleRefs.current[index]

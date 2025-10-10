@@ -113,7 +113,7 @@ export function CertificateTransferControls({
       aria-label="Certificate management actions"
     >
       <header className="flex flex-col items-center gap-2 text-center flex-shrink-0">
-        <h2 className="text-3xl font-semibold text-foreground">
+        <h2 className="text-5xl font-semibold text-foreground">
           Manage Certificates
         </h2>
       </header>

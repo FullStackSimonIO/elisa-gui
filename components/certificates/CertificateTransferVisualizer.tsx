@@ -24,7 +24,7 @@ export interface CertificateDescriptor {
   name: string // User-friendly name of the certificate
   issuedBy?: string // Authority that issued the certificate
   size?: string // Size of the certificate file
-  fingerprint?: string // Fingerprint of the certificate
+  fingerprint?: string // Fingerprint of the certificatejsx-ab9c638f89a1e702 relative overflow-hidden rounded-[22px] border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-lg dark:border-white/10 dark:bg-white/5
   status?: CertificateStatus // Current status of the certificate
 }
 
@@ -95,10 +95,18 @@ export const FALLBACK_CERTIFICATES: CertificateDescriptor[] = [
 type OverallStatus = "Idle" | "Transferring" | "Completed" | "Failed"
 
 // Hard Coded Duration for the Simulation - only used if no external control is applied
-// Should be replaced with a Function that estimates the Duration based on the number of Certificates received from the Backend
+// Should be replaced with a Function that estimates the Duration based on the number of Certificates received from the Backend -> Needs to be calculated dynamically as ETA
 const SIMULATION_DURATION_MS = 8000
 
 
+/**
+ * Certificate Transfer Visualizer Component
+ * 
+ * This component visualizes the transfer process of certificates, showing the current status and progress.
+ * Currently uses hardcoded Data to simulate the process.
+ * @param props - Props for the Certificate Transfer Visualizer
+ * @returns JSX.Element
+ */
 export function CertificateTransferVisualizer(props: CertificateTransferVisualizerProps) {
   const {
     isActive: isActiveProp,
@@ -334,7 +342,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
     >
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-5xl pl-8 font-semibold text-foreground">
+          <h2 className="text-5xl pl-32 font-semibold text-foreground">
             Certificate Transfer
           </h2>
         </div>
@@ -358,10 +366,10 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
       </header>
 
     <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] flex-1 min-h-0">
-  <div className="relative flex flex-col gap-5 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-5 shadow-[0_32px_90px_-70px_rgba(227,55,106,0.35)] backdrop-blur-xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/55">
+  <div className="relative flex flex-col gap-5 overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/20 via-white/10 to-white/5 p-8 shadow-[0_32px_90px_-70px_rgba(227,55,106,0.35)] backdrop-blur-xl dark:border-white/10 dark:from-slate-950/45 dark:via-slate-950/30 dark:to-slate-950/55">
           <span className="pointer-events-none absolute inset-px rounded-[28px] border border-white/20 opacity-40 dark:border-white/10" />
       <div className="relative -mx-3 overflow-x-auto px-3 pb-1.5">
-            <div className="flex min-w-[660px] items-stretch gap-4 md:min-w-0">
+            <div className="flex min-w-[900px] items-stretch gap-6 md:min-w-0">
               {PIPELINE_STEPS.map((step, index) => {
                 const Icon = step.icon
                 const isLast = index === PIPELINE_STEPS.length - 1
@@ -370,28 +378,29 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                   <React.Fragment key={step.key}>
                     <div
                       className={cn(
-                        "group relative flex min-w-[220px] flex-1 flex-col gap-2 overflow-hidden rounded-[24px] border border-white/10 bg-gradient-to-br from-white/22 via-white/10 to-white/12 p-4 text-sm shadow-[0_25px_60px_-50px_rgba(227,55,106,0.35)] transition-all duration-500",
+                        "group relative flex min-w-[280px] flex-1 flex-col gap-6 overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-white/22 via-white/10 to-white/12 p-8 text-sm shadow-[0_25px_60px_-50px_rgba(227,55,106,0.35)] transition-all duration-500",
                         effectiveIsActive ? "shadow-glow" : "shadow-none"
                       )}
                     >
-                      <span className="pointer-events-none absolute inset-px rounded-[20px] border border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
+                      <span className="pointer-events-none absolute inset-px rounded-[24px] bojsx-ab9c638f89a1e702 relative overflow-hidden rounded-[22px] border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-lg dark:border-white/10 dark:bg-white/5rder border-white/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:border-white/10" />
                       <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-brand-300/25 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/45 text-brand shadow-[0_20px_50px_-45px_rgba(227,55,106,0.55)]">
-                          <Icon className="h-[28px] w-[28px]" aria-hidden />
+                        <span className="inline-flex h-20 w-20 items-center justify-center rounded-[20px] bg-gradient-to-br from-brand-100/70 via-brand-400/35 to-primary/45 text-brand shadow-[0_20px_50px_-45px_rgba(227,55,106,0.55)]">
+                          <Icon className="h-[36px] w-[36px]" aria-hidden />
                         </span>
-                        <span className="text-lg uppercase tracking-[0.2em] text-muted-foreground">
+                        <span className="text-2xl uppercase tracking-[0.2em] text-muted-foreground/70">
                           {index + 1}
                         </span>
                       </div>
-                      <div className="mt-4 space-y-1">
-                        <p className="text-2xl font-semibold text-foreground">{step.label}</p>
+                      <div className="mt-2 space-y-2 flex-1 flex flex-col justify-center">
+                        <p className="text-5xl font-bold text-foreground leading-tight">{step.label}</p>
+                        
                       </div>
                     </div>
 
                     {!isLast ? (
-                      <div className="flex w-12 shrink-0 items-center justify-center">
-                        <div className="certificate-transfer__line h-[2px] w-full rounded-full bg-white/20" />
+                      <div className="flex w-16 shrink-0 items-center justify-center">
+                        <div className="certificate-transfer__line h-[3px] w-full rounded-full bg-white/20" />
                       </div>
                     ) : null}
                   </React.Fragment>
@@ -442,22 +451,22 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                   queued: {
                     label: "Queued",
                     tone: "bg-white/20 text-foreground dark:bg-white/10",
-                    icon: <Shield className="h-5 w-5" aria-hidden />,
+                    icon: <Shield className="h-10 w-10" aria-hidden />,
                   },
                   transferring: {
                     label: "Transferring",
                     tone: "bg-gradient-to-r from-brand-300/40 via-brand-500/30 to-primary/40 text-brand",
-                    icon: <Loader2 className="h-5 w-5 animate-spin" aria-hidden />,
+                    icon: <Loader2 className="h-10 w-10 animate-spin" aria-hidden />,
                   },
                   verified: {
                     label: "Installed",
                     tone: "bg-gradient-to-r from-emerald-400/30 via-emerald-500/25 to-emerald-400/30 text-foreground",
-                    icon: <CheckCircle className="h-5 w-5" aria-hidden />,
+                    icon: <CheckCircle className="h-10 w-10" aria-hidden />,
                   },
                   failed: {
                     label: "Failed",
                     tone: "bg-gradient-to-r from-destructive/30 via-destructive/20 to-destructive/30 text-destructive",
-                    icon: <AlertTriangle className="h-5 w-5" aria-hidden />,
+                    icon: <AlertTriangle className="h-10 w-10" aria-hidden />,
                   },
                 }
 
@@ -476,7 +485,7 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
                     </div>
                     <span
                       className={cn(
-                        "inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-lg font-medium backdrop-blur-lg dark:border-white/5",
+                        "inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-4xl font-medium backdrop-blur-lg dark:border-white/5",
                         statusInfo[status].tone
                       )}
                     >
@@ -492,15 +501,15 @@ export function CertificateTransferVisualizer(props: CertificateTransferVisualiz
       </div>
 
   <footer className="mt-5 flex flex-wrap items-center gap-6 rounded-[26px] border border-white/10 bg-white/10 px-5 py-4 text-lg text-muted-foreground backdrop-blur dark:border-white/5 dark:bg-white/5 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <Shield className="h-6 w-6" aria-hidden />
-          <span className="text-base uppercase tracking-[0.2em]">Started</span>
-          <span className="text-xl font-medium text-foreground">{startLabel}</span>
+        <div className="flex items-center gap-3 text-3xl">
+          <Shield className="h-12 w-12 text-foreground" aria-hidden />
+          <span className=" text-3xl  uppercase tracking-[0.2em]">Started</span>
+          <span className="font-medium text-foreground">{startLabel}</span>
         </div>
         <div className="flex items-center gap-3">
-          <Loader2 className="h-6 w-6" aria-hidden />
-          <span className="text-base uppercase tracking-[0.2em]">ETA</span>
-          <span className="text-xl font-medium text-foreground">{etaLabel}</span>
+          <Loader2 className="h-12 w-12" aria-hidden />
+          <span className="text-3xl uppercase tracking-[0.2em]">ETA</span>
+          <span className="text-3xl font-medium text-foreground">{etaLabel}</span>
         </div>
       </footer>
 

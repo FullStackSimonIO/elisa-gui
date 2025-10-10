@@ -656,7 +656,7 @@ const CertificatesPage = () => {
 
   return (
     <section className="flex w-full flex-1 flex-col gap-6 px-6 pb-8 pt-6 xl:gap-8 xl:px-8 max-h-screen overflow-hidden">
-      <div className="grid h-full max-h-full min-h-0 gap-6 lg:grid-cols-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(0,1.05fr)_minmax(0,0.9fr)] items-stretch">
+      <div className="grid h-full max-h-full min-h-0 gap-6 lg:grid-cols-3 xl:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)_minmax(0,0.6fr)] items-stretch">
         <CertificateTransferVisualizer
           isActive={isActive}
           progress={progress}
